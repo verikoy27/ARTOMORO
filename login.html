@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <!-- Memanggil CSS -->
+    <link rel="stylesheet" href="login.css" />
+    <title>Portal Teknisi Elektromedik</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav class="nav">
+            <div class="nav-logo">
+                <p>E-MEDIK .</p>
+            </div>
+            <div class="nav-menu" id="navMenu"><ul></ul></div>
+            <div class="nav-button">
+                <button class="btn white-btn" id="loginBtn" onclick="login()">Log In</button>
+                <button class="btn" id="registerBtn" onclick="register()">Daftar</button>
+            </div>
+            <div class="nav-menu-btn">
+                <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+            </div>
+        </nav>
+
+        <div class="form-box">
+            
+            <!-- FORM LOGIN (Tanpa tag form agar tidak refresh) -->
+            <div class="login-container" id="login">
+                <div class="top">
+                    <header>Login Teknisi</header>
+                </div>
+                
+                <div class="input-box">
+                    <input type="text" id="login-user" class="input-field" placeholder="ID Teknisi atau Email" />
+                    <i class="bx bx-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="login-pass" class="input-field" placeholder="Password" />
+                    <i class="bx bx-lock-alt"></i>
+                </div>
+                <div class="input-box">
+                    <button type="button" class="submit" onclick="prosesLogin()">Masuk Sistem</button>
+                </div>
+                
+                <div class="two-col">
+                    <div class="one"></div> 
+                    <div class="two">
+                        <label><a href="https://wa.me/6289614035927?text=Halo%20Admin,%20saya%20lupa%20password%20akun%20E-MEDIK%20saya." target="_blank">Lupa password?</a></label>
+                    </div>
+                </div>
+                <div class="bottom-link">
+                    <span>Belum punya akun? <a href="#" onclick="register()">Daftar di sini</a></span>
+                </div>
+            </div>
+
+            <!-- FORM REGISTRASI -->
+            <div class="register-container" id="register">
+                <div class="top">
+                    <header>Registrasi Staf</header>
+                </div>
+                <div class="two-forms">
+                    <div class="input-box">
+                        <input type="text" id="reg-depan" class="input-field" placeholder="Nama Depan" />
+                        <i class="bx bx-user"></i>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" id="reg-belakang" class="input-field" placeholder="Nama Belakang" />
+                        <i class="bx bx-user"></i>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <input type="text" id="reg-id" class="input-field" placeholder="Email / ID Teknisi" />
+                    <i class="bx bx-envelope"></i>
+                </div>
+                
+                <div class="input-box">
+                    <button type="button" class="submit" onclick="kirimKeWA()">Daftarkan Akun via WA</button>
+                </div>
+                <div class="bottom-link">
+                    <span>Sudah punya akun? <a href="#" onclick="login()">Login di sini</a></span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- CUSTOM ALERT NOTIFIKASI -->
+    <div id="customAlert" class="alert-overlay">
+        <div class="alert-box">
+            <i class='bx bx-error-circle'></i>
+            <h2>Perhatian</h2>
+            <p id="alertMessage">Pesan error muncul di sini.</p>
+            <button onclick="tutupAlert()">Mengerti</button>
+        </div>
+    </div>
+
+    <!-- Memanggil Javascript -->
+    <script src="login.js"></script>
+</body>
+</html>
