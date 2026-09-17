@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Terkini - PT. ARTOMORO</title>
+    <script>if (sessionStorage.getItem("kunciAkses") !== "diizinkan") window.location.replace("login.html");</script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: linear-gradient(135deg, #0f2027, #203a43, #2c5364); --text-main: #ffffff; --text-muted: rgba(255, 255, 255, 0.6);
+            --panel-bg: rgba(15, 32, 39, 0.85); --nav-bg: rgba(15, 32, 39, 0.8); --input-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.15); --table-border: rgba(255, 255, 255, 0.05); --table-hover: rgba(255, 255, 255, 0.03); --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+        body.light-mode {
+            --bg-color: linear-gradient(135deg, #f0f9ff, #e0f2fe, #bae6fd); --text-main: #0f172a; --text-muted: #475569;
+            --panel-bg: rgba(255, 255, 255, 0.85); --nav-bg: rgba(255, 255, 255, 0.8); --input-bg: rgba(255, 255, 255, 0.6);
+            --border-color: rgba(14, 165, 233, 0.4); --table-border: rgba(0, 0, 0, 0.1); --table-hover: rgba(0, 0, 0, 0.03); --shadow-color: rgba(14, 165, 233, 0.15);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; transition: 0.3s; }
+        #webgl-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.3; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: var(--nav-bg); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
+        .navbar .logo { font-size: 22px; font-weight: 700; color: #0ea5e9; }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .btn-theme { background: transparent; border: none; color: var(--text-main); font-size: 24px; cursor: pointer; transition: 0.3s; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .btn-theme:hover { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
+        .btn-back { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        
+        .container { position: relative; z-index: 2; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        
+        .btn-buka-form { background: #0ea5e9; color: white; border: none; padding: 15px 35px; border-radius: 30px; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3); }
+        .form-box { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; width: 100%; max-width: 900px; backdrop-filter: blur(15px); box-shadow: 0 15px 35px var(--shadow-color); position: relative; transition: 0.3s; }
+        .btn-tutup { position: absolute; top: 20px; right: 25px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; transition: 0.3s; }
+        .form-header { text-align: center; margin-bottom: 30px; }
+        .form-header i { font-size: 50px; color: #0ea5e9; margin-bottom: 10px; }
+        .form-header h2 { font-size: 28px; font-weight: 600; color: #0ea5e9; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 13px; color: var(--text-main); margin-bottom: 8px; font-weight: 600; }
+        .input-group input, .input-group textarea, .input-group select { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 15px; color: var(--text-main); outline: none; transition: 0.3s; font-size: 14px; }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: #0ea5e9; background: rgba(14, 165, 233, 0.05); }
+        .input-group select option { background: var(--panel-bg); color: var(--text-main); }
+        body.light-mode ::-webkit-calendar-picker-indicator { filter: invert(0); cursor: pointer; }
+        body:not(.light-mode) ::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+
+        .alat-container { background: rgba(0,0,0,0.2); border: 1px dashed var(--border-color); padding: 20px; border-radius: 12px; margin-bottom: 15px; transition: 0.3s; }
+        body.light-mode .alat-container { background: rgba(0,0,0,0.03); }
+        .alat-header { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
+        .alat-header span { font-weight: 600; font-size: 14px; color: #0ea5e9; }
+        .btn-hapus-alat { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .btn-tambah-alat { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; border: 1px dashed #0ea5e9; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-tambah-alat:hover { background: #0ea5e9; color: white; }
+
+        .btn-submit { background: #0ea5e9; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; display: block; }
+        .btn-submit:hover { background: #0284c7; box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4); transform: translateY(-3px); }
+
+        .panel { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; width: 100%; max-width: 1100px; backdrop-filter: blur(15px); box-shadow: 0 15px 35px var(--shadow-color); transition: 0.3s; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--table-border); padding-bottom: 15px; }
+        
+        .search-table-box { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 5px 15px; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .search-table-box i { color: var(--text-muted); }
+        .search-table-box input { background: transparent; border: none; color: var(--text-main); outline: none; font-size: 13px; width: 250px; }
+        .search-table-box:focus-within { border-color: #0ea5e9; }
+
+        .btn-refresh { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; border: 1px solid #0ea5e9; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 5px;}
+        .btn-refresh:hover { background: #0ea5e9; color: white; }
+        
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { padding: 14px 15px; text-align: left; border-bottom: 1px solid var(--table-border); vertical-align: middle; }
+        th { color: var(--text-muted); font-weight: 500; text-transform: uppercase; font-size: 11px; }
+        
+        .status-dropdown { appearance: none; -moz-appearance: none; -webkit-appearance: none; background-color: transparent; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; cursor: pointer; outline: none; text-align: center; }
+        .status-dropdown option { background: var(--panel-bg); color: var(--text-main); font-weight: normal; }
+        .badge-red { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .badge-yellow { background: rgba(245, 158, 11, 0.15); color: #eab308; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .badge-green { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 9999; opacity: 0; }
+        .modal-box { background: var(--panel-bg); border: 1px solid #10b981; border-radius: 20px; padding: 35px; width: 90%; max-width: 450px; text-align: center; color: var(--text-main); transform: scale(0.8); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.2); }
+        .modal-box i { font-size: 65px; margin-bottom: 5px; color: #10b981; }
+        @media only screen and (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="webgl-background"></div>
+
+    <nav class="navbar">
+        <div class="logo">PT. ARTOMORO .</div>
+        <div class="nav-right">
+            <button id="btnTheme" class="btn-theme"><i class='bx bx-sun'></i></button>
+            <a href="dashboard.html" class="btn-back"><i class='bx bx-arrow-back'></i> Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <button id="btnBukaForm" class="btn-buka-form"><i class='bx bx-plus-circle'></i> Buat Jadwal Baru</button>
+
+        <div class="form-box" id="wadahForm" style="display: none;">
+            <button class="btn-tutup" id="btnTutupForm"><i class='bx bx-x'></i></button>
+            <div class="form-header">
+                <i class='bx bx-calendar-check'></i>
+                <h2>Form Jadwal Terkini</h2>
+                <p>Format No Laporan (SR/Jenis/Bulan/Tahun/Urut) digenerate otomatis.</p>
+            </div>
+
+            <form id="formJadwal" class="form-grid">
+                <div class="input-group full-width">
+                    <label>Kode Jenis Laporan</label>
+                    <select name="kode_jenis" required>
+                        <option value="" disabled selected>-- Pilih Jenis Pekerjaan (CM / PM / CHK) --</option>
+                        <option value="CM">Corrective Maintenance (CM)</option>
+                        <option value="PM">Preventive Maintenance (PM)</option>
+                        <option value="CHK">Pengecekan / Checking (CHK)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Tanggal Visite</label>
+                    <input type="date" name="tanggal_visite" required>
+                </div>
+                <div class="input-group">
+                    <label>Nama Faskes (Ketik untuk mencari)</label>
+                    <input list="listFaskes" name="nama_faskes" placeholder="Ketik/Pilih Nama Faskes..." required autocomplete="off">
+                    <datalist id="listFaskes">
+                        <option value="Puskesmas Asemrowo"></option>
+                        <option value="Puskesmas Balas Klumprik"></option>
+                        <option value="Puskesmas Balongsari"></option>
+                        <option value="Puskesmas Bangkingan"></option>
+                        <option value="Puskesmas Banyu Urip"></option>
+                        <option value="Puskesmas Benowo"></option>
+                        <option value="Puskesmas Bulak Banteng"></option>
+                        <option value="Puskesmas Dr. Soetomo"></option>
+                        <option value="Puskesmas Dukuh Kupang"></option>
+                        <option value="Puskesmas Dupak"></option>
+                        <option value="Puskesmas Gading"></option>
+                        <option value="Puskesmas Gayungan"></option>
+                        <option value="Puskesmas Gundih"></option>
+                        <option value="Puskesmas Gunung Anyar"></option>
+                        <option value="Puskesmas Jagir"></option>
+                        <option value="Puskesmas Jemursari"></option>
+                        <option value="Puskesmas Jeruk"></option>
+                        <option value="Puskesmas Kalijudan"></option>
+                        <option value="Puskesmas Kalirungkut"></option>
+                        <option value="Puskesmas Kebonsari"></option>
+                        <option value="Puskesmas Kedungdoro"></option>
+                        <option value="Puskesmas Kedurus"></option>
+                        <option value="Puskesmas Kenjeran"></option>
+                        <option value="Puskesmas Keputih"></option>
+                        <option value="Puskesmas Ketabang"></option>
+                        <option value="Puskesmas Klampis Ngasem"></option>
+                        <option value="Puskesmas Krembangan Selatan"></option>
+                        <option value="Puskesmas Lidah Kulon"></option>
+                        <option value="Puskesmas Lontar"></option>
+                        <option value="Puskesmas Made"></option>
+                        <option value="Puskesmas Manukan Kulon"></option>
+                        <option value="Puskesmas Medokan Ayu"></option>
+                        <option value="Puskesmas Menur"></option>
+                        <option value="Puskesmas Mojo"></option>
+                        <option value="Puskesmas Moro Krembangan"></option>
+                        <option value="Puskesmas Mulyorejo"></option>
+                        <option value="Puskesmas Ngagel Rejo"></option>
+                        <option value="Puskesmas Pacar Keling"></option>
+                        <option value="Puskesmas Pakis"></option>
+                        <option value="Puskesmas Pegirian"></option>
+                        <option value="Puskesmas Peneleh"></option>
+                        <option value="Puskesmas Perak Timur"></option>
+                        <option value="Puskesmas Pucangsewu"></option>
+                        <option value="Puskesmas Putat Jaya"></option>
+                        <option value="Puskesmas Rangkah"></option>
+                        <option value="Puskesmas Sawah Pulo"></option>
+                        <option value="Puskesmas Sawahan"></option>
+                        <option value="Puskesmas Sememi"></option>
+                        <option value="Puskesmas Sidosermo"></option>
+                        <option value="Puskesmas Sidotopo"></option>
+                        <option value="Puskesmas Sidotopo Wetan"></option>
+                        <option value="Puskesmas Simolawang"></option>
+                        <option value="Puskesmas Simomulyo"></option>
+                        <option value="Puskesmas Siwalankerto"></option>
+                        <option value="Puskesmas Tambak Wedi"></option>
+                        <option value="Puskesmas Tambakrejo"></option>
+                        <option value="Puskesmas Tanah Kali Kedinding"></option>
+                        <option value="Puskesmas Tanjungsari"></option>
+                        <option value="Puskesmas Tembok Dukuh"></option>
+                        <option value="Puskesmas Tenggilis"></option>
+                        <option value="Puskesmas Wiyung"></option>
+                        <option value="Puskesmas Wonokromo"></option>
+                        <option value="Puskesmas Wonokusumo"></option>
+                        <option value="GFK"></option>
+                        <option value="Labkesda"></option>
+                    </datalist>
+                </div>
+                <div class="input-group">
+                    <label>Nama Teknisi</label>
+                    <input type="text" name="nama_teknisi" placeholder="Contoh: Rahmat Hidayat" required>
+                </div>
+                <div class="input-group">
+                    <label>Nama CP Faskes & No. HP</label>
+                    <input type="text" name="cp_hp" placeholder="Contoh: dr. Andi - 081234567xxx" required>
+                </div>
+
+                <div class="full-width" style="margin-top: 10px;">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 10px;">Rincian Alat Rusak</label>
+                    
+                    <div id="wadahListAlat">
+                        <div class="alat-container item-alat">
+                            <div class="alat-header">
+                                <span class="nomer-urut">Alat #1</span>
+                            </div>
+                            <div class="input-group" style="margin-bottom: 10px;">
+                                <input type="text" class="input-nama-alat" placeholder="Nama Alat & Merk..." required>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-tambah-alat" onclick="tambahFormAlat()">
+                        <i class='bx bx-plus'></i> Tambah Baris Alat Lainnya
+                    </button>
+                </div>
+
+                <div class="input-group full-width">
+                    <label>Status Penjadwalan</label>
+                    <select name="status_jadwal" required>
+                        <option value="" disabled selected>-- Pilih Status --</option>
+                        <option value="Belum Dihubungi">Belum Dihubungi</option>
+                        <option value="Menunggu Konfirmasi">Menunggu Konfirmasi Faskes</option>
+                        <option value="Sudah Dihubungi">Sudah Dihubungi (Fix Jadwal)</option>
+                    </select>
+                </div>
+                <div class="input-group full-width">
+                    <button type="submit" class="btn-submit" id="btnKirim">Simpan & Generate Nomor</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="panel gsap-panel">
+            <div class="panel-header">
+                <h3 style="margin: 0;"><i class='bx bx-table'></i> Database Jadwal</h3>
+                
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <div class="search-table-box">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="inputCariFaskes" placeholder="Cari Kode CM/PM atau Faskes..." onkeyup="cariFaskesTabel()">
+                    </div>
+                    <button class="btn-refresh" onclick="muatDataJadwal()" title="Segarkan Data"><i class='bx bx-refresh' style="font-size: 18px;"></i></button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No Laporan</th>
+                            <th>Tanggal</th>
+                            <th>Faskes & Kontak</th>
+                            <th>Alat & Kerusakan</th>
+                            <th>Teknisi</th>
+                            <th>Status (Bisa Diedit)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTabelJadwal">
+                        <tr><td colspan="6" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SUCCESS -->
+    <div id="modalSuccess" class="modal-overlay">
+        <div class="modal-box" id="modalSuccessBox">
+            <i class='bx bx-check-circle'></i>
+            <h2>Berhasil Digenerate!</h2>
+            <p id="teksSukses" style="margin-bottom: 25px;">Data berhasil dipecah dan disimpan di Database.</p>
+            <button class="btn-submit" style="background: #10b981;" onclick="document.getElementById('modalSuccess').style.display='none'">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzP5btzre-P0GW-XTK90I-6-P6QOgWgnBzAzvspNvrYofFWSSoTHrxZnL8gncUxty2Q/exec'; 
+
+        // TEMA MODE GELAP/TERANG
+        const btnTheme = document.getElementById('btnTheme');
+        if(localStorage.getItem('temaArtomoro') === 'light') { document.body.classList.add('light-mode'); btnTheme.querySelector('i').className = 'bx bx-moon'; }
+        btnTheme.addEventListener('click', () => { document.body.classList.toggle('light-mode'); localStorage.setItem('temaArtomoro', document.body.classList.contains('light-mode') ? 'light' : 'dark'); btnTheme.querySelector('i').className = document.body.classList.contains('light-mode') ? 'bx bx-moon' : 'bx bx-sun'; });
+
+        // TOGGLE FORM
+        const btnBuka = document.getElementById("btnBukaForm"), btnTutup = document.getElementById("btnTutupForm"), wadahForm = document.getElementById("wadahForm");
+        btnBuka.addEventListener("click", () => { wadahForm.style.display = "block"; gsap.fromTo(wadahForm, { y:-30, opacity:0 }, { y:0, opacity:1, duration:0.5 }); btnBuka.style.display = "none"; });
+        
+        function sembunyikanForm() {
+            gsap.to(wadahForm, { y:-30, opacity:0, duration:0.3, onComplete: () => { 
+                wadahForm.style.display = "none"; btnBuka.style.display = "inline-flex"; 
+                gsap.fromTo(btnBuka, { scale:0.5, opacity:0 }, { scale:1, opacity:1, duration:0.5 }); 
+            }});
+        }
+        btnTutup.addEventListener("click", sembunyikanForm);
+
+        // BACKGROUND THREE.JS
+        window.onload = () => { gsap.fromTo(".btn-buka-form", { y:20, opacity:0 }, { y:0, opacity:1, duration:0.8, delay:0.3 }); gsap.fromTo(".gsap-panel", { y:50, opacity:0 }, { y:0, opacity:1, duration:1, delay:0.5 }); muatDataJadwal(); };
+        const bgContainer = document.getElementById('webgl-background'), scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); camera.position.z = 10; const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight); bgContainer.appendChild(renderer.domElement);
+        const particlesGeo = new THREE.BufferGeometry(), posArray = new Float32Array(250 * 3); for(let i=0; i<750; i++) posArray[i] = (Math.random()-0.5)*25; particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3)); const particleMesh = new THREE.Points(particlesGeo, new THREE.PointsMaterial({ size: 0.05, color: 0x0ea5e9, transparent: true, opacity: 0.6 })); scene.add(particleMesh); function animateBg() { requestAnimationFrame(animateBg); particleMesh.rotation.y += 0.0015; renderer.render(scene, camera); } animateBg();
+
+        // ALAT DINAMIS
+        let hitungAlat = 1;
+        function tambahFormAlat() {
+            hitungAlat++;
+            const wadah = document.getElementById("wadahListAlat");
+            const divBaru = document.createElement("div"); divBaru.className = "alat-container item-alat";
+            divBaru.innerHTML = `<div class="alat-header"><span class="nomer-urut">Alat #${hitungAlat}</span><button type="button" class="btn-hapus-alat" onclick="hapusFormAlat(this)"><i class='bx bx-trash'></i> Hapus</button></div><div class="input-group" style="margin-bottom: 10px;"><input type="text" class="input-nama-alat" placeholder="Nama Alat & Merk..." required></div><div class="input-group"><input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required></div>`;
+            wadah.appendChild(divBaru); updateNomerUrut();
+        }
+        function hapusFormAlat(btn) { btn.closest(".item-alat").remove(); updateNomerUrut(); }
+        function updateNomerUrut() { document.querySelectorAll(".item-alat").forEach((el, index) => { el.querySelector(".nomer-urut").innerText = `Alat #${index + 1}`; }); }
+
+        // MENCARI FASKES & KODE (LIVE SEARCH)
+        function cariFaskesTabel() {
+            let input = document.getElementById("inputCariFaskes").value.toLowerCase();
+            let barisTable = document.querySelectorAll("#bodyTabelJadwal tr");
+            barisTable.forEach(tr => {
+                let tdNo = tr.getElementsByTagName("td")[0]; 
+                let tdFaskes = tr.getElementsByTagName("td")[2]; 
+                if(tdNo && tdFaskes) {
+                    let teks = (tdNo.textContent + " " + tdFaskes.textContent).toLowerCase();
+                    tr.style.display = teks.indexOf(input) > -1 ? "" : "none";
+                }
+            });
+        }
+
+        // ================= INPUT JADWAL BARU (MENGGUNAKAN MODE no-cors AGAR TIDAK MACET) =================
+        document.getElementById('formJadwal').addEventListener('submit', e => {
+            e.preventDefault();
+            const btnKirim = document.getElementById('btnKirim');
+            btnKirim.innerText = "Memproses..."; btnKirim.style.background = "#fbbf24";
+            
+            let arrayAlat = [];
+            document.querySelectorAll(".item-alat").forEach(item => {
+                arrayAlat.push({ nama: item.querySelector(".input-nama-alat").value, rusak: item.querySelector(".input-rusak-alat").value });
+            });
+
+            let formData = new FormData(document.getElementById('formJadwal'));
+            formData.append("data_alat_json", JSON.stringify(arrayAlat));
+
+            // Menggunakan mode no-cors agar browser tidak memblokir respon balik
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: formData })
+                .then(() => {
+                    gsap.killTweensOf(btnKirim); 
+                    btnKirim.style.background = "#0ea5e9"; 
+                    btnKirim.innerText = "Simpan & Generate Nomor";
+                    btnKirim.style.transform = "scale(1)";
+                    
+                    document.getElementById('teksSukses').innerText = `Sistem berhasil memecah dan membuat ${arrayAlat.length} Laporan berurutan di Database!`;
+                    document.getElementById("modalSuccess").style.display = "flex";
+                    
+                    document.getElementById('formJadwal').reset();
+                    document.getElementById("wadahListAlat").innerHTML = `<div class="alat-container item-alat"><div class="alat-header"><span class="nomer-urut">Alat #1</span></div><div class="input-group" style="margin-bottom: 10px;"><input type="text" class="input-nama-alat" placeholder="Nama Alat & Merk..." required></div><div class="input-group"><input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required></div></div>`;
+                    hitungAlat = 1; 
+                    
+                    sembunyikanForm();
+                    setTimeout(muatDataJadwal, 1500); // Jeda 1.5 detik agar Google Sheets sempat menyimpan baris baru
+                })
+                .catch(err => {
+                    gsap.killTweensOf(btnKirim);
+                    btnKirim.style.background = "#ef4444"; 
+                    btnKirim.innerText = "Gagal Menyimpan!"; 
+                    btnKirim.style.transform = "scale(1)";
+                    alert("Error Jaringan!");
+                });
+        });
+
+        // ================= FITUR EDIT STATUS LANGSUNG (MENGGUNAKAN no-cors) =================
+        window.ubahStatus = function(idLaporan, elemenSelect) {
+            const statusBaru = elemenSelect.value;
+            const classLama = elemenSelect.className;
+            
+            elemenSelect.className = "status-dropdown";
+            if(statusBaru.includes("Belum")) elemenSelect.classList.add("badge-red");
+            else if(statusBaru.includes("Menunggu")) elemenSelect.classList.add("badge-yellow");
+            else elemenSelect.classList.add("badge-green");
+            elemenSelect.style.opacity = "0.5";
+
+            let fd = new FormData();
+            fd.append("action", "update_status");
+            fd.append("no_laporan", idLaporan);
+            fd.append("status_baru", statusBaru);
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
+                .then(() => { 
+                    elemenSelect.style.opacity = "1"; 
+                })
+                .catch(err => {
+                    elemenSelect.style.opacity = "1";
+                    elemenSelect.className = classLama; 
+                    alert("Gagal update status. Cek koneksi internet.");
+                });
+        };
+
+        // ================= TARIK DATA TAMPIL (TIDAK MERESET SEARCH BAR) =================
+        function muatDataJadwal() {
+            const tbody = document.getElementById("bodyTabelJadwal");
+            // Catatan: Baris reset inputCariFaskes sudah dihapus agar apa yang Anda ketik tidak terhapus saat refresh!
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data...</td></tr>`;
+            
+            fetch(scriptURL).then(res => res.json()).then(data => {
+                tbody.innerHTML = "";
+                if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Belum ada jadwal.</td></tr>'; return; }
+                
+                data.reverse().forEach(item => {
+                    let st = item.status || "";
+                    let b = "badge-green"; if(st.includes("Belum")) b = "badge-red"; else if(st.includes("Menunggu")) b = "badge-yellow";
+                    
+                    let alatSafe = (item.nama_alat || "").toString().replace(/\n/g, "<br>");
+                    let rusakSafe = (item.kerusakan || "").toString().replace(/\n/g, "<br>");
+
+                    let selectHtml = `
+                    <select class="status-dropdown ${b}" onchange="ubahStatus('${item.no_jadwal}', this)">
+                        <option value="Belum Dihubungi" ${st === 'Belum Dihubungi' ? 'selected' : ''}>Belum Dihubungi</option>
+                        <option value="Menunggu Konfirmasi" ${st === 'Menunggu Konfirmasi' ? 'selected' : ''}>Menunggu Konfirmasi</option>
+                        <option value="Sudah Dihubungi" ${st === 'Sudah Dihubungi' || st.includes('Fix') ? 'selected' : ''}>Sudah Dihubungi (Fix Jadwal)</option>
+                    </select>`;
+
+                    tbody.innerHTML += `<tr>
+                        <td style="font-weight: 600; color:#0ea5e9;">${item.no_jadwal}</td>
+                        <td>${item.tanggal_visite}</td>
+                        <td><b>${item.nama_faskes}</b><br><span style="font-size:11px; opacity:0.6;"><i class='bx bx-phone'></i> ${item.cp}</span></td>
+                        <td><b>${alatSafe}</b><br><span style="opacity:0.8;">${rusakSafe}</span></td>
+                        <td>${item.nama_teknisi}</td>
+                        <td>${selectHtml}</td>
+                    </tr>`;
+                });
+
+                // Jalankan ulang fungsi pencarian agar jika ada teks di kolom search, hasilnya langsung terfilter lagi
+                cariFaskesTabel();
+            }).catch(err => {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #ef4444;">Gagal mengambil data.</td></tr>`;
+            });
+        }
+    </script>
+</body>
+</html>
