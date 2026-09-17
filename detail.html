@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Faskes - PT. ARTOMORO</title>
+    <script>if (sessionStorage.getItem("kunciAkses") !== "diizinkan") { window.location.replace("login.html"); }</script>
+    <style>
+        body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; font-family: sans-serif; padding: 40px; }
+        .panel { background: rgba(15, 32, 39, 0.8); border: 1px solid #0ea5e9; padding: 40px; border-radius: 20px; max-width: 900px; margin: auto; text-align: center; }
+        .btn-back { display: inline-block; background: rgba(255, 255, 255, 0.1); color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 30px; } th, td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); } th { color: #0ea5e9; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <a href="pkm.html" class="btn-back">Kembali ke Daftar</a>
+        <h1 id="judulFaskes" style="color: #0ea5e9;">Memuat...</h1>
+        <table><tr><th>No</th><th>Alat Medis</th><th>Status</th></tr><tr><td>1</td><td>Data dari Sheets...</td><td>-</td></tr></table>
+    </div>
+    <script>
+        const nama = new URLSearchParams(window.location.search).get("nama");
+        document.getElementById("judulFaskes").innerText = nama ? "Data Laporan: " + nama : "Faskes Tidak Ditemukan";
+    </script>
+</body>
+</html>

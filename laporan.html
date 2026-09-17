@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Laporan Kerusakan - PT. ARTOMORO</title>
+    
+    <!-- SCRIPT PENJAGA PINTU (Anti Tembak Link) -->
+    <!-- Wajib di posisi paling atas agar langsung menendang user yang belum login -->
+    <script>
+        if (sessionStorage.getItem("kunciAkses") !== "diizinkan") {
+            window.location.replace("login.html");
+        }
+    </script>
+
+    <!-- Boxicons & Font Poppins -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Memanggil Library Three.js & GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body {
+            /* Tema warna disamakan 100% dengan halaman Login & Dashboard */
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Tampilan Background Partikel Three.js */
+        #webgl-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none; opacity: 0.5;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px; background: rgba(15, 32, 39, 0.7);
+            backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .navbar .logo { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #10b981; }
+        .btn-back {
+            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 25px; border-radius: 30px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; display: flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+        .btn-back:hover { background: rgba(255, 255, 255, 0.2); transform: translateX(-5px); }
+
+        /* --- CONTAINER FORM KACA (Glassmorphism) --- */
+        .container {
+            position: relative; z-index: 2; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .form-box {
+            background: rgba(15, 32, 39, 0.85); border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 20px; padding: 40px; width: 100%; max-width: 850px;
+            backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .form-header { text-align: center; margin-bottom: 30px; }
+        .form-header i { font-size: 50px; color: #10b981; margin-bottom: 10px; }
+        .form-header h2 { font-size: 28px; font-weight: 600; }
+        .form-header p { color: rgba(255, 255, 255, 0.6); font-size: 14px; }
+
+        /* GRID FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .full-width { grid-column: span 2; }
+
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 8px; font-weight: 500; }
+        
+        .input-group input, .input-group textarea {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px; padding: 14px 15px; color: white; outline: none;
+            transition: 0.3s; font-size: 14px;
+        }
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: #10b981; background: rgba(16, 185, 129, 0.05);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+        
+        /* Ikon di dalam input date (kalender) */
+        ::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+
+        .btn-submit {
+            background: #10b981; color: white; border: none; padding: 15px;
+            border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer;
+            transition: 0.3s; margin-top: 15px; width: 100%;
+        }
+        .btn-submit:hover {
+            background: #0e9f6e; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); transform: translateY(-3px);
+        }
+
+        /* Responsif untuk layar HP */
+        @media only screen and (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .navbar { padding: 15px 20px; }
+            .form-box { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ANIMASI BACKGROUND THREE.JS -->
+    <div id="webgl-background"></div>
+
+    <!-- NAVBAR ATAS -->
+    <nav class="navbar">
+        <div class="logo">PT. ARTOMORO .</div>
+        <a href="dashboard.html" class="btn-back">
+            <i class='bx bx-arrow-back'></i> Dashboard
+        </a>
+    </nav>
+
+    <!-- KONTEN FORM -->
+    <div class="container">
+        <div class="form-box">
+            <div class="form-header">
+                <i class='bx bx-file-find'></i>
+                <h2>Log Laporan Kerusakan</h2>
+                <p>Isi data unit elektromedis secara detail untuk keperluan database rumah sakit.</p>
+            </div>
+
+            <!-- Susunan Form 2 Kolom Profesional -->
+            <div class="form-grid">
+                
+                <div class="input-group">
+                    <label>Nama Puskesmas / Instansi</label>
+                    <input type="text" placeholder="Contoh: Puskesmas Sukomanunggal">
+                </div>
+                
+                <div class="input-group">
+                    <label>Contact Person (Nama/No. HP)</label>
+                    <input type="text" placeholder="Contoh: dr. Andi - 081234xxx">
+                </div>
+                
+                <div class="input-group">
+                    <label>Tanggal Visit</label>
+                    <input type="date">
+                </div>
+                
+                <div class="input-group">
+                    <label>Nama Alat</label>
+                    <input type="text" placeholder="Contoh: Patient Monitor">
+                </div>
+                
+                <div class="input-group">
+                    <label>Merk Alat</label>
+                    <input type="text" placeholder="Contoh: Mindray">
+                </div>
+                
+                <div class="input-group">
+                    <label>Tipe Alat (Type)</label>
+                    <input type="text" placeholder="Contoh: MEC-1000">
+                </div>
+                
+                <div class="input-group full-width">
+                    <label>Serial Number (SN)</label>
+                    <input type="text" placeholder="Contoh: SN-123456789">
+                </div>
+                
+                <div class="input-group full-width">
+                    <label>Detail Kerusakan / Trouble</label>
+                    <textarea rows="4" placeholder="Jelaskan secara detail kerusakan yang terjadi..."></textarea>
+                </div>
+                
+                <div class="input-group full-width">
+                    <button class="btn-submit" onclick="simpanData()">Kirim Laporan ke Sistem</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. ANIMASI MUNCUL ELEGAN GSAP
+        // ==========================================
+        window.onload = () => {
+            gsap.from(".navbar", { y: -50, opacity: 0, duration: 1, ease: "power3.out" });
+            // Efek kotak form muncul dan membesar perlahan
+            gsap.from(".form-box", { y: 50, scale: 0.9, opacity: 0, duration: 1.2, delay: 0.2, ease: "back.out(1.5)" });
+            // Efek elemen input muncul satu per satu
+            gsap.from(".input-group", { y: 20, opacity: 0, duration: 0.8, stagger: 0.1, delay: 0.5, ease: "power2.out" });
+        };
+
+        // ==========================================
+        // 2. THREE.JS (ANIMASI PARTIKEL LATAR BELAKANG)
+        // ==========================================
+        const bgContainer = document.getElementById('webgl-background');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 10;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        bgContainer.appendChild(renderer.domElement);
+
+        const particlesGeo = new THREE.BufferGeometry();
+        const particlesCount = 250; 
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 25; 
+        }
+        
+        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMat = new THREE.PointsMaterial({
+            size: 0.05, color: 0x10b981, transparent: true, opacity: 0.7
+        });
+        
+        const particleMesh = new THREE.Points(particlesGeo, particlesMat);
+        scene.add(particleMesh);
+
+        const clock = new THREE.Clock();
+        function animateBg() {
+            requestAnimationFrame(animateBg);
+            const time = clock.getElapsedTime();
+            // Partikel berputar mengitari layar
+            particleMesh.rotation.y = time * 0.02;
+            particleMesh.rotation.x = time * 0.01;
+            renderer.render(scene, camera);
+        }
+        animateBg();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // ==========================================
+        // 3. FUNGSI SIMPAN DATA (Sementara)
+        // ==========================================
+        function simpanData() {
+            // Animasi tombol ketika diklik (GSAP)
+            gsap.to(".btn-submit", { scale: 0.95, yoyo: true, repeat: 1, duration: 0.1 });
+            
+            // Notifikasi sebelum dihubungkan ke Google Sheets
+            alert("Sistem Siap! Form ini tinggal kita hubungkan dengan script Google Sheets (Google Apps Script).");
+        }
+    </script>
+</body>
+</html>

@@ -34,11 +34,10 @@ function register() {
     y.style.opacity = 1;
 }
 
-// --- FUNGSI LOGIN (Masuk Sistem) ---
+// Fungsi Login
 function prosesLogin() {
-    // Tambahan .trim() agar kalau tidak sengaja ter-copy spasi, tetap aman
-    var userLogin = document.getElementById("login-user").value.trim();
-    var passLogin = document.getElementById("login-pass").value.trim();
+    var userLogin = document.getElementById("login-user").value;
+    var passLogin = document.getElementById("login-pass").value;
 
     if (userLogin === "" || passLogin === "") {
         tampilkanAlert("Akses ditolak! Mohon lengkapi ID Teknisi dan Password Anda terlebih dahulu.");
@@ -46,7 +45,7 @@ function prosesLogin() {
     }
 
     var usernameBenar = "admin_medik";
-    var sandiRahasia = "QXNldEBNZWRpazIwMjYh"; // Ini adalah Aset@Medik2026!
+    var sandiRahasia = "QXNldEBNZWRpazIwMjYh"; 
 
     if (userLogin === usernameBenar && btoa(passLogin) === sandiRahasia) {
         sessionStorage.setItem("kunciAkses", "diizinkan");

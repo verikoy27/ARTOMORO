@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Faskes - PT. ARTOMORO</title>
+    
+    <script>
+        if (sessionStorage.getItem("kunciAkses") !== "diizinkan") {
+            window.location.replace("login.html");
+        }
+    </script>
+
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; min-height: 100vh; }
+        
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 40px; background: rgba(15, 32, 39, 0.8); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); position: sticky; top: 0; z-index: 100;
+        }
+        .navbar .logo { font-size: 22px; font-weight: 700; color: #0ea5e9; }
+        .btn-back {
+            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+        }
+        .btn-back:hover { background: rgba(14, 165, 233, 0.2); border-color: #0ea5e9; color: #0ea5e9; }
+
+        .container { padding: 40px; max-width: 1200px; margin: auto; }
+        
+        .header-section { text-align: center; margin-bottom: 30px; }
+        .header-section h1 { font-size: 28px; font-weight: 600; color: #0ea5e9; margin-bottom: 15px; }
+        
+        /* KOTAK PENCARIAN */
+        .search-container {
+            max-width: 500px; margin: 0 auto 40px auto; position: relative;
+        }
+        .search-container input {
+            width: 100%; padding: 15px 20px 15px 45px; border-radius: 30px;
+            background: rgba(15, 32, 39, 0.7); border: 1px solid rgba(14, 165, 233, 0.4);
+            color: white; font-size: 15px; outline: none; transition: 0.3s;
+        }
+        .search-container input:focus { border-color: #0ea5e9; box-shadow: 0 0 15px rgba(14, 165, 233, 0.3); }
+        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #0ea5e9; }
+
+        /* GRID DAFTAR FASKES */
+        .faskes-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;
+        }
+        
+        .faskes-card {
+            background: rgba(15, 32, 39, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 15px;
+            text-decoration: none; color: white; transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .faskes-card:hover {
+            transform: translateY(-5px); background: rgba(14, 165, 233, 0.1); border-color: #0ea5e9;
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.15);
+        }
+        .faskes-card i { font-size: 24px; color: #0ea5e9; }
+        .faskes-card h3 { font-size: 14px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">PT. ARTOMORO .</div>
+        <a href="dashboard.html" class="btn-back"><i class='bx bx-arrow-back'></i> Kembali</a>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Daftar Fasilitas Kesehatan</h1>
+            <p>Pilih Faskes untuk melihat data inventaris dan laporan kerusakan alat.</p>
+        </div>
+
+        <div class="search-container">
+            <i class='bx bx-search'></i>
+            <input type="text" id="inputCari" onkeyup="cariFaskes()" placeholder="Cari nama puskesmas / instansi...">
+        </div>
+
+        <!-- Daftar akan di-generate otomatis oleh JavaScript -->
+        <div class="faskes-grid" id="faskesList"></div>
+    </div>
+
+    <script>
+        // Array Data 65 Faskes yang Anda berikan
+        const dataFaskes = [
+            "Puskesmas Asemrowo", "Puskesmas Balas Klumprik", "Puskesmas Balongsari", "Puskesmas Bangkingan", 
+            "Puskesmas Banyu Urip", "Puskesmas Benowo", "Puskesmas Bulak Banteng", "Puskesmas Dr. Soetomo", 
+            "Puskesmas Dukuh Kupang", "Puskesmas Dupak", "Puskesmas Gading", "Puskesmas Gayungan", 
+            "Puskesmas Gundih", "Puskesmas Gunung Anyar", "Puskesmas Jagir", "Puskesmas Jemursari", 
+            "Puskesmas Jeruk", "Puskesmas Kalijudan", "Puskesmas Kalirungkut", "Puskesmas Kebonsari", 
+            "Puskesmas Kedungdoro", "Puskesmas Kedurus", "Puskesmas Kenjeran", "Puskesmas Keputih", 
+            "Puskesmas Ketabang", "Puskesmas Klampis Ngasem", "Puskesmas Krembangan Selatan", "Puskesmas Lidah Kulon", 
+            "Puskesmas Lontar", "Puskesmas Made", "Puskesmas Manukan Kulon", "Puskesmas Medokan Ayu", 
+            "Puskesmas Menur", "Puskesmas Mojo", "Puskesmas Moro Krembangan", "Puskesmas Mulyorejo", 
+            "Puskesmas Ngagel Rejo", "Puskesmas Pacar Keling", "Puskesmas Pakis", "Puskesmas Pegirian", 
+            "Puskesmas Peneleh", "Puskesmas Perak Timur", "Puskesmas Pucangsewu", "Puskesmas Putat Jaya", 
+            "Puskesmas Rangkah", "Puskesmas Sawah Pulo", "Puskesmas Sawahan", "Puskesmas Sememi", 
+            "Puskesmas Sidosermo", "Puskesmas Sidotopo", "Puskesmas Sidotopo Wetan", "Puskesmas Simolawang", 
+            "Puskesmas Simomulyo", "Puskesmas Siwalankerto", "Puskesmas Tambak Wedi", "Puskesmas Tambakrejo", 
+            "Puskesmas Tanah Kali Kedinding", "Puskesmas Tanjungsari", "Puskesmas Tembok Dukuh", "Puskesmas Tenggilis", 
+            "Puskesmas Wiyung", "Puskesmas Wonokromo", "Puskesmas Wonokusumo", "GFK", "Labkesda"
+        ];
+
+        const containerFaskes = document.getElementById("faskesList");
+
+        // Fungsi mencetak kartu Faskes
+        function renderFaskes(data) {
+            containerFaskes.innerHTML = "";
+            data.forEach(faskes => {
+                // Perhatikan: link mengarah ke 1 file (detail.html) dengan membawa nama puskesmas
+                const urlAman = encodeURIComponent(faskes);
+                const htmlCard = `
+                    <a href="detail.html?nama=${urlAman}" class="faskes-card item-faskes">
+                        <i class='bx bx-clinic'></i>
+                        <h3>${faskes}</h3>
+                    </a>
+                `;
+                containerFaskes.innerHTML += htmlCard;
+            });
+        }
+
+        // Tampilkan semua saat pertama kali dibuka
+        renderFaskes(dataFaskes);
+
+        // Fungsi Filter Pencarian (Cari Cepat)
+        function cariFaskes() {
+            const keyword = document.getElementById("inputCari").value.toLowerCase();
+            const hasilFilter = dataFaskes.filter(faskes => faskes.toLowerCase().includes(keyword));
+            renderFaskes(hasilFilter);
+        }
+    </script>
+</body>
+</html>
