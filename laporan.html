@@ -3,257 +3,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Laporan Kerusakan - PT. ARTOMORO</title>
-    
-    <!-- SCRIPT PENJAGA PINTU (Anti Tembak Link) -->
-    <!-- Wajib di posisi paling atas agar langsung menendang user yang belum login -->
-    <script>
-        if (sessionStorage.getItem("kunciAkses") !== "diizinkan") {
-            window.location.replace("login.html");
-        }
-    </script>
-
-    <!-- Boxicons & Font Poppins -->
+    <title>Laporan Kerusakan - PT. ARTOMORO</title>
+    <script>if (sessionStorage.getItem("kunciAkses") !== "diizinkan") window.location.replace("login.html");</script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Memanggil Library Three.js & GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <style>
+        :root {
+            --bg-color: linear-gradient(135deg, #0f2027, #203a43, #2c5364); --text-main: #ffffff; --text-muted: rgba(255, 255, 255, 0.6);
+            --panel-bg: rgba(15, 32, 39, 0.85); --nav-bg: rgba(15, 32, 39, 0.8); --input-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.15); --table-border: rgba(255, 255, 255, 0.05); --table-hover: rgba(255, 255, 255, 0.03);
+        }
+        body.light-mode {
+            --bg-color: linear-gradient(135deg, #f0f9ff, #e0f2fe, #bae6fd); --text-main: #0f172a; --text-muted: #475569;
+            --panel-bg: rgba(255, 255, 255, 0.85); --nav-bg: rgba(255, 255, 255, 0.8); --input-bg: rgba(255, 255, 255, 0.6);
+            --border-color: rgba(14, 165, 233, 0.4); --table-border: rgba(0, 0, 0, 0.1); --table-hover: rgba(0, 0, 0, 0.03);
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; overflow-x: hidden; transition: 0.3s; }
+        #webgl-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.3; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: var(--nav-bg); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s;}
+        .navbar .logo { font-size: 22px; font-weight: 700; color: #0ea5e9; }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .btn-theme { background: transparent; border: none; color: var(--text-main); font-size: 24px; cursor: pointer; transition: 0.3s; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .btn-theme:hover { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
+        .btn-back { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         
-        body {
-            /* Tema warna disamakan 100% dengan halaman Login & Dashboard */
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Tampilan Background Partikel Three.js */
-        #webgl-background {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none; opacity: 0.5;
-        }
-
-        /* --- NAVBAR --- */
-        .navbar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 50px; background: rgba(15, 32, 39, 0.7);
-            backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky; top: 0; z-index: 100;
-        }
-        .navbar .logo { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #10b981; }
-        .btn-back {
-            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 10px 25px; border-radius: 30px; font-weight: 600; cursor: pointer;
-            transition: 0.3s; display: flex; align-items: center; gap: 8px; text-decoration: none;
-        }
-        .btn-back:hover { background: rgba(255, 255, 255, 0.2); transform: translateX(-5px); }
-
-        /* --- CONTAINER FORM KACA (Glassmorphism) --- */
-        .container {
-            position: relative; z-index: 2; padding: 40px 20px;
-            display: flex; justify-content: center; align-items: center;
-        }
+        .container { position: relative; z-index: 2; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
         
-        .form-box {
-            background: rgba(15, 32, 39, 0.85); border: 1px solid rgba(16, 185, 129, 0.4);
-            border-radius: 20px; padding: 40px; width: 100%; max-width: 850px;
-            backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        }
-
+        .btn-buka-form { background: #0ea5e9; color: white; border: none; padding: 15px 35px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3); }
+        .btn-buka-form:hover { background: #0284c7; transform: translateY(-3px); }
+        
+        .form-box, .panel { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; width: 100%; max-width: 1100px; backdrop-filter: blur(15px); transition: 0.3s; }
+        .form-box { display: none; position: relative; max-width: 900px; }
+        
+        .btn-tutup { position: absolute; top: 20px; right: 25px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; transition: 0.3s; }
+        
         .form-header { text-align: center; margin-bottom: 30px; }
-        .form-header i { font-size: 50px; color: #10b981; margin-bottom: 10px; }
-        .form-header h2 { font-size: 28px; font-weight: 600; }
-        .form-header p { color: rgba(255, 255, 255, 0.6); font-size: 14px; }
-
-        /* GRID FORM */
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        .form-header i { font-size: 50px; color: #0ea5e9; margin-bottom: 10px; }
+        .form-header h2 { font-size: 28px; font-weight: 600; color: #0ea5e9; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full-width { grid-column: span 2; }
-
         .input-group { display: flex; flex-direction: column; }
-        .input-group label { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 8px; font-weight: 500; }
+        .input-group label { font-size: 13px; color: var(--text-main); margin-bottom: 8px; font-weight: 600; }
+        .input-group input, .input-group textarea, .input-group select { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 15px; color: var(--text-main); outline: none; transition: 0.3s; font-size: 14px; }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: #0ea5e9; background: rgba(14, 165, 233, 0.05); }
+        .input-group select option { background: var(--panel-bg); color: var(--text-main); }
         
-        .input-group input, .input-group textarea {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px; padding: 14px 15px; color: white; outline: none;
-            transition: 0.3s; font-size: 14px;
-        }
-        .input-group input:focus, .input-group textarea:focus {
-            border-color: #10b981; background: rgba(16, 185, 129, 0.05);
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
-        }
+        .radio-box-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .radio-box-group input[type="radio"] { display: none; }
+        .radio-label { flex: 1; text-align: center; background: var(--input-bg); border: 2px solid var(--border-color); padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.3s; font-size: 14px; }
+        .radio-box-group input[type="radio"]:checked + .radio-label { background: #0ea5e9; color: white; border-color: #0ea5e9; box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4); transform: translateY(-2px); }
+        .radio-label:hover { border-color: #0ea5e9; color: #0ea5e9; }
+
+        /* KOTAK ALAT DINAMIS */
+        .alat-container { background: rgba(0,0,0,0.2); border: 1px dashed var(--border-color); padding: 20px; border-radius: 12px; margin-bottom: 15px; transition: 0.3s; }
+        body.light-mode .alat-container { background: rgba(0,0,0,0.03); }
+        .alat-header { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
+        .alat-header span { font-weight: 600; font-size: 14px; color: #0ea5e9; }
+        .btn-hapus-alat { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .btn-tambah-alat { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; border: 1px dashed #0ea5e9; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; cursor: pointer; transition: 0.3s; }
         
-        /* Ikon di dalam input date (kalender) */
-        ::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        .btn-submit { background: #0ea5e9; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; display: block; }
 
-        .btn-submit {
-            background: #10b981; color: white; border: none; padding: 15px;
-            border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer;
-            transition: 0.3s; margin-top: 15px; width: 100%;
-        }
-        .btn-submit:hover {
-            background: #0e9f6e; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); transform: translateY(-3px);
-        }
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; background: var(--input-bg); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
+        .filter-item { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px; background: var(--panel-bg); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .filter-item i { color: #0ea5e9; font-size: 18px; }
+        .filter-item input, .filter-item select { background: transparent; border: none; color: var(--text-main); width: 100%; outline: none; font-size: 13px; }
 
-        /* Responsif untuk layar HP */
-        @media only screen and (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .full-width { grid-column: span 1; }
-            .navbar { padding: 15px 20px; }
-            .form-box { padding: 25px; }
-        }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { padding: 14px 15px; text-align: left; border-bottom: 1px solid var(--table-border); vertical-align: middle; }
+        th { color: var(--text-muted); font-size: 11px; text-transform: uppercase; font-weight: 500; }
+        
+        /* DROPDOWN STATUS EDITABLE */
+        .status-dropdown { appearance: none; -moz-appearance: none; -webkit-appearance: none; background-color: transparent; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; cursor: pointer; outline: none; text-align: center; border: 1px solid transparent; }
+        .status-dropdown option { background: var(--panel-bg); color: var(--text-main); font-weight: normal; }
+        .badge-merah { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.4); }
+        .badge-kuning { background: rgba(245, 158, 11, 0.15); color: #eab308; border-color: rgba(245, 158, 11, 0.4); }
+        .badge-hijau { background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.4); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 9999; opacity: 0; }
+        .modal-box { background: var(--panel-bg); border: 1px solid #10b981; border-radius: 20px; padding: 35px; width: 90%; max-width: 450px; text-align: center; color: var(--text-main); transform: scale(0.8); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.2); }
+        .modal-box i { font-size: 65px; margin-bottom: 5px; color: #10b981; }
+
+        @media only screen and (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
     </style>
 </head>
 <body>
 
-    <!-- ANIMASI BACKGROUND THREE.JS -->
     <div id="webgl-background"></div>
 
-    <!-- NAVBAR ATAS -->
     <nav class="navbar">
         <div class="logo">PT. ARTOMORO .</div>
-        <a href="dashboard.html" class="btn-back">
-            <i class='bx bx-arrow-back'></i> Dashboard
-        </a>
+        <div class="nav-right">
+            <button id="btnTheme" class="btn-theme"><i class='bx bx-sun'></i></button>
+            <a href="dashboard.html" class="btn-back"><i class='bx bx-arrow-back'></i> Dashboard</a>
+        </div>
     </nav>
 
-    <!-- KONTEN FORM -->
     <div class="container">
-        <div class="form-box">
+        <button id="btnBukaForm" class="btn-buka-form"><i class='bx bx-wrench'></i> Lapor Kerusakan Baru</button>
+
+        <div class="form-box" id="wadahForm">
+            <button class="btn-tutup" id="btnTutupForm"><i class='bx bx-x'></i></button>
             <div class="form-header">
-                <i class='bx bx-file-find'></i>
-                <h2>Log Laporan Kerusakan</h2>
-                <p>Isi data unit elektromedis secara detail untuk keperluan database rumah sakit.</p>
+                <i class='bx bx-clipboard'></i>
+                <h2>Laporan Kerusakan</h2>
+                <p>No Laporan: SR / [KATEGORI] / [BULAN] / [TAHUN] / [URUT] digenerate otomatis.</p>
             </div>
 
-            <!-- Susunan Form 2 Kolom Profesional -->
-            <div class="form-grid">
-                
-                <div class="input-group">
-                    <label>Nama Puskesmas / Instansi</label>
-                    <input type="text" placeholder="Contoh: Puskesmas Sukomanunggal">
+            <form id="formLaporan" class="form-grid">
+                <input type="hidden" name="action" value="simpan_laporan">
+
+                <div class="input-group full-width">
+                    <label>Pilih Kategori Pekerjaan</label>
+                    <div class="radio-box-group">
+                        <input type="radio" id="katCM" name="kategori" value="CM" required>
+                        <label for="katCM" class="radio-label">CM</label>
+                        <input type="radio" id="katPM" name="kategori" value="PM">
+                        <label for="katPM" class="radio-label">PM</label>
+                        <input type="radio" id="katCHK" name="kategori" value="CHK">
+                        <label for="katCHK" class="radio-label">CHK</label>
+                        <input type="radio" id="katINS" name="kategori" value="INS">
+                        <label for="katINS" class="radio-label">INS</label>
+                    </div>
                 </div>
-                
+
                 <div class="input-group">
-                    <label>Contact Person (Nama/No. HP)</label>
-                    <input type="text" placeholder="Contoh: dr. Andi - 081234xxx">
+                    <label>Tanggal / Bulan / Tahun</label>
+                    <input type="date" name="tanggal" required>
                 </div>
-                
                 <div class="input-group">
-                    <label>Tanggal Visit</label>
-                    <input type="date">
+                    <label>Nama Faskes (Ketik untuk mencari / list)</label>
+                    <input list="listFaskes" name="nama_faskes" placeholder="Contoh: Puskesmas Asemrowo" required autocomplete="off">
+                    <datalist id="listFaskes">
+                        <option value="Puskesmas Asemrowo"></option>
+                        <option value="Puskesmas Balas Klumprik"></option>
+                        <option value="Puskesmas Balongsari"></option>
+                    </datalist>
                 </div>
-                
-                <div class="input-group">
-                    <label>Nama Alat</label>
-                    <input type="text" placeholder="Contoh: Patient Monitor">
+
+                <div class="input-group full-width">
+                    <label>Contact Person (Nama PJ & No HP)</label>
+                    <input type="text" name="cp" placeholder="Contoh: dr. Budi - 081234567xxx" required>
                 </div>
-                
-                <div class="input-group">
-                    <label>Merk Alat</label>
-                    <input type="text" placeholder="Contoh: Mindray">
+
+                <div class="full-width" style="margin-top: 10px;">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 10px;">Rincian Alat (Bisa >1 alat dalam 1 PKM)</label>
+                    
+                    <div id="wadahListAlat">
+                        <div class="alat-container item-alat">
+                            <div class="alat-header">
+                                <span class="nomer-urut">Alat #1</span>
+                            </div>
+                            <div class="input-group" style="margin-bottom: 10px;">
+                                <label style="font-size:11px; margin-bottom:5px;">Nama Alkes (Merk, Type, S/N)</label>
+                                <input type="text" class="input-nama-alat" placeholder="Merk, Type, SN..." required>
+                            </div>
+                            <div class="input-group">
+                                <label style="font-size:11px; margin-bottom:5px;">Kerusakan</label>
+                                <input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-tambah-alat" onclick="tambahFormAlat()">
+                        <i class='bx bx-plus'></i> Tambah Baris Alat Lainnya
+                    </button>
                 </div>
-                
-                <div class="input-group">
-                    <label>Tipe Alat (Type)</label>
-                    <input type="text" placeholder="Contoh: MEC-1000">
+
+                <div class="input-group full-width">
+                    <label>Status</label>
+                    <select name="status" required>
+                        <option value="" disabled selected>-- Pilih Status --</option>
+                        <option value="Belum diTL">Belum diTL</option>
+                        <option value="Penjadwalan Teknisi">Penjadwalan Teknisi</option>
+                        <option value="Selesai">Selesai</option>
+                    </select>
                 </div>
                 
                 <div class="input-group full-width">
-                    <label>Serial Number (SN)</label>
-                    <input type="text" placeholder="Contoh: SN-123456789">
+                    <button type="submit" class="btn-submit" id="btnKirim">Simpan & Generate Laporan</button>
                 </div>
-                
-                <div class="input-group full-width">
-                    <label>Detail Kerusakan / Trouble</label>
-                    <textarea rows="4" placeholder="Jelaskan secara detail kerusakan yang terjadi..."></textarea>
+            </form>
+        </div>
+
+        <div class="panel">
+            <h3 style="color: #0ea5e9; margin-bottom: 20px; margin-top: 0;"><i class='bx bx-table'></i> Detail Laporan Kerusakan</h3>
+            
+            <div class="filter-bar">
+                <div class="filter-item">
+                    <i class='bx bx-building-house'></i>
+                    <input type="text" id="filterFaskes" placeholder="Filter Faskes..." onkeyup="saringTabel()">
                 </div>
-                
-                <div class="input-group full-width">
-                    <button class="btn-submit" onclick="simpanData()">Kirim Laporan ke Sistem</button>
+                <div class="filter-item">
+                    <i class='bx bx-category'></i>
+                    <select id="filterKategori" onchange="saringTabel()">
+                        <option value="">Semua Kategori (CM/PM/CHK/INS)</option>
+                        <option value="CM">CM</option>
+                        <option value="PM">PM</option>
+                        <option value="CHK">CHK</option>
+                        <option value="INS">INS</option>
+                    </select>
                 </div>
-                
+                <div class="filter-item">
+                    <i class='bx bx-calendar'></i>
+                    <input type="date" id="filterTanggal" onchange="saringTabel()">
+                </div>
+                <button onclick="document.getElementById('filterTanggal').value=''; saringTabel();" style="background:transparent; border:1px solid #ef4444; color:#ef4444; border-radius:10px; padding:0 15px; cursor:pointer;" title="Reset Filter Tanggal"><i class='bx bx-reset'></i></button>
+            </div>
+
+            <div class="table-responsive">
+                <table id="tabelData">
+                    <thead>
+                        <tr>
+                            <th>No Laporan</th>
+                            <th>Tanggal</th>
+                            <th>Faskes & CP</th>
+                            <th>Alkes & Kerusakan</th>
+                            <th>Status TL (Bisa Diedit)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTabelLaporan">
+                        <tr><td colspan="5" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
+    <!-- MODAL SUCCESS -->
+    <div id="modalSuccess" class="modal-overlay">
+        <div class="modal-box" id="modalSuccessBox">
+            <i class='bx bx-check-circle'></i>
+            <h2>Laporan Tersimpan!</h2>
+            <p id="teksSukses" style="margin-bottom: 25px; color: var(--text-muted);">Data berhasil dipecah dan masuk ke Database.</p>
+            <button class="btn-submit" style="background: #10b981;" onclick="document.getElementById('modalSuccess').style.display='none'">Tutup</button>
+        </div>
+    </div>
+
     <script>
-        // ==========================================
-        // 1. ANIMASI MUNCUL ELEGAN GSAP
-        // ==========================================
-        window.onload = () => {
-            gsap.from(".navbar", { y: -50, opacity: 0, duration: 1, ease: "power3.out" });
-            // Efek kotak form muncul dan membesar perlahan
-            gsap.from(".form-box", { y: 50, scale: 0.9, opacity: 0, duration: 1.2, delay: 0.2, ease: "back.out(1.5)" });
-            // Efek elemen input muncul satu per satu
-            gsap.from(".input-group", { y: 20, opacity: 0, duration: 0.8, stagger: 0.1, delay: 0.5, ease: "power2.out" });
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzP5btzre-P0GW-XTK90I-6-P6QOgWgnBzAzvspNvrYofFWSSoTHrxZnL8gncUxty2Q/exec'; 
+
+        const btnTheme = document.getElementById('btnTheme');
+        if(localStorage.getItem('temaArtomoro') === 'light') { document.body.classList.add('light-mode'); btnTheme.querySelector('i').className = 'bx bx-moon'; }
+        btnTheme.addEventListener('click', () => { document.body.classList.toggle('light-mode'); localStorage.setItem('temaArtomoro', document.body.classList.contains('light-mode') ? 'light' : 'dark'); btnTheme.querySelector('i').className = document.body.classList.contains('light-mode') ? 'bx bx-moon' : 'bx bx-sun'; });
+
+        const wadahForm = document.getElementById("wadahForm");
+        const btnBuka = document.getElementById("btnBukaForm");
+        
+        btnBuka.addEventListener("click", () => {
+            wadahForm.style.display = "block";
+            gsap.fromTo(wadahForm, { y:-30, opacity:0 }, { y:0, opacity:1, duration:0.5 });
+            btnBuka.style.display = "none";
+        });
+        function sembunyikanForm() {
+            gsap.to(wadahForm, { y:-30, opacity:0, duration:0.3, onComplete: () => { 
+                wadahForm.style.display = "none"; 
+                btnBuka.style.display = "inline-flex"; 
+                gsap.fromTo(btnBuka, { scale:0.5, opacity:0 }, { scale:1, opacity:1, duration:0.5 }); 
+            }});
+        }
+        document.getElementById("btnTutupForm").addEventListener("click", sembunyikanForm);
+
+        const bgContainer = document.getElementById('webgl-background'); const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); camera.position.z = 10; const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight); bgContainer.appendChild(renderer.domElement);
+        const particlesGeo = new THREE.BufferGeometry(); const posArray = new Float32Array(250 * 3); for(let i=0; i<750; i++) posArray[i] = (Math.random()-0.5)*25; particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3)); const particleMesh = new THREE.Points(particlesGeo, new THREE.PointsMaterial({ size: 0.05, color: 0x0ea5e9, transparent: true, opacity: 0.6 })); scene.add(particleMesh); function animateBg() { requestAnimationFrame(animateBg); particleMesh.rotation.y += 0.0015; renderer.render(scene, camera); } animateBg();
+
+        let hitungAlat = 1;
+        function tambahFormAlat() {
+            hitungAlat++;
+            const wadah = document.getElementById("wadahListAlat");
+            const divBaru = document.createElement("div"); divBaru.className = "alat-container item-alat";
+            divBaru.innerHTML = `<div class="alat-header"><span class="nomer-urut">Alat #${hitungAlat}</span><button type="button" class="btn-hapus-alat" onclick="hapusFormAlat(this)"><i class='bx bx-trash'></i> Hapus</button></div><div class="input-group" style="margin-bottom: 10px;"><label style="font-size:11px; margin-bottom:5px;">Nama Alkes (Merk, Type, S/N)</label><input type="text" class="input-nama-alat" placeholder="Merk, Type, SN..." required></div><div class="input-group"><label style="font-size:11px; margin-bottom:5px;">Kerusakan</label><input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required></div>`;
+            wadah.appendChild(divBaru); updateNomerUrut();
+        }
+        function hapusFormAlat(btn) { btn.closest(".item-alat").remove(); updateNomerUrut(); }
+        function updateNomerUrut() { document.querySelectorAll(".item-alat").forEach((el, index) => { el.querySelector(".nomer-urut").innerText = `Alat #${index + 1}`; }); }
+
+        document.getElementById('formLaporan').addEventListener('submit', e => {
+            e.preventDefault();
+            const btnKirim = document.getElementById('btnKirim');
+            btnKirim.innerText = "Menyimpan..."; btnKirim.style.background = "#fbbf24";
+            
+            let arrayAlat = [];
+            document.querySelectorAll(".item-alat").forEach(item => { arrayAlat.push({ nama: item.querySelector(".input-nama-alat").value, rusak: item.querySelector(".input-rusak-alat").value }); });
+            let formData = new FormData(document.getElementById('formLaporan'));
+            formData.append("data_alat_json", JSON.stringify(arrayAlat));
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: formData })
+                .then(() => {
+                    gsap.killTweensOf(btnKirim);
+                    btnKirim.style.background = "#0ea5e9"; btnKirim.innerText = "Simpan & Generate Laporan";
+                    document.getElementById('teksSukses').innerText = `Sistem berhasil memecah data menjadi ${arrayAlat.length} Laporan!`;
+                    document.getElementById("modalSuccess").style.display = "flex";
+                    document.getElementById('formLaporan').reset();
+                    document.getElementById("wadahListAlat").innerHTML = `<div class="alat-container item-alat"><div class="alat-header"><span class="nomer-urut">Alat #1</span></div><div class="input-group" style="margin-bottom: 10px;"><label style="font-size:11px; margin-bottom:5px;">Nama Alkes (Merk, Type, S/N)</label><input type="text" class="input-nama-alat" placeholder="Merk, Type, SN..." required></div><div class="input-group"><label style="font-size:11px; margin-bottom:5px;">Kerusakan</label><input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required></div></div>`;
+                    hitungAlat = 1; sembunyikanForm();
+                    setTimeout(muatDataLaporan, 1500); 
+                }).catch(err => {
+                    btnKirim.style.background = "#ef4444"; btnKirim.innerText = "Gagal Simpan!"; alert("Cek Koneksi Internet Anda!");
+                });
+        });
+
+        // ================= FITUR EDIT STATUS LANGSUNG DARI TABEL =================
+        window.ubahStatusLaporan = function(idLaporan, elemenSelect) {
+            const statusBaru = elemenSelect.value;
+            const classLama = elemenSelect.className;
+            
+            elemenSelect.className = "status-dropdown";
+            if(statusBaru === "Belum diTL") elemenSelect.classList.add("badge-merah");
+            else if(statusBaru === "Penjadwalan Teknisi") elemenSelect.classList.add("badge-kuning");
+            else if(statusBaru === "Selesai") elemenSelect.classList.add("badge-hijau");
+            elemenSelect.style.opacity = "0.5";
+
+            let fd = new FormData();
+            fd.append("action", "update_status_laporan");
+            fd.append("no_laporan", idLaporan);
+            fd.append("status_baru", statusBaru);
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
+                .then(() => { 
+                    elemenSelect.style.opacity = "1"; 
+                    // Jika diubah ke penjadwalan teknisi, beritahu user
+                    if(statusBaru === "Penjadwalan Teknisi") {
+                        alert(`Laporan ${idLaporan} otomatis disalin ke menu Jadwal Teknisi!`);
+                    }
+                })
+                .catch(err => {
+                    elemenSelect.style.opacity = "1";
+                    elemenSelect.className = classLama; 
+                    alert("Gagal update status. Cek koneksi internet.");
+                });
         };
 
-        // ==========================================
-        // 2. THREE.JS (ANIMASI PARTIKEL LATAR BELAKANG)
-        // ==========================================
-        const bgContainer = document.getElementById('webgl-background');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 10;
-
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        bgContainer.appendChild(renderer.domElement);
-
-        const particlesGeo = new THREE.BufferGeometry();
-        const particlesCount = 250; 
-        const posArray = new Float32Array(particlesCount * 3);
-        
-        for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 25; 
-        }
-        
-        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particlesMat = new THREE.PointsMaterial({
-            size: 0.05, color: 0x10b981, transparent: true, opacity: 0.7
-        });
-        
-        const particleMesh = new THREE.Points(particlesGeo, particlesMat);
-        scene.add(particleMesh);
-
-        const clock = new THREE.Clock();
-        function animateBg() {
-            requestAnimationFrame(animateBg);
-            const time = clock.getElapsedTime();
-            // Partikel berputar mengitari layar
-            particleMesh.rotation.y = time * 0.02;
-            particleMesh.rotation.x = time * 0.01;
-            renderer.render(scene, camera);
-        }
-        animateBg();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // ==========================================
-        // 3. FUNGSI SIMPAN DATA (Sementara)
-        // ==========================================
-        function simpanData() {
-            // Animasi tombol ketika diklik (GSAP)
-            gsap.to(".btn-submit", { scale: 0.95, yoyo: true, repeat: 1, duration: 0.1 });
+        function muatDataLaporan() {
+            const tbody = document.getElementById("bodyTabelLaporan");
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data...</td></tr>`;
             
-            // Notifikasi sebelum dihubungkan ke Google Sheets
-            alert("Sistem Siap! Form ini tinggal kita hubungkan dengan script Google Sheets (Google Apps Script).");
+            fetch(scriptURL + "?action=get_laporan")
+            .then(res => res.json())
+            .then(data => {
+                tbody.innerHTML = "";
+                if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada laporan kerusakan masuk.</td></tr>'; return; }
+                
+                data.reverse().forEach(item => {
+                    let st = item.status || "";
+                    let b = "badge-merah"; 
+                    if(st === "Penjadwalan Teknisi") b = "badge-kuning"; 
+                    else if(st === "Selesai") b = "badge-hijau";
+
+                    // Select Status Editable
+                    let selectHtml = `
+                    <select class="status-dropdown ${b}" onchange="ubahStatusLaporan('${item.no_laporan}', this)">
+                        <option value="Belum diTL" ${st === 'Belum diTL' ? 'selected' : ''}>Belum diTL</option>
+                        <option value="Penjadwalan Teknisi" ${st === 'Penjadwalan Teknisi' ? 'selected' : ''}>Penjadwalan Teknisi</option>
+                        <option value="Selesai" ${st === 'Selesai' ? 'selected' : ''}>Selesai</option>
+                    </select>`;
+                    
+                    let formatAlkes = (item.alkes || "").toString().replace(/\n/g, "<br>");
+                    let formatRusak = (item.kerusakan || "").toString().replace(/\n/g, "<br>");
+
+                    tbody.innerHTML += `
+                    <tr>
+                        <td><b>${item.no_laporan}</b><br><span style="color:#0ea5e9; font-size:11px; font-weight:600;">${item.kategori}</span></td>
+                        <td class="kol-tanggal">${item.tanggal}</td>
+                        <td class="kol-faskes"><b>${item.faskes}</b><br><span style="font-size:11px; opacity:0.7;"><i class='bx bx-user'></i> ${item.cp}</span></td>
+                        <td><b>${formatAlkes}</b><br><span style="opacity:0.8;">${formatRusak}</span></td>
+                        <td>${selectHtml}</td>
+                    </tr>`;
+                });
+                saringTabel(); 
+            }).catch(err => {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Gagal mengambil data.</td></tr>`;
+            });
         }
+
+        function saringTabel() {
+            let fFaskes = document.getElementById("filterFaskes").value.toLowerCase();
+            let fKat = document.getElementById("filterKategori").value.toLowerCase();
+            let fTgl = document.getElementById("filterTanggal").value; 
+
+            let baris = document.querySelectorAll("#bodyTabelLaporan tr");
+            baris.forEach(tr => {
+                if(tr.getElementsByTagName("td").length > 1) {
+                    let tdFaskes = tr.querySelector(".kol-faskes").textContent.toLowerCase();
+                    let tdKategori = tr.getElementsByTagName("td")[0].textContent.toLowerCase();
+                    let tdTanggal = tr.querySelector(".kol-tanggal").textContent; 
+                    let cocokFaskes = tdFaskes.indexOf(fFaskes) > -1;
+                    let cocokKat = fKat === "" || tdKategori.indexOf(fKat) > -1;
+                    let cocokTgl = fTgl === "" || tdTanggal.includes(fTgl);
+                    tr.style.display = (cocokFaskes && cocokKat && cocokTgl) ? "" : "none";
+                }
+            });
+        }
+        window.onload = muatDataLaporan;
     </script>
 </body>
 </html>

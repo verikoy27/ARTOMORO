@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History Alat - PT. ARTOMORO</title>
+    <script>if (sessionStorage.getItem("kunciAkses") !== "diizinkan") window.location.replace("login.html");</script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root { --bg-color: linear-gradient(135deg, #0f2027, #203a43, #2c5364); --text-main: #ffffff; --text-muted: rgba(255, 255, 255, 0.6); --panel-bg: rgba(15, 32, 39, 0.85); --nav-bg: rgba(15, 32, 39, 0.8); --input-bg: rgba(255, 255, 255, 0.05); --border-color: rgba(255, 255, 255, 0.15); --table-border: rgba(255, 255, 255, 0.05); }
+        body.light-mode { --bg-color: linear-gradient(135deg, #f0f9ff, #e0f2fe, #bae6fd); --text-main: #0f172a; --text-muted: #475569; --panel-bg: rgba(255, 255, 255, 0.85); --nav-bg: rgba(255, 255, 255, 0.8); --input-bg: rgba(255, 255, 255, 0.6); --border-color: rgba(14, 165, 233, 0.4); --table-border: rgba(0, 0, 0, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; overflow-x: hidden; transition: 0.3s; }
+        #webgl-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.3; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: var(--nav-bg); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100;}
+        .navbar .logo { font-size: 22px; font-weight: 700; color: #0ea5e9; }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .btn-theme { background: transparent; border: none; color: var(--text-main); font-size: 24px; cursor: pointer; transition: 0.3s; width: 40px; height: 40px; border-radius: 50%; }
+        .btn-theme:hover { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
+        .btn-back { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        
+        .container { position: relative; z-index: 2; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .btn-buka-form { background: #0ea5e9; color: white; border: none; padding: 15px 35px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3); }
+        .btn-buka-form:hover { background: #0284c7; transform: translateY(-3px); }
+        
+        .form-box, .panel { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; width: 100%; max-width: 1000px; backdrop-filter: blur(15px); }
+        .form-box { display: none; position: relative; max-width: 800px; }
+        .btn-tutup { position: absolute; top: 20px; right: 25px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 24px; transition: 0.3s; }
+        
+        .form-header { text-align: center; margin-bottom: 25px; }
+        .form-header i { font-size: 50px; color: #0ea5e9; margin-bottom: 10px; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+        
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 12px; color: var(--text-main); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; }
+        .input-group input, .input-group textarea, .input-group select { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 15px; color: var(--text-main); outline: none; transition: 0.3s; font-size: 14px; }
+        .input-group select option { background: var(--panel-bg); color: var(--text-main); }
+        body.light-mode ::-webkit-calendar-picker-indicator { filter: invert(0); } body:not(.light-mode) ::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+        .btn-submit { background: #0ea5e9; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; }
+
+        .table-responsive { overflow-x: auto; margin-top: 20px;}
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { padding: 14px 15px; text-align: left; border-bottom: 1px solid var(--table-border); vertical-align: top; }
+        th { color: var(--text-muted); font-size: 11px; text-transform: uppercase; font-weight: 500; }
+        
+        .badge { padding: 5px 10px; border-radius: 15px; font-size: 11px; font-weight: 600; display: inline-block; white-space: nowrap; }
+        .bg-red { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .bg-green { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .btn-kembali { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-kembali:hover { background: #dc2626; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        .img-link { color: #0ea5e9; text-decoration: none; font-weight: 600; font-size: 12px; display: inline-flex; align-items: center; gap: 5px; }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 9999; opacity: 0; }
+        .modal-box { background: var(--panel-bg); border: 1px solid #0ea5e9; border-radius: 20px; padding: 35px; width: 90%; max-width: 450px; text-align: center; color: var(--text-main); transform: scale(0.8); position: relative; }
+        .modal-box i.icon-center { font-size: 60px; margin-bottom: 5px; color: #0ea5e9; }
+        
+        @media only screen and (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
+    </style>
+</head>
+<body>
+    <div id="webgl-background"></div>
+
+    <nav class="navbar">
+        <div class="logo">PT. ARTOMORO .</div>
+        <div class="nav-right">
+            <button id="btnTheme" class="btn-theme"><i class='bx bx-sun'></i></button>
+            <a href="dashboard.html" class="btn-back"><i class='bx bx-arrow-back'></i> Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <button id="btnBukaForm" class="btn-buka-form"><i class='bx bx-export'></i> Alat Masuk ke Basecamp</button>
+
+        <!-- FORM ALAT DIBAWA -->
+        <div class="form-box" id="wadahForm">
+            <button class="btn-tutup" id="btnTutupForm"><i class='bx bx-x'></i></button>
+            <div class="form-header">
+                <i class='bx bx-log-in-circle'></i>
+                <h2 style="color: #0ea5e9; font-weight: 600;">Penerimaan Alat (Dibawa)</h2>
+            </div>
+
+            <form id="formBawa">
+                <input type="hidden" name="action" value="simpan_basecamp">
+                <div class="form-grid">
+                    
+                    <!-- INPUT FASKES DENGAN DAFTAR LENGKAP -->
+                    <div class="input-group">
+                        <label>PKM / Faskes</label>
+                        <input list="listFaskes" name="pkm" placeholder="Ketik atau pilih Puskesmas..." required autocomplete="off">
+                        <datalist id="listFaskes">
+                            <option value="Puskesmas Asemrowo"></option>
+                            <option value="Puskesmas Balas Klumprik"></option>
+                            <option value="Puskesmas Balongsari"></option>
+                            <option value="Puskesmas Bangkingan"></option>
+                            <option value="Puskesmas Banyu Urip"></option>
+                            <option value="Puskesmas Benowo"></option>
+                            <option value="Puskesmas Bulak Banteng"></option>
+                            <option value="Puskesmas Dr. Soetomo"></option>
+                            <option value="Puskesmas Dukuh Kupang"></option>
+                            <option value="Puskesmas Dupak"></option>
+                            <option value="Puskesmas Gading"></option>
+                            <option value="Puskesmas Gayungan"></option>
+                            <option value="Puskesmas Gundih"></option>
+                            <option value="Puskesmas Gunung Anyar"></option>
+                            <option value="Puskesmas Jagir"></option>
+                            <option value="Puskesmas Jemursari"></option>
+                            <option value="Puskesmas Jeruk"></option>
+                            <option value="Puskesmas Kalijudan"></option>
+                            <option value="Puskesmas Kalirungkut"></option>
+                            <option value="Puskesmas Kebonsari"></option>
+                            <option value="Puskesmas Kedungdoro"></option>
+                            <option value="Puskesmas Kedurus"></option>
+                            <option value="Puskesmas Kenjeran"></option>
+                            <option value="Puskesmas Keputih"></option>
+                            <option value="Puskesmas Ketabang"></option>
+                            <option value="Puskesmas Klampis Ngasem"></option>
+                            <option value="Puskesmas Krembangan Selatan"></option>
+                            <option value="Puskesmas Lidah Kulon"></option>
+                            <option value="Puskesmas Lontar"></option>
+                            <option value="Puskesmas Made"></option>
+                            <option value="Puskesmas Manukan Kulon"></option>
+                            <option value="Puskesmas Medokan Ayu"></option>
+                            <option value="Puskesmas Menur"></option>
+                            <option value="Puskesmas Mojo"></option>
+                            <option value="Puskesmas Moro Krembangan"></option>
+                            <option value="Puskesmas Mulyorejo"></option>
+                            <option value="Puskesmas Ngagel Rejo"></option>
+                            <option value="Puskesmas Pacar Keling"></option>
+                            <option value="Puskesmas Pakis"></option>
+                            <option value="Puskesmas Pegirian"></option>
+                            <option value="Puskesmas Peneleh"></option>
+                            <option value="Puskesmas Perak Timur"></option>
+                            <option value="Puskesmas Pucangsewu"></option>
+                            <option value="Puskesmas Putat Jaya"></option>
+                            <option value="Puskesmas Rangkah"></option>
+                            <option value="Puskesmas Sawah Pulo"></option>
+                            <option value="Puskesmas Sawahan"></option>
+                            <option value="Puskesmas Sememi"></option>
+                            <option value="Puskesmas Sidosermo"></option>
+                            <option value="Puskesmas Sidotopo"></option>
+                            <option value="Puskesmas Sidotopo Wetan"></option>
+                            <option value="Puskesmas Simolawang"></option>
+                            <option value="Puskesmas Simomulyo"></option>
+                            <option value="Puskesmas Siwalankerto"></option>
+                            <option value="Puskesmas Tambak Wedi"></option>
+                            <option value="Puskesmas Tambakrejo"></option>
+                            <option value="Puskesmas Tanah Kali Kedinding"></option>
+                            <option value="Puskesmas Tanjungsari"></option>
+                            <option value="Puskesmas Tembok Dukuh"></option>
+                            <option value="Puskesmas Tenggilis"></option>
+                            <option value="Puskesmas Wiyung"></option>
+                            <option value="Puskesmas Wonokromo"></option>
+                            <option value="Puskesmas Wonokusumo"></option>
+                        </datalist>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Tanggal Dibawa</label>
+                        <input type="date" name="tanggal_bawa" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Nama Alkes</label>
+                        <input type="text" name="nama_alkes" placeholder="Contoh: Patient Monitor" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Merek & Type</label>
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" name="merek" placeholder="Merek" style="width:50%;" required>
+                            <input type="text" name="type" placeholder="Type" style="width:50%;" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Serial Number (S/N)</label>
+                        <input type="text" name="sn" placeholder="Contoh: MX123456" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Aksesoris Bawaan</label>
+                        <input type="text" name="aksesoris" placeholder="Kabel power, dll..." required>
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Kerusakan</label>
+                        <textarea name="kerusakan" rows="2" placeholder="Jelaskan kondisi kerusakan alat..." required></textarea>
+                    </div>
+                    
+                    <!-- INPUT LOKASI MANUAL -->
+                    <div class="input-group">
+                        <label>Tempat Basecamp</label>
+                        <input type="text" name="tempat_basecamp" placeholder="Contoh: Kantor Pusat, Gudang, dll..." required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Upload Foto Saat Dibawa</label>
+                        <input type="file" id="inputFileBawa" accept="image/*" required style="padding: 9px;">
+                    </div>
+
+                    <div class="input-group full-width">
+                        <button type="submit" class="btn-submit" id="btnKirimBawa">Simpan Alat Masuk</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- TABEL REKAPAN -->
+        <div class="panel">
+            <h3 style="color: #0ea5e9; margin-bottom: 5px; margin-top: 0;"><i class='bx bx-history'></i> Riwayat Logistik Basecamp</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Klik tombol "Kembalikan" untuk meng-update alat yang sudah selesai diperbaiki.</p>
+
+            <div class="table-responsive">
+                <table id="tabelData">
+                    <thead>
+                        <tr>
+                            <th>Identitas Alat</th>
+                            <th>Tanggal Dibawa</th>
+                            <th>Info Masuk & Kerusakan</th>
+                            <th>Status Alat</th>
+                            <th>Aksi Update</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTabelBasecamp">
+                        <tr><td colspan="5" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT / PENGEMBALIAN ALAT -->
+    <div id="modalEdit" class="modal-overlay">
+        <div class="modal-box" style="text-align: left;">
+            <button class="btn-tutup" onclick="tutupModal('modalEdit')" style="top:15px; right:15px; width:35px; height:35px;"><i class='bx bx-x'></i></button>
+            <h2 style="color: #0ea5e9; margin-bottom: 5px; font-size:22px;"><i class='bx bx-log-out-circle'></i> Kembalikan Alat</h2>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Update status alat dengan <b id="teksSN" style="color:white;"></b>.</p>
+            
+            <form id="formKembali">
+                <input type="hidden" name="action" value="update_basecamp">
+                <input type="hidden" name="id_alat" id="editIdAlat">
+                
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Tanggal Dikembalikan</label>
+                    <input type="date" name="tanggal_kembali" required>
+                </div>
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Status Alat Keluar</label>
+                    <select name="status_alat" required>
+                        <option value="" disabled selected>-- Pilih Status Akhir --</option>
+                        <option value="Ready (Berfungsi Normal)">Ready (Berfungsi Normal)</option>
+                        <option value="Rusak (Belum Selesai)">Rusak (Belum Selesai)</option>
+                        <option value="Afkir (Tidak Bisa Diperbaiki)">Afkir (Tidak Bisa Diperbaiki)</option>
+                    </select>
+                </div>
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <label>Bukti Foto Pengembalian</label>
+                    <input type="file" id="inputFileKembali" accept="image/*" required style="padding: 9px;">
+                </div>
+                
+                <button type="submit" class="btn-submit" id="btnKirimKembali">Update & Kembalikan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SUCCESS -->
+    <div id="modalSuccess" class="modal-overlay">
+        <div class="modal-box" style="text-align:center;">
+            <i class='bx bx-check-circle icon-center'></i>
+            <h2>Berhasil Disimpan!</h2>
+            <p style="margin-bottom: 25px; color: var(--text-muted);">Data sedang disinkronisasi. Halaman akan dimuat ulang...</p>
+        </div>
+    </div>
+
+    <script>
+        // PASTIKAN LINK SCRIPT GOOGLE ANDA TETAP SAMA
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzP5btzre-P0GW-XTK90I-6-P6QOgWgnBzAzvspNvrYofFWSSoTHrxZnL8gncUxty2Q/exec'; 
+
+        // TEMA DAN ANIMASI TAMPILAN
+        const btnTheme = document.getElementById('btnTheme');
+        if(localStorage.getItem('temaArtomoro') === 'light') { document.body.classList.add('light-mode'); btnTheme.querySelector('i').className = 'bx bx-moon'; }
+        btnTheme.addEventListener('click', () => { document.body.classList.toggle('light-mode'); localStorage.setItem('temaArtomoro', document.body.classList.contains('light-mode') ? 'light' : 'dark'); btnTheme.querySelector('i').className = document.body.classList.contains('light-mode') ? 'bx bx-moon' : 'bx bx-sun'; });
+
+        const wadahForm = document.getElementById("wadahForm");
+        const btnBuka = document.getElementById("btnBukaForm");
+        btnBuka.addEventListener("click", () => { wadahForm.style.display = "block"; gsap.fromTo(wadahForm, { y:-30, opacity:0 }, { y:0, opacity:1, duration:0.5 }); btnBuka.style.display = "none"; });
+        document.getElementById("btnTutupForm").addEventListener("click", () => { gsap.to(wadahForm, { y:-30, opacity:0, duration:0.3, onComplete: () => { wadahForm.style.display = "none"; btnBuka.style.display = "inline-flex"; gsap.fromTo(btnBuka, { scale:0.5, opacity:0 }, { scale:1, opacity:1, duration:0.5 }); }}); });
+
+        // TIGA DIMENSI (WebGL)
+        const bgContainer = document.getElementById('webgl-background'); const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); camera.position.z = 10; const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight); bgContainer.appendChild(renderer.domElement);
+        const particlesGeo = new THREE.BufferGeometry(); const posArray = new Float32Array(250 * 3); for(let i=0; i<750; i++) posArray[i] = (Math.random()-0.5)*25; particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3)); const particleMesh = new THREE.Points(particlesGeo, new THREE.PointsMaterial({ size: 0.05, color: 0x0ea5e9, transparent: true, opacity: 0.6 })); scene.add(particleMesh); function animateBg() { requestAnimationFrame(animateBg); particleMesh.rotation.y += 0.0015; renderer.render(scene, camera); } animateBg();
+
+        // LOGIKA KOMPRESI FOTO KE BASE64
+        function kompresFotoKeBase64(file, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    const MAX_WIDTH = 800; // Kompresi agar ringan
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    callback(canvas.toDataURL("image/jpeg", 0.7)); // 70% Quality
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        let base64FotoBawa = "";
+        document.getElementById("inputFileBawa").addEventListener("change", function() {
+            if(this.files[0]) kompresFotoKeBase64(this.files[0], base64 => base64FotoBawa = base64);
+        });
+
+        let base64FotoKembali = "";
+        document.getElementById("inputFileKembali").addEventListener("change", function() {
+            if(this.files[0]) kompresFotoKeBase64(this.files[0], base64 => base64FotoKembali = base64);
+        });
+
+        // FUNGSI UMUM MODAL
+        function bukaModalEdit(id, snAlat) {
+            document.getElementById("editIdAlat").value = id;
+            document.getElementById("teksSN").innerText = "SN: " + snAlat;
+            let md = document.getElementById("modalEdit");
+            md.style.display = "flex";
+            gsap.to(md, {opacity: 1, duration: 0.3});
+            gsap.fromTo(md.querySelector('.modal-box'), {scale:0.8}, {scale:1, duration:0.4, ease:"back.out(1.5)"});
+        }
+        function tutupModal(idModal) {
+            let md = document.getElementById(idModal);
+            gsap.to(md, {opacity: 0, duration: 0.3, onComplete: () => md.style.display = "none"});
+        }
+        function suksesDanRefresh() {
+            document.getElementById("modalEdit").style.display = "none";
+            document.getElementById("modalSuccess").style.display = "flex";
+            gsap.to(document.getElementById("modalSuccess"), {opacity: 1, duration: 0.3});
+            setTimeout(() => { window.location.reload(); }, 2000);
+        }
+
+        // KIRIM DATA ALAT MASUK (BARU)
+        document.getElementById('formBawa').addEventListener('submit', e => {
+            e.preventDefault();
+            const btn = document.getElementById('btnKirimBawa');
+            btn.innerText = "Mengupload..."; btn.style.background = "#fbbf24";
+            
+            const fd = new FormData(document.getElementById('formBawa'));
+            fd.append("foto_bawa", base64FotoBawa);
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
+                .then(() => suksesDanRefresh())
+                .catch(err => { btn.style.background = "#ef4444"; btn.innerText = "Gagal Simpan!"; alert("Gagal koneksi internet!"); });
+        });
+
+        // KIRIM DATA UPDATE KEMBALI
+        document.getElementById('formKembali').addEventListener('submit', e => {
+            e.preventDefault();
+            const btn = document.getElementById('btnKirimKembali');
+            btn.innerText = "Mengupdate..."; btn.style.background = "#fbbf24";
+            
+            const fd = new FormData(document.getElementById('formKembali'));
+            fd.append("foto_kembali", base64FotoKembali);
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
+                .then(() => suksesDanRefresh())
+                .catch(err => { btn.style.background = "#ef4444"; btn.innerText = "Gagal Simpan!"; });
+        });
+
+        // TARIK DATA TABEL
+        function muatDataBasecamp() {
+            const tbody = document.getElementById("bodyTabelBasecamp");
+            fetch(scriptURL + "?action=get_basecamp")
+            .then(res => res.json())
+            .then(data => {
+                tbody.innerHTML = "";
+                if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada data history basecamp.</td></tr>'; return; }
+                
+                data.reverse().forEach(item => {
+                    let isKembali = (item.tgl_kembali && item.tgl_kembali !== "");
+                    let statusHtml = isKembali 
+                        ? `<span class="badge bg-green">DIKEMBALIKAN</span><br><b style="font-size:10px; color:#10b981;">Tgl: ${item.tgl_kembali}</b><br><span style="font-size:10px;">Status: ${item.status_akhir}</span>`
+                        : `<span class="badge bg-red">DI BASECAMP</span><br><span style="font-size:10px;">Lokasi: ${item.basecamp}</span>`;
+                    
+                    let aksiHtml = isKembali 
+                        ? (item.foto_kembali ? `<a href="${item.foto_kembali}" target="_blank" class="img-link"><i class='bx bx-image'></i> Foto Keluar</a>` : `-`) 
+                        : `<button class="btn-kembali" onclick="bukaModalEdit('${item.id}', '${item.sn}')"><i class='bx bx-log-out-circle'></i> Kembalikan</button>`;
+
+                    let linkFotoBawa = item.foto_bawa ? `<br><a href="${item.foto_bawa}" target="_blank" class="img-link" style="margin-top:5px;"><i class='bx bx-image'></i> Foto Alat Dibawa</a>` : ``;
+
+                    tbody.innerHTML += `
+                    <tr>
+                        <td><b>${item.pkm}</b><br><span style="color:#0ea5e9; font-size:12px; font-weight:600;">${item.alkes}</span><br><span style="font-size:11px; opacity:0.8;">Merek: ${item.merek} / ${item.type} <br>SN: ${item.sn}</span></td>
+                        <td>${item.tgl_bawa}</td>
+                        <td style="font-size:11px;"><b>Aksesoris:</b> ${item.aksesoris}<br><b>Rusak:</b> ${item.kerusakan} ${linkFotoBawa}</td>
+                        <td>${statusHtml}</td>
+                        <td>${aksiHtml}</td>
+                    </tr>`;
+                });
+            }).catch(err => {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Gagal menarik data.</td></tr>`;
+            });
+        }
+        window.onload = muatDataBasecamp;
+    </script>
+</body>
+</html>
