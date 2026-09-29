@@ -45,6 +45,7 @@
         body.light-mode ::-webkit-calendar-picker-indicator { filter: invert(0); } body:not(.light-mode) ::-webkit-calendar-picker-indicator { filter: invert(1); }
 
         .btn-submit { background: #0ea5e9; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; }
+        .btn-submit:disabled { background: #64748b !important; cursor: not-allowed; }
 
         .table-responsive { overflow-x: auto; margin-top: 20px;}
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -92,7 +93,6 @@
                 <input type="hidden" name="action" value="simpan_basecamp">
                 <div class="form-grid">
                     
-                    <!-- INPUT FASKES DENGAN DAFTAR LENGKAP -->
                     <div class="input-group">
                         <label>PKM / Faskes</label>
                         <input list="listFaskes" name="pkm" placeholder="Ketik atau pilih Puskesmas..." required autocomplete="off">
@@ -190,8 +190,6 @@
                         <label>Kerusakan</label>
                         <textarea name="kerusakan" rows="2" placeholder="Jelaskan kondisi kerusakan alat..." required></textarea>
                     </div>
-                    
-                    <!-- INPUT LOKASI MANUAL -->
                     <div class="input-group">
                         <label>Tempat Basecamp</label>
                         <input type="text" name="tempat_basecamp" placeholder="Contoh: Kantor Pusat, Gudang, dll..." required>
@@ -280,7 +278,6 @@
         // PASTIKAN LINK SCRIPT GOOGLE ANDA TETAP SAMA
         const scriptURL = 'https://script.google.com/macros/s/AKfycbzP5btzre-P0GW-XTK90I-6-P6QOgWgnBzAzvspNvrYofFWSSoTHrxZnL8gncUxty2Q/exec'; 
 
-        // TEMA DAN ANIMASI TAMPILAN
         const btnTheme = document.getElementById('btnTheme');
         if(localStorage.getItem('temaArtomoro') === 'light') { document.body.classList.add('light-mode'); btnTheme.querySelector('i').className = 'bx bx-moon'; }
         btnTheme.addEventListener('click', () => { document.body.classList.toggle('light-mode'); localStorage.setItem('temaArtomoro', document.body.classList.contains('light-mode') ? 'light' : 'dark'); btnTheme.querySelector('i').className = document.body.classList.contains('light-mode') ? 'bx bx-moon' : 'bx bx-sun'; });
@@ -290,11 +287,10 @@
         btnBuka.addEventListener("click", () => { wadahForm.style.display = "block"; gsap.fromTo(wadahForm, { y:-30, opacity:0 }, { y:0, opacity:1, duration:0.5 }); btnBuka.style.display = "none"; });
         document.getElementById("btnTutupForm").addEventListener("click", () => { gsap.to(wadahForm, { y:-30, opacity:0, duration:0.3, onComplete: () => { wadahForm.style.display = "none"; btnBuka.style.display = "inline-flex"; gsap.fromTo(btnBuka, { scale:0.5, opacity:0 }, { scale:1, opacity:1, duration:0.5 }); }}); });
 
-        // TIGA DIMENSI (WebGL)
         const bgContainer = document.getElementById('webgl-background'); const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); camera.position.z = 10; const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight); bgContainer.appendChild(renderer.domElement);
         const particlesGeo = new THREE.BufferGeometry(); const posArray = new Float32Array(250 * 3); for(let i=0; i<750; i++) posArray[i] = (Math.random()-0.5)*25; particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3)); const particleMesh = new THREE.Points(particlesGeo, new THREE.PointsMaterial({ size: 0.05, color: 0x0ea5e9, transparent: true, opacity: 0.6 })); scene.add(particleMesh); function animateBg() { requestAnimationFrame(animateBg); particleMesh.rotation.y += 0.0015; renderer.render(scene, camera); } animateBg();
 
-        // LOGIKA KOMPRESI FOTO KE BASE64
+        // LOGIKA KOMPRESI FOTO (MEMAKAI PROMISE AGAR BISA DITUNGGU)
         function kompresFotoKeBase64(file, callback) {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -302,29 +298,18 @@
                 img.onload = function() {
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
-                    const MAX_WIDTH = 800; // Kompresi agar ringan
+                    const MAX_WIDTH = 800; 
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL("image/jpeg", 0.7)); // 70% Quality
+                    callback(canvas.toDataURL("image/jpeg", 0.7)); 
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
 
-        let base64FotoBawa = "";
-        document.getElementById("inputFileBawa").addEventListener("change", function() {
-            if(this.files[0]) kompresFotoKeBase64(this.files[0], base64 => base64FotoBawa = base64);
-        });
-
-        let base64FotoKembali = "";
-        document.getElementById("inputFileKembali").addEventListener("change", function() {
-            if(this.files[0]) kompresFotoKeBase64(this.files[0], base64 => base64FotoKembali = base64);
-        });
-
-        // FUNGSI UMUM MODAL
         function bukaModalEdit(id, snAlat) {
             document.getElementById("editIdAlat").value = id;
             document.getElementById("teksSN").innerText = "SN: " + snAlat;
@@ -344,32 +329,63 @@
             setTimeout(() => { window.location.reload(); }, 2000);
         }
 
-        // KIRIM DATA ALAT MASUK (BARU)
-        document.getElementById('formBawa').addEventListener('submit', e => {
+        // ==========================================
+        // SUBMIT ALAT DIBAWA (DENGAN AWAIT)
+        // ==========================================
+        document.getElementById('formBawa').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnKirimBawa');
-            btn.innerText = "Mengupload..."; btn.style.background = "#fbbf24";
+            btn.innerText = "Memproses Foto (Mohon Tunggu)..."; 
+            btn.style.background = "#fbbf24";
+            btn.disabled = true;
             
-            const fd = new FormData(document.getElementById('formBawa'));
-            fd.append("foto_bawa", base64FotoBawa);
+            let base64Foto = "";
+            const fileInput = document.getElementById("inputFileBawa");
+            if(fileInput.files.length > 0) {
+                base64Foto = await new Promise((resolve) => {
+                    kompresFotoKeBase64(fileInput.files[0], (res) => resolve(res));
+                });
+            }
 
+            const fd = new FormData(document.getElementById('formBawa'));
+            fd.append("foto_bawa", base64Foto);
+
+            btn.innerText = "Mengirim ke Google Drive...";
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
                 .then(() => suksesDanRefresh())
-                .catch(err => { btn.style.background = "#ef4444"; btn.innerText = "Gagal Simpan!"; alert("Gagal koneksi internet!"); });
+                .catch(err => { 
+                    btn.style.background = "#ef4444"; btn.innerText = "Gagal Simpan!"; btn.disabled = false;
+                    alert("Gagal koneksi internet!"); 
+                });
         });
 
-        // KIRIM DATA UPDATE KEMBALI
-        document.getElementById('formKembali').addEventListener('submit', e => {
+        // ==========================================
+        // SUBMIT ALAT KEMBALI (DENGAN AWAIT)
+        // ==========================================
+        document.getElementById('formKembali').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnKirimKembali');
-            btn.innerText = "Mengupdate..."; btn.style.background = "#fbbf24";
+            btn.innerText = "Memproses Foto..."; 
+            btn.style.background = "#fbbf24";
+            btn.disabled = true;
             
-            const fd = new FormData(document.getElementById('formKembali'));
-            fd.append("foto_kembali", base64FotoKembali);
+            let base64Foto = "";
+            const fileInput = document.getElementById("inputFileKembali");
+            if(fileInput.files.length > 0) {
+                base64Foto = await new Promise((resolve) => {
+                    kompresFotoKeBase64(fileInput.files[0], (res) => resolve(res));
+                });
+            }
 
+            const fd = new FormData(document.getElementById('formKembali'));
+            fd.append("foto_kembali", base64Foto);
+
+            btn.innerText = "Mengirim ke Google Drive...";
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
                 .then(() => suksesDanRefresh())
-                .catch(err => { btn.style.background = "#ef4444"; btn.innerText = "Gagal Simpan!"; });
+                .catch(err => { 
+                    btn.style.background = "#ef4444"; btn.innerText = "Gagal Simpan!"; btn.disabled = false;
+                });
         });
 
         // TARIK DATA TABEL
@@ -383,15 +399,16 @@
                 
                 data.reverse().forEach(item => {
                     let isKembali = (item.tgl_kembali && item.tgl_kembali !== "");
+                    
                     let statusHtml = isKembali 
                         ? `<span class="badge bg-green">DIKEMBALIKAN</span><br><b style="font-size:10px; color:#10b981;">Tgl: ${item.tgl_kembali}</b><br><span style="font-size:10px;">Status: ${item.status_akhir}</span>`
                         : `<span class="badge bg-red">DI BASECAMP</span><br><span style="font-size:10px;">Lokasi: ${item.basecamp}</span>`;
                     
+                    let linkFotoBawa = item.foto_bawa.startsWith("http") ? `<br><a href="${item.foto_bawa}" target="_blank" class="img-link" style="margin-top:5px;"><i class='bx bx-image'></i> Foto Alat Dibawa</a>` : `<br><span style="color:#ef4444; font-size:10px;">${item.foto_bawa}</span>`;
+                    
                     let aksiHtml = isKembali 
-                        ? (item.foto_kembali ? `<a href="${item.foto_kembali}" target="_blank" class="img-link"><i class='bx bx-image'></i> Foto Keluar</a>` : `-`) 
+                        ? (item.foto_kembali.startsWith("http") ? `<a href="${item.foto_kembali}" target="_blank" class="img-link"><i class='bx bx-image'></i> Foto Keluar</a>` : `<span style="color:#ef4444; font-size:10px;">${item.foto_kembali}</span>`) 
                         : `<button class="btn-kembali" onclick="bukaModalEdit('${item.id}', '${item.sn}')"><i class='bx bx-log-out-circle'></i> Kembalikan</button>`;
-
-                    let linkFotoBawa = item.foto_bawa ? `<br><a href="${item.foto_bawa}" target="_blank" class="img-link" style="margin-top:5px;"><i class='bx bx-image'></i> Foto Alat Dibawa</a>` : ``;
 
                     tbody.innerHTML += `
                     <tr>

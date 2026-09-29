@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cetak BAST - EBACON SYSTEM</title>
+    <style>
+        /* Pengaturan Kertas A4 & Print */
+        body { margin: 0; background: #e0e0e0; font-family: 'Times New Roman', Times, serif; font-size: 14px; }
+        .a4-page { width: 210mm; min-height: 297mm; padding: 25mm 20mm; margin: 10mm auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.2); box-sizing: border-box; }
+        @media print {
+            body { background: white; margin: 0; }
+            .a4-page { margin: 0; box-shadow: none; width: 100%; padding: 15mm; }
+            .no-print { display: none !important; }
+        }
+        
+        /* Kop Surat */
+        .header { display: flex; align-items: center; justify-content: center; border-bottom: 3px solid black; padding-bottom: 10px; margin-bottom: 20px; position: relative; }
+        .logo-box { position: absolute; left: 10px; width: 120px; height: 60px; border: 3px solid #6fa8dc; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-text { font-family: Arial, sans-serif; font-size: 38px; font-weight: bold; color: #6fa8dc; letter-spacing: 2px; }
+        .header-text { text-align: center; }
+        .header-text h1 { margin: 0; font-size: 20px; color: #1c4587; font-family: Arial, sans-serif; }
+        .header-text p { margin: 2px 0; font-size: 12px; font-family: Arial, sans-serif; }
+        
+        /* Judul */
+        .title { text-align: center; margin-top: 20px; }
+        .title h2 { margin: 0; font-size: 16px; text-decoration: underline; font-weight: bold; }
+        .title p { margin: 5px 0 0 0; font-size: 14px; }
+        
+        /* Konten Paragraf */
+        .content { margin-top: 30px; line-height: 1.6; }
+        .indent { padding-left: 20px; }
+        
+        /* Grid untuk Titik Dua Sejajar */
+        .grid-row { display: grid; grid-template-columns: 180px 20px 1fr; margin-bottom: 5px; }
+        
+        /* Tabel Rincian */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-weight: bold; }
+        th, td { border: 1px solid black; padding: 8px 5px; text-align: center; font-size: 13px; font-weight: normal; }
+        th { font-weight: bold; }
+        
+        /* Tanda Tangan */
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; text-align: center; }
+        .sign-box { width: 45%; }
+        .sign-space { height: 90px; }
+
+        /* Tombol Print */
+        .btn-print { background: #0ea5e9; color: white; padding: 12px 25px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; font-family: Arial, sans-serif; }
+        .btn-print:hover { background: #0284c7; }
+    </style>
+</head>
+<body>
+
+    <!-- Tombol Cetak (Akan Hilang Saat Di-Print) -->
+    <div class="no-print" style="text-align: center; padding: 20px; background: white; border-bottom: 2px solid #ccc;">
+        <button class="btn-print" onclick="window.print()">🖨️ Cetak / Download PDF BAST</button>
+        <p style="font-family: Arial; font-size: 12px; margin-top:10px; color:#555;">(Pilih "Save as PDF" di menu Destination saat jendela print muncul)</p>
+    </div>
+
+    <!-- Kertas A4 -->
+    <div class="a4-page">
+        
+        <!-- Header (Kop Surat) -->
+        <div class="header">
+            <div class="logo-box">
+                <span class="logo-text">eBa</span>
+            </div>
+            <div class="header-text">
+                <h1>CV. EBACON SYSTEM</h1>
+                <p>JL. Rungkut Menanggal Harapan O-51, Surabaya</p>
+                <p>Telp: 031-8707613 | Whatsapp: 0889 8948 8844 |</p>
+            </div>
+        </div>
+
+        <!-- Judul BAST -->
+        <div class="title">
+            <h2>BERITA ACARA SERAH TERIMA BARANG</h2>
+            <p>Nomor: ..... /BAST/EBC/...../2026</p>
+        </div>
+
+        <!-- Isi Dokumen -->
+        <div class="content">
+            <p style="text-align: justify;">
+                Pada hari ini <span id="hariText">................</span> tanggal <span id="tglText">...........</span> bulan <span id="blnText">...................</span> Tahun Dua Ribu <span id="thnText">...................</span>, kami yang bertanda tangan di bawah ini:
+            </p>
+
+            <div class="grid-row"><div>Nama</div><div>:</div><div>....................................................................................</div></div>
+            <div class="grid-row"><div>Jabatan</div><div>:</div><div>....................................................................................</div></div>
+            <div class="grid-row"><div>Perusahaan</div><div>:</div><div>CV. EBACON SYSTEM</div></div>
+            <div class="grid-row"><div>Alamat</div><div>:</div><div>JL. Rungkut Menanggal Harapan O-51, Surabaya</div></div>
+            
+            <p style="font-weight: bold; margin-top: 15px;">Selanjutnya disebut PIHAK PERTAMA.</p>
+
+            <div class="grid-row"><div>Nama</div><div>:</div><div>....................................................................................</div></div>
+            <div class="grid-row"><div>Jabatan</div><div>:</div><div>....................................................................................</div></div>
+            <div class="grid-row"><div>Instansi/Perusahaan</div><div>:</div><div id="pkmText" style="font-weight:bold;">....................................................................................</div></div>
+            <div class="grid-row"><div>Alamat</div><div>:</div><div>....................................................................................</div></div>
+
+            <p style="font-weight: bold; margin-top: 15px;">Selanjutnya disebut PIHAK KEDUA.</p>
+
+            <p style="text-align: justify; margin-top: 20px;">
+                Dengan ini menyatakan bahwa <b>PIHAK PERTAMA</b> telah menyerahkan kepada <b>PIHAK KEDUA</b> berupa barang dengan rincian sebagai berikut:
+            </p>
+
+            <!-- Tabel Barang -->
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">No.</th>
+                        <th style="width: 25%;">Nama Barang</th>
+                        <th style="width: 20%;">Merek</th>
+                        <th style="width: 15%;">Type</th>
+                        <th style="width: 15%;">SN</th>
+                        <th style="width: 20%;">Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1.</td>
+                        <td id="tdAlkes"></td>
+                        <td id="tdMerek"></td>
+                        <td id="tdType"></td>
+                        <td id="tdSn"></td>
+                        <td></td>
+                    </tr>
+                    <tr><td>2.</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td>3.</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td>4.</td><td></td><td></td><td></td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <p style="text-align: justify;">
+                Untuk diserahkan kepada ......................................................................................... Barang tersebut telah diterima dan diperiksa.
+            </p>
+            <p style="text-align: justify;">
+                Demikian Berita Acara Serah Terima Barang ini dibuat untuk dapat dipergunakan sebagaimana mestinya.
+            </p>
+
+            <!-- Bagian Tanda Tangan -->
+            <div class="signatures">
+                <div class="sign-box">
+                    <b>PIHAK PERTAMA</b><br>
+                    Yang Menyerahkan,
+                    <div class="sign-space"></div>
+                    <b>( ............................................ )</b>
+                </div>
+                <div class="sign-box">
+                    Surabaya, <span id="tglSurat">.....................................</span> 2026<br><br>
+                    <b>PIHAK KEDUA</b><br>
+                    Yang Menerima,
+                    <div class="sign-space"></div>
+                    <b>( ............................................ )</b>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script untuk Otomatisasi Data dari URL -->
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Ambil data dari link
+            const pkm = urlParams.get('pkm');
+            const alkes = urlParams.get('alkes');
+            const merek = urlParams.get('merek');
+            const type = urlParams.get('type');
+            const sn = urlParams.get('sn');
+            const tgl = urlParams.get('tgl');
+
+            // Masukkan data ke HTML
+            if(pkm) document.getElementById('pkmText').innerText = pkm;
+            if(alkes) document.getElementById('tdAlkes').innerText = alkes;
+            if(merek) document.getElementById('tdMerek').innerText = merek;
+            if(type) document.getElementById('tdType').innerText = type;
+            if(sn) document.getElementById('tdSn').innerText = sn;
+
+            // Format Tanggal Otomatis
+            if(tgl) {
+                const d = new Date(tgl);
+                const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+                
+                document.getElementById('hariText').innerText = hari[d.getDay()];
+                document.getElementById('tglText').innerText = d.getDate();
+                document.getElementById('blnText').innerText = bulan[d.getMonth()];
+                
+                // Terbilang Tahun Khusus 2026
+                if(d.getFullYear() === 2026) {
+                    document.getElementById('thnText').innerText = "Dua Puluh Enam";
+                }
+
+                document.getElementById('tglSurat').innerText = d.getDate() + " " + bulan[d.getMonth()];
+            }
+        };
+    </script>
+</body>
+</html>
