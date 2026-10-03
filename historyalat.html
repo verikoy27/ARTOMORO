@@ -55,11 +55,8 @@
         .badge { padding: 5px 10px; border-radius: 15px; font-size: 11px; font-weight: 600; display: inline-block; white-space: nowrap; }
         .bg-red { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
         .bg-green { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
-        .btn-kembali { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .btn-kembali:hover { background: #dc2626; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
         .img-link { color: #0ea5e9; text-decoration: none; font-weight: 600; font-size: 12px; display: inline-flex; align-items: center; gap: 5px; }
 
-        /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 9999; opacity: 0; }
         .modal-box { background: var(--panel-bg); border: 1px solid #0ea5e9; border-radius: 20px; padding: 35px; width: 90%; max-width: 450px; text-align: center; color: var(--text-main); transform: scale(0.8); position: relative; }
         .modal-box i.icon-center { font-size: 60px; margin-bottom: 5px; color: #0ea5e9; }
@@ -84,143 +81,49 @@
         <!-- FORM ALAT DIBAWA -->
         <div class="form-box" id="wadahForm">
             <button class="btn-tutup" id="btnTutupForm"><i class='bx bx-x'></i></button>
-            <div class="form-header">
-                <i class='bx bx-log-in-circle'></i>
-                <h2 style="color: #0ea5e9; font-weight: 600;">Penerimaan Alat (Dibawa)</h2>
-            </div>
+            <div class="form-header"><i class='bx bx-log-in-circle'></i><h2 style="color: #0ea5e9; font-weight: 600;">Penerimaan Alat (Dibawa)</h2></div>
 
             <form id="formBawa">
                 <input type="hidden" name="action" value="simpan_basecamp">
                 <div class="form-grid">
-                    
                     <div class="input-group">
                         <label>PKM / Faskes</label>
                         <input list="listFaskes" name="pkm" placeholder="Ketik atau pilih Puskesmas..." required autocomplete="off">
                         <datalist id="listFaskes">
-                            <option value="Puskesmas Asemrowo"></option>
-                            <option value="Puskesmas Balas Klumprik"></option>
-                            <option value="Puskesmas Balongsari"></option>
-                            <option value="Puskesmas Bangkingan"></option>
-                            <option value="Puskesmas Banyu Urip"></option>
-                            <option value="Puskesmas Benowo"></option>
-                            <option value="Puskesmas Bulak Banteng"></option>
-                            <option value="Puskesmas Dr. Soetomo"></option>
-                            <option value="Puskesmas Dukuh Kupang"></option>
-                            <option value="Puskesmas Dupak"></option>
-                            <option value="Puskesmas Gading"></option>
-                            <option value="Puskesmas Gayungan"></option>
-                            <option value="Puskesmas Gundih"></option>
-                            <option value="Puskesmas Gunung Anyar"></option>
-                            <option value="Puskesmas Jagir"></option>
-                            <option value="Puskesmas Jemursari"></option>
-                            <option value="Puskesmas Jeruk"></option>
-                            <option value="Puskesmas Kalijudan"></option>
-                            <option value="Puskesmas Kalirungkut"></option>
-                            <option value="Puskesmas Kebonsari"></option>
-                            <option value="Puskesmas Kedungdoro"></option>
-                            <option value="Puskesmas Kedurus"></option>
-                            <option value="Puskesmas Kenjeran"></option>
-                            <option value="Puskesmas Keputih"></option>
-                            <option value="Puskesmas Ketabang"></option>
-                            <option value="Puskesmas Klampis Ngasem"></option>
-                            <option value="Puskesmas Krembangan Selatan"></option>
-                            <option value="Puskesmas Lidah Kulon"></option>
-                            <option value="Puskesmas Lontar"></option>
-                            <option value="Puskesmas Made"></option>
-                            <option value="Puskesmas Manukan Kulon"></option>
-                            <option value="Puskesmas Medokan Ayu"></option>
-                            <option value="Puskesmas Menur"></option>
-                            <option value="Puskesmas Mojo"></option>
-                            <option value="Puskesmas Moro Krembangan"></option>
-                            <option value="Puskesmas Mulyorejo"></option>
-                            <option value="Puskesmas Ngagel Rejo"></option>
-                            <option value="Puskesmas Pacar Keling"></option>
-                            <option value="Puskesmas Pakis"></option>
-                            <option value="Puskesmas Pegirian"></option>
-                            <option value="Puskesmas Peneleh"></option>
-                            <option value="Puskesmas Perak Timur"></option>
-                            <option value="Puskesmas Pucangsewu"></option>
-                            <option value="Puskesmas Putat Jaya"></option>
-                            <option value="Puskesmas Rangkah"></option>
-                            <option value="Puskesmas Sawah Pulo"></option>
-                            <option value="Puskesmas Sawahan"></option>
-                            <option value="Puskesmas Sememi"></option>
-                            <option value="Puskesmas Sidosermo"></option>
-                            <option value="Puskesmas Sidotopo"></option>
-                            <option value="Puskesmas Sidotopo Wetan"></option>
-                            <option value="Puskesmas Simolawang"></option>
-                            <option value="Puskesmas Simomulyo"></option>
-                            <option value="Puskesmas Siwalankerto"></option>
-                            <option value="Puskesmas Tambak Wedi"></option>
-                            <option value="Puskesmas Tambakrejo"></option>
-                            <option value="Puskesmas Tanah Kali Kedinding"></option>
-                            <option value="Puskesmas Tanjungsari"></option>
-                            <option value="Puskesmas Tembok Dukuh"></option>
-                            <option value="Puskesmas Tenggilis"></option>
-                            <option value="Puskesmas Wiyung"></option>
-                            <option value="Puskesmas Wonokromo"></option>
-                            <option value="Puskesmas Wonokusumo"></option>
+                            <option value="Puskesmas Asemrowo"></option><option value="Puskesmas Balas Klumprik"></option><option value="Puskesmas Balongsari"></option>
                         </datalist>
                     </div>
-
-                    <div class="input-group">
-                        <label>Tanggal Dibawa</label>
-                        <input type="date" name="tanggal_bawa" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Nama Alkes</label>
-                        <input type="text" name="nama_alkes" placeholder="Contoh: Patient Monitor" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Merek & Type</label>
-                        <div style="display:flex; gap:10px;">
-                            <input type="text" name="merek" placeholder="Merek" style="width:50%;" required>
-                            <input type="text" name="type" placeholder="Type" style="width:50%;" required>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label>Serial Number (S/N)</label>
-                        <input type="text" name="sn" placeholder="Contoh: MX123456" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Aksesoris Bawaan</label>
-                        <input type="text" name="aksesoris" placeholder="Kabel power, dll..." required>
-                    </div>
-                    <div class="input-group full-width">
-                        <label>Kerusakan</label>
-                        <textarea name="kerusakan" rows="2" placeholder="Jelaskan kondisi kerusakan alat..." required></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label>Tempat Basecamp</label>
-                        <input type="text" name="tempat_basecamp" placeholder="Contoh: Kantor Pusat, Gudang, dll..." required>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>Upload Foto Saat Dibawa</label>
-                        <input type="file" id="inputFileBawa" accept="image/*" required style="padding: 9px;">
-                    </div>
-
-                    <div class="input-group full-width">
-                        <button type="submit" class="btn-submit" id="btnKirimBawa">Simpan Alat Masuk</button>
-                    </div>
+                    <div class="input-group"><label>Tanggal Dibawa</label><input type="date" name="tanggal_bawa" required></div>
+                    <div class="input-group"><label>Nama Alkes</label><input type="text" name="nama_alkes" placeholder="Contoh: Patient Monitor" required></div>
+                    <div class="input-group"><label>Merek & Type</label><div style="display:flex; gap:10px;"><input type="text" name="merek" placeholder="Merek" style="width:50%;" required><input type="text" name="type" placeholder="Type" style="width:50%;" required></div></div>
+                    <div class="input-group"><label>Serial Number (S/N)</label><input type="text" name="sn" placeholder="Contoh: MX123456" required></div>
+                    <div class="input-group"><label>Aksesoris Bawaan</label><input type="text" name="aksesoris" placeholder="Kabel power, dll..." required></div>
+                    <div class="input-group full-width"><label>Kerusakan</label><textarea name="kerusakan" rows="2" placeholder="Jelaskan kondisi kerusakan alat..." required></textarea></div>
+                    <div class="input-group"><label>Tempat Basecamp</label><input type="text" name="tempat_basecamp" placeholder="Contoh: Kantor Pusat, Gudang, dll..." required></div>
+                    <div class="input-group"><label>Upload Foto Saat Dibawa</label><input type="file" id="inputFileBawa" accept="image/*" required style="padding: 9px;"></div>
+                    <div class="input-group full-width"><button type="submit" class="btn-submit" id="btnKirimBawa">Simpan Alat Masuk</button></div>
                 </div>
             </form>
         </div>
 
-        <!-- TABEL REKAPAN -->
+        <!-- TABEL REKAPAN BATCH -->
         <div class="panel">
             <h3 style="color: #0ea5e9; margin-bottom: 5px; margin-top: 0;"><i class='bx bx-history'></i> Riwayat Logistik Basecamp</h3>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Klik tombol "Kembalikan" untuk meng-update alat yang sudah selesai diperbaiki.</p>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+                <p style="font-size:12px; color:var(--text-muted); margin:0;">Centang kotak di tabel untuk mengembalikan beberapa alat sekaligus (Pastikan PKM-nya sama).</p>
+                <button class="btn-submit" onclick="bukaModalMulti()" style="width:auto; margin:0; padding:10px 20px; font-size:13px; background:#10b981;"><i class='bx bx-check-double'></i> Kembalikan Alat Terpilih</button>
+            </div>
 
             <div class="table-responsive">
                 <table id="tabelData">
                     <thead>
                         <tr>
+                            <th style="width: 30px;"><i class='bx bx-check-square' style="font-size:16px;"></i></th>
                             <th>Identitas Alat</th>
                             <th>Tanggal Dibawa</th>
                             <th>Info Masuk & Kerusakan</th>
                             <th>Status Alat</th>
-                            <th>Aksi Update</th>
                         </tr>
                     </thead>
                     <tbody id="bodyTabelBasecamp">
@@ -231,37 +134,59 @@
         </div>
     </div>
 
-    <!-- MODAL EDIT / PENGEMBALIAN ALAT -->
+    <!-- MODAL EDIT PENGEMBALIAN BATCH -->
     <div id="modalEdit" class="modal-overlay">
-        <div class="modal-box" style="text-align: left;">
+        <div class="modal-box" style="text-align: left; max-width: 600px; max-height: 90vh; overflow-y: auto;">
             <button class="btn-tutup" onclick="tutupModal('modalEdit')" style="top:15px; right:15px; width:35px; height:35px;"><i class='bx bx-x'></i></button>
             <h2 style="color: #0ea5e9; margin-bottom: 5px; font-size:22px;"><i class='bx bx-log-out-circle'></i> Kembalikan Alat</h2>
-            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Update status alat dengan <b id="teksSN" style="color:white;"></b>.</p>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Menggabungkan BAST untuk: <b id="teksSN" style="color:#0ea5e9;"></b></p>
             
             <form id="formKembali">
-                <input type="hidden" name="action" value="update_basecamp">
-                <input type="hidden" name="id_alat" id="editIdAlat">
+                <input type="hidden" name="action" value="update_basecamp_multi">
+                <input type="hidden" name="sn_list" id="editSnList">
                 
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label>Tanggal Dikembalikan</label>
-                    <input type="date" name="tanggal_kembali" required>
+                <div class="form-grid">
+                    <div class="input-group full-width" style="margin-top:5px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;"><label style="color:#10b981;">-- PIHAK PERTAMA (YANG MENYERAHKAN) --</label></div>
+                    <div class="input-group"><label>Nama Teknisi</label><input type="text" name="nama_teknisi" required></div>
+                    <div class="input-group"><label>Jabatan Teknisi</label><input type="text" name="jabatan_teknisi" required></div>
+
+                    <div class="input-group full-width" style="margin-top:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;"><label style="color:#fbbf24;">-- PIHAK KEDUA (YANG MENERIMA) --</label></div>
+                    <div class="input-group"><label>Nama Penerima</label><input type="text" name="nama_penerima" required></div>
+                    <div class="input-group"><label>Jabatan Penerima</label><input type="text" name="jabatan_penerima" required></div>
+                    <div class="input-group full-width"><label>Alamat Penerima</label><input type="text" name="alamat_penerima" required></div>
+                    
+                    <div class="input-group full-width" style="margin-top:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;"><label style="color:#0ea5e9;">-- BUKTI & STATUS ALAT --</label></div>
+                    
+                    <!-- INPUT NO BAST MANUAL -->
+                    <div class="input-group full-width">
+                        <label>Nomor BAST (Ketik Manual)</label>
+                        <input type="text" name="no_bast" placeholder="Contoh: 015/BAST/EBC/X/2026" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Status Alat Keluar</label>
+                        <select name="status_alat" required>
+                            <option value="" disabled selected>-- Pilih Status --</option>
+                            <option value="Ready (Berfungsi Normal)">Ready (Normal)</option>
+                            <option value="Rusak (Belum Selesai)">Rusak (Belum Selesai)</option>
+                            <option value="Afkir (Tidak Bisa Diperbaiki)">Afkir (Tidak Bisa Diperbaiki)</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>Tanggal Dikembalikan</label><input type="date" name="tanggal_kembali" required></div>
+                    <div class="input-group full-width" style="margin-bottom: 15px;"><label>Foto Bukti Bersama (Pilih 1)</label><input type="file" id="inputFileKembali" accept="image/*" required style="padding: 9px;"></div>
                 </div>
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label>Status Alat Keluar</label>
-                    <select name="status_alat" required>
-                        <option value="" disabled selected>-- Pilih Status Akhir --</option>
-                        <option value="Ready (Berfungsi Normal)">Ready (Berfungsi Normal)</option>
-                        <option value="Rusak (Belum Selesai)">Rusak (Belum Selesai)</option>
-                        <option value="Afkir (Tidak Bisa Diperbaiki)">Afkir (Tidak Bisa Diperbaiki)</option>
-                    </select>
-                </div>
-                <div class="input-group" style="margin-bottom: 20px;">
-                    <label>Bukti Foto Pengembalian</label>
-                    <input type="file" id="inputFileKembali" accept="image/*" required style="padding: 9px;">
-                </div>
-                
-                <button type="submit" class="btn-submit" id="btnKirimKembali">Update & Kembalikan</button>
+                <button type="submit" class="btn-submit" id="btnKirimKembali">Update & Buat BAST</button>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL ALERT KUSTOM -->
+    <div id="modalAlert" class="modal-overlay" style="z-index: 10000;">
+        <div class="modal-box" style="text-align:center; max-width: 400px;">
+            <i class='bx bx-error-circle icon-center' style="color: #ef4444; font-size: 70px;"></i>
+            <h2 id="alertJudul" style="color: #ef4444; margin-bottom: 10px; font-size: 22px;">Perhatian!</h2>
+            <p id="alertPesan" style="margin-bottom: 25px; color: var(--text-muted); font-size: 13px;">Pesan error di sini.</p>
+            <button class="btn-submit" onclick="tutupModal('modalAlert')" style="background: #ef4444; width: auto; padding: 10px 40px; border-radius: 30px;">Mengerti</button>
         </div>
     </div>
 
@@ -275,7 +200,6 @@
     </div>
 
     <script>
-        // PASTIKAN LINK SCRIPT GOOGLE ANDA TETAP SAMA
         const scriptURL = 'https://script.google.com/macros/s/AKfycbzP5btzre-P0GW-XTK90I-6-P6QOgWgnBzAzvspNvrYofFWSSoTHrxZnL8gncUxty2Q/exec'; 
 
         const btnTheme = document.getElementById('btnTheme');
@@ -290,7 +214,6 @@
         const bgContainer = document.getElementById('webgl-background'); const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); camera.position.z = 10; const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight); bgContainer.appendChild(renderer.domElement);
         const particlesGeo = new THREE.BufferGeometry(); const posArray = new Float32Array(250 * 3); for(let i=0; i<750; i++) posArray[i] = (Math.random()-0.5)*25; particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3)); const particleMesh = new THREE.Points(particlesGeo, new THREE.PointsMaterial({ size: 0.05, color: 0x0ea5e9, transparent: true, opacity: 0.6 })); scene.add(particleMesh); function animateBg() { requestAnimationFrame(animateBg); particleMesh.rotation.y += 0.0015; renderer.render(scene, camera); } animateBg();
 
-        // LOGIKA KOMPRESI FOTO (MEMAKAI PROMISE AGAR BISA DITUNGGU)
         function kompresFotoKeBase64(file, callback) {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -298,26 +221,37 @@
                 img.onload = function() {
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
-                    const MAX_WIDTH = 800; 
-                    const scaleSize = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scaleSize;
+                    const MAX_WIDTH = 800; const scaleSize = MAX_WIDTH / img.width; canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     callback(canvas.toDataURL("image/jpeg", 0.7)); 
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                }; img.src = e.target.result;
+            }; reader.readAsDataURL(file);
         }
 
-        function bukaModalEdit(id, snAlat) {
-            document.getElementById("editIdAlat").value = id;
-            document.getElementById("teksSN").innerText = "SN: " + snAlat;
+        // BUKA MODAL MULTI
+        function bukaModalMulti() {
+            let selected = document.querySelectorAll('.chk-pilih:checked');
+            if (selected.length === 0) { alert("Pilih minimal 1 alat di tabel untuk dikembalikan!"); return; }
+            
+            let snList = [];
+            let pkmPertama = selected[0].getAttribute('data-pkm');
+            
+            for(let i=0; i<selected.length; i++) {
+                if(selected[i].getAttribute('data-pkm') !== pkmPertama) {
+                    alert("GAGAL: Alat yang digabungkan dalam 1 BAST harus dari PKM / Faskes yang SAMA!");
+                    return;
+                }
+                snList.push(selected[i].value);
+            }
+            
+            document.getElementById("editSnList").value = JSON.stringify(snList);
+            document.getElementById("teksSN").innerText = snList.length + " Unit Alat (" + pkmPertama + ")";
             let md = document.getElementById("modalEdit");
             md.style.display = "flex";
             gsap.to(md, {opacity: 1, duration: 0.3});
             gsap.fromTo(md.querySelector('.modal-box'), {scale:0.8}, {scale:1, duration:0.4, ease:"back.out(1.5)"});
         }
+
         function tutupModal(idModal) {
             let md = document.getElementById(idModal);
             gsap.to(md, {opacity: 0, duration: 0.3, onComplete: () => md.style.display = "none"});
@@ -329,99 +263,59 @@
             setTimeout(() => { window.location.reload(); }, 2000);
         }
 
-        // ==========================================
-        // SUBMIT ALAT DIBAWA (DENGAN AWAIT)
-        // ==========================================
         document.getElementById('formBawa').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btnKirimBawa');
-            btn.innerText = "Memproses Foto (Mohon Tunggu)..."; 
-            btn.style.background = "#fbbf24";
-            btn.disabled = true;
-            
+            const btn = document.getElementById('btnKirimBawa'); btn.innerText = "Memproses Foto..."; btn.style.background = "#fbbf24"; btn.disabled = true;
             let base64Foto = "";
             const fileInput = document.getElementById("inputFileBawa");
-            if(fileInput.files.length > 0) {
-                base64Foto = await new Promise((resolve) => {
-                    kompresFotoKeBase64(fileInput.files[0], (res) => resolve(res));
-                });
-            }
-
-            const fd = new FormData(document.getElementById('formBawa'));
-            fd.append("foto_bawa", base64Foto);
-
-            btn.innerText = "Mengirim ke Google Drive...";
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
-                .then(() => suksesDanRefresh())
-                .catch(err => { 
-                    btn.style.background = "#ef4444"; btn.innerText = "Gagal Simpan!"; btn.disabled = false;
-                    alert("Gagal koneksi internet!"); 
-                });
+            if(fileInput.files.length > 0) { base64Foto = await new Promise((resolve) => { kompresFotoKeBase64(fileInput.files[0], (res) => resolve(res)); }); }
+            const fd = new FormData(document.getElementById('formBawa')); fd.append("foto_bawa", base64Foto);
+            btn.innerText = "Mengirim...";
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd }).then(() => suksesDanRefresh()).catch(err => { btn.style.background = "#ef4444"; btn.innerText = "Gagal!"; btn.disabled = false; });
         });
 
-        // ==========================================
-        // SUBMIT ALAT KEMBALI (DENGAN AWAIT)
-        // ==========================================
         document.getElementById('formKembali').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btnKirimKembali');
-            btn.innerText = "Memproses Foto..."; 
-            btn.style.background = "#fbbf24";
-            btn.disabled = true;
-            
+            const btn = document.getElementById('btnKirimKembali'); btn.innerText = "Memproses..."; btn.style.background = "#fbbf24"; btn.disabled = true;
             let base64Foto = "";
             const fileInput = document.getElementById("inputFileKembali");
-            if(fileInput.files.length > 0) {
-                base64Foto = await new Promise((resolve) => {
-                    kompresFotoKeBase64(fileInput.files[0], (res) => resolve(res));
-                });
-            }
-
-            const fd = new FormData(document.getElementById('formKembali'));
-            fd.append("foto_kembali", base64Foto);
-
-            btn.innerText = "Mengirim ke Google Drive...";
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
-                .then(() => suksesDanRefresh())
-                .catch(err => { 
-                    btn.style.background = "#ef4444"; btn.innerText = "Gagal Simpan!"; btn.disabled = false;
-                });
+            if(fileInput.files.length > 0) { base64Foto = await new Promise((resolve) => { kompresFotoKeBase64(fileInput.files[0], (res) => resolve(res)); }); }
+            const fd = new FormData(document.getElementById('formKembali')); fd.append("foto_kembali", base64Foto);
+            btn.innerText = "Menyimpan ke Drive...";
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd }).then(() => suksesDanRefresh()).catch(err => { btn.style.background = "#ef4444"; btn.innerText = "Gagal!"; btn.disabled = false; });
         });
 
-        // TARIK DATA TABEL
         function muatDataBasecamp() {
             const tbody = document.getElementById("bodyTabelBasecamp");
-            fetch(scriptURL + "?action=get_basecamp")
-            .then(res => res.json())
-            .then(data => {
+            fetch(scriptURL + "?action=get_basecamp").then(res => res.json()).then(data => {
                 tbody.innerHTML = "";
                 if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada data history basecamp.</td></tr>'; return; }
                 
                 data.reverse().forEach(item => {
                     let isKembali = (item.tgl_kembali && item.tgl_kembali !== "");
                     
-                    let statusHtml = isKembali 
-                        ? `<span class="badge bg-green">DIKEMBALIKAN</span><br><b style="font-size:10px; color:#10b981;">Tgl: ${item.tgl_kembali}</b><br><span style="font-size:10px;">Status: ${item.status_akhir}</span>`
-                        : `<span class="badge bg-red">DI BASECAMP</span><br><span style="font-size:10px;">Lokasi: ${item.basecamp}</span>`;
+                    let chkBox = !isKembali ? `<input type="checkbox" class="chk-pilih" value="${item.sn}" data-pkm="${item.pkm}" style="width:18px; height:18px; cursor:pointer;">` : `<i class='bx bx-check-circle' style="color:#10b981; font-size:22px;"></i>`;
+
+                    let statusHtml = isKembali ? `<span class="badge bg-green">DIKEMBALIKAN</span><br><b style="font-size:10px; color:#10b981;">Tgl: ${item.tgl_kembali}</b><br><span style="font-size:10px;">Status: ${item.status_akhir}</span>` : `<span class="badge bg-red">DI BASECAMP</span><br><span style="font-size:10px;">Lokasi: ${item.basecamp}</span>`;
                     
-                    let linkFotoBawa = item.foto_bawa.startsWith("http") ? `<br><a href="${item.foto_bawa}" target="_blank" class="img-link" style="margin-top:5px;"><i class='bx bx-image'></i> Foto Alat Dibawa</a>` : `<br><span style="color:#ef4444; font-size:10px;">${item.foto_bawa}</span>`;
+                    let fotoBawaAman = item.foto_bawa || "";
+                    let fotoKembaliAman = item.foto_kembali || "";
+
+                    let linkFotoBawa = fotoBawaAman.includes("http") ? `<br><a href="${fotoBawaAman}" target="_blank" class="img-link" style="margin-top:5px;"><i class='bx bx-image'></i> Foto Alat Dibawa</a>` : (fotoBawaAman ? `<br><span style="color:#ef4444; font-size:10px;">${fotoBawaAman}</span>` : "");
+                    let linkFotoKembali = fotoKembaliAman.includes("http") ? `<a href="${fotoKembaliAman}" target="_blank" class="img-link"><i class='bx bx-image'></i> Bukti Kembali</a>` : "";
                     
-                    let aksiHtml = isKembali 
-                        ? (item.foto_kembali.startsWith("http") ? `<a href="${item.foto_kembali}" target="_blank" class="img-link"><i class='bx bx-image'></i> Foto Keluar</a>` : `<span style="color:#ef4444; font-size:10px;">${item.foto_kembali}</span>`) 
-                        : `<button class="btn-kembali" onclick="bukaModalEdit('${item.id}', '${item.sn}')"><i class='bx bx-log-out-circle'></i> Kembalikan</button>`;
+                    let tombolBAST = isKembali && item.no_bast ? `<br><a href="bast.html?nobast=${encodeURIComponent(item.no_bast)}" target="_blank" style="background:#0284c7; color:white; padding:5px 10px; border-radius:5px; font-size:11px; text-decoration:none; display:inline-block; margin-top:8px; font-weight:bold;"><i class='bx bx-printer'></i> BAST & PDF</a>` : "";
 
                     tbody.innerHTML += `
                     <tr>
+                        <td style="vertical-align:middle; text-align:center;">${chkBox}</td>
                         <td><b>${item.pkm}</b><br><span style="color:#0ea5e9; font-size:12px; font-weight:600;">${item.alkes}</span><br><span style="font-size:11px; opacity:0.8;">Merek: ${item.merek} / ${item.type} <br>SN: ${item.sn}</span></td>
                         <td>${item.tgl_bawa}</td>
                         <td style="font-size:11px;"><b>Aksesoris:</b> ${item.aksesoris}<br><b>Rusak:</b> ${item.kerusakan} ${linkFotoBawa}</td>
-                        <td>${statusHtml}</td>
-                        <td>${aksiHtml}</td>
+                        <td>${statusHtml}<br>${linkFotoKembali}${tombolBAST}</td>
                     </tr>`;
                 });
-            }).catch(err => {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Gagal menarik data.</td></tr>`;
-            });
+            }).catch(err => { tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Gagal menarik data.</td></tr>`; });
         }
         window.onload = muatDataBasecamp;
     </script>
