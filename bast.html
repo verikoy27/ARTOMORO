@@ -11,8 +11,8 @@
         @media print { body { background: white; margin: 0; } .a4-page { margin: 0; box-shadow: none; width: 100%; padding: 15mm; } .no-print { display: none !important; } }
         
         .header { display: flex; align-items: center; justify-content: center; border-bottom: 3px solid black; padding-bottom: 10px; margin-bottom: 20px; position: relative; }
-        .logo-box { position: absolute; left: 10px; width: 120px; height: 60px; border: 3px solid #6fa8dc; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-        .logo-text { font-family: Arial, sans-serif; font-size: 38px; font-weight: bold; color: #6fa8dc; letter-spacing: 2px; }
+        .logo-img { position: absolute; left: 10px; height: 65px; width: auto; object-fit: contain; }
+        
         .header-text { text-align: center; }
         .header-text h1 { margin: 0; font-size: 20px; color: #1c4587; font-family: Arial, sans-serif; }
         .header-text p { margin: 2px 0; font-size: 12px; font-family: Arial, sans-serif; }
@@ -50,7 +50,7 @@
 
     <div class="a4-page" id="lembarBAST">
         <div class="header">
-            <div class="logo-box"><span class="logo-text">eBa</span></div>
+            <img src="https://i.ibb.co.com/wh3v3FG8/IMG-7461.jpg" alt="Logo Ebacon" class="logo-img">
             <div class="header-text">
                 <h1>CV. EBACON SYSTEM</h1>
                 <p>JL. Rungkut Menanggal Harapan O-51, Surabaya</p>
@@ -100,7 +100,7 @@
 
             <div class="signatures">
                 <div class="sign-box">
-                    <br><br> <!-- Penyeimbang baris tanggal -->
+                    <br><br>
                     <b>PIHAK PERTAMA</b><br>Yang Menyerahkan,
                     <div class="sign-space"></div>
                     <b id="sign1">( ... )</b>
@@ -153,14 +153,14 @@
                 if(d.getFullYear() === 2026) document.getElementById('thnText').innerText = "Dua Puluh Enam";
                 document.getElementById('tglSurat').innerText = d.getDate() + " " + bulan[d.getMonth()];
 
-                // Susun Tabel Barang
+                // Susun Tabel Barang (Menggunakan Data Aksesoris)
                 let tbody = document.getElementById('tabelBarang');
                 tbody.innerHTML = "";
                 items.forEach((item, index) => {
-                    tbody.innerHTML += `<tr><td>${index + 1}.</td><td>${item.alkes}</td><td>${item.merek}</td><td>${item.type}</td><td>${item.sn}</td><td>Selesai Servis</td></tr>`;
+                    let aksesorisTeks = item.aksesoris ? item.aksesoris : "-";
+                    tbody.innerHTML += `<tr><td>${index + 1}.</td><td>${item.alkes}</td><td>${item.merek}</td><td>${item.type}</td><td>${item.sn}</td><td>${aksesorisTeks}</td></tr>`;
                 });
                 
-                // Tambah baris kosong agar tabel rapi minimal 4 baris
                 for(let i = items.length; i < 4; i++) {
                      tbody.innerHTML += `<tr><td>${i+1}.</td><td></td><td></td><td></td><td></td><td></td></tr>`;
                 }
@@ -171,7 +171,6 @@
             });
         };
 
-        // Convert ke PDF & Tembak ke Drive
         document.getElementById('btnSimpanDrive').addEventListener('click', function() {
             const btn = this;
             btn.innerText = "⏳ Memproses PDF...";
