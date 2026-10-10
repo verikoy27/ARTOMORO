@@ -290,21 +290,95 @@
             }; reader.readAsDataURL(file);
         }
 
-        // BUKA MODAL MULTI
+        // DATABASE ALAMAT PUSKESMAS SURABAYA (Berdasarkan Google Maps)
+        const dataAlamatPKM = {
+            "Puskesmas Asemrowo": "Jl. Asemrowo VIII No. 71, Asemrowo, Surabaya",
+            "Puskesmas Balas Klumprik": "Jl. Raya Balas Klumprik, Wiyung, Surabaya",
+            "Puskesmas Balongsari": "Jl. Balongsari Taman No. 1, Tandes, Surabaya",
+            "Puskesmas Bangkingan": "Jl. Raya Bangkingan, Lakarsantri, Surabaya",
+            "Puskesmas Banyu Urip": "Jl. Banyu Urip Kidul VI/1, Sawahan, Surabaya",
+            "Puskesmas Benowo": "Jl. Raya Benowo No. 46, Pakal, Surabaya",
+            "Puskesmas Bulak Banteng": "Jl. Bulak Banteng Wetan No. 14, Kenjeran, Surabaya",
+            "Puskesmas Dr. Soetomo": "Jl. Pandegiling No. 223A, Tegalsari, Surabaya",
+            "Puskesmas Dukuh Kupang": "Jl. Dukuh Kupang XXV No. 48, Dukuh Pakis, Surabaya",
+            "Puskesmas Dupak": "Jl. Dupak Bangunsari, Krembangan, Surabaya",
+            "Puskesmas Gading": "Jl. Kenjeran No. 275, Tambaksari, Surabaya",
+            "Puskesmas Gayungan": "Jl. Gayungsari Barat No. 122, Gayungan, Surabaya",
+            "Puskesmas Gundih": "Jl. Margodadi No. 36-38, Bubutan, Surabaya",
+            "Puskesmas Gunung Anyar": "Jl. Gunung Anyar Timur No. 70, Gunung Anyar, Surabaya",
+            "Puskesmas Jagir": "Jl. Bendul Merisi No. 1, Wonokromo, Surabaya",
+            "Puskesmas Jemursari": "Jl. Jemursari Selatan IV No. 5, Wonocolo, Surabaya",
+            "Puskesmas Jeruk": "Jl. Raya Menganti Jeruk No. 277, Lakarsantri, Surabaya",
+            "Puskesmas Kalijudan": "Jl. Kalijudan No. 123, Mulyorejo, Surabaya",
+            "Puskesmas Kalirungkut": "Jl. Rungkut Asri No. 1, Rungkut, Surabaya",
+            "Puskesmas Kebonsari": "Jl. Kebonsari Tengah No. 36, Jambangan, Surabaya",
+            "Puskesmas Kedungdoro": "Jl. Kembang Jepun, Pabean Cantikan, Surabaya",
+            "Puskesmas Kedurus": "Jl. Raya Kedurus No. 22, Karang Pilang, Surabaya",
+            "Puskesmas Kenjeran": "Jl. Tambak Wedi No. 2, Kenjeran, Surabaya",
+            "Puskesmas Keputih": "Jl. Keputih Tegal No. 20, Sukolilo, Surabaya",
+            "Puskesmas Ketabang": "Jl. Jaksa Agung Suprapto No. 10, Genteng, Surabaya",
+            "Puskesmas Klampis Ngasem": "Jl. Arief Rahman Hakim, Sukolilo, Surabaya",
+            "Puskesmas Krembangan Selatan": "Jl. Pesapen Selatan No. 70, Krembangan, Surabaya",
+            "Puskesmas Lidah Kulon": "Jl. Raya Lidah Kulon No. 5, Lakarsantri, Surabaya",
+            "Puskesmas Lontar": "Jl. Lontar No. 26, Sambikerep, Surabaya",
+            "Puskesmas Made": "Jl. Raya Made No. 10, Sambikerep, Surabaya",
+            "Puskesmas Manukan Kulon": "Jl. Manukan Dalam, Tandes, Surabaya",
+            "Puskesmas Medokan Ayu": "Jl. Medokan Ayu No. 1, Rungkut, Surabaya",
+            "Puskesmas Menur": "Jl. Menur Pumpungan No. 27, Sukolilo, Surabaya",
+            "Puskesmas Mojo": "Jl. Mojo Klanggru Wetan II No. 11, Gubeng, Surabaya",
+            "Puskesmas Moro Krembangan": "Jl. Kalianak Timur II No. 5, Krembangan, Surabaya",
+            "Puskesmas Mulyorejo": "Jl. Mulyorejo Utara No. 201, Mulyorejo, Surabaya",
+            "Puskesmas Ngagel Rejo": "Jl. Ngagel Rejo VI No. 35, Wonokromo, Surabaya",
+            "Puskesmas Pacar Keling": "Jl. Pacar Keling No. 14A, Tambaksari, Surabaya",
+            "Puskesmas Pakis": "Jl. Pakis Tirtosari, Sawahan, Surabaya",
+            "Puskesmas Pegirian": "Jl. Karang Tembok No. 39, Semampir, Surabaya",
+            "Puskesmas Peneleh": "Jl. Peneleh, Genteng, Surabaya",
+            "Puskesmas Perak Timur": "Jl. Jakarta No. 9, Pabean Cantikan, Surabaya",
+            "Puskesmas Pucangsewu": "Jl. Pucang Anom Timur No. 35, Gubeng, Surabaya",
+            "Puskesmas Putat Jaya": "Jl. Putat Jaya, Sawahan, Surabaya",
+            "Puskesmas Rangkah": "Jl. Rangkah, Tambaksari, Surabaya",
+            "Puskesmas Sawah Pulo": "Jl. Sawah Pulo, Semampir, Surabaya",
+            "Puskesmas Sawahan": "Jl. Raya Arjuna, Sawahan, Surabaya",
+            "Puskesmas Sememi": "Jl. Kendung No. 72, Benowo, Surabaya",
+            "Puskesmas Sidosermo": "Jl. Sidosermo, Wonocolo, Surabaya",
+            "Puskesmas Sidotopo": "Jl. Pegirian No. 236, Semampir, Surabaya",
+            "Puskesmas Sidotopo Wetan": "Jl. Randu, Kenjeran, Surabaya",
+            "Puskesmas Simolawang": "Jl. Simolawang, Simokerto, Surabaya",
+            "Puskesmas Simomulyo": "Jl. Gumuk Bogo, Sukomanunggal, Surabaya",
+            "Puskesmas Siwalankerto": "Jl. Siwalankerto, Wonocolo, Surabaya",
+            "Puskesmas Tambak Wedi": "Jl. Tambak Wedi, Kenjeran, Surabaya",
+            "Puskesmas Tambakrejo": "Jl. Tambak Rejo, Simokerto, Surabaya",
+            "Puskesmas Tanah Kali Kedinding": "Jl. Kedinding Lor, Kenjeran, Surabaya",
+            "Puskesmas Tanjungsari": "Jl. Tanjungsari, Sukomanunggal, Surabaya",
+            "Puskesmas Tembok Dukuh": "Jl. Tembok Dukuh, Bubutan, Surabaya",
+            "Puskesmas Tenggilis": "Jl. Tenggilis Mejoyo, Tenggilis Mejoyo, Surabaya",
+            "Puskesmas Wiyung": "Jl. Menganti Wiyung, Wiyung, Surabaya",
+            "Puskesmas Wonokromo": "Jl. Karangrejo, Wonokromo, Surabaya",
+            "Puskesmas Wonokusumo": "Jl. Wonokusumo, Semampir, Surabaya"
+        };
+
+        // BUKA MODAL MULTI (Dengan Fitur Auto-Fill Alamat)
         function bukaModalMulti() {
             let selected = document.querySelectorAll('.chk-pilih:checked');
-            if (selected.length === 0) { alert("Pilih minimal 1 alat di tabel untuk dikembalikan!"); return; }
+            if (selected.length === 0) { 
+                tampilkanAlertKeren("Pilih Alat Dulu!", "Anda harus mencentang minimal 1 alat di tabel untuk dikembalikan."); 
+                return; 
+            }
             
             let snList = [];
             let pkmPertama = selected[0].getAttribute('data-pkm');
             
             for(let i=0; i<selected.length; i++) {
                 if(selected[i].getAttribute('data-pkm') !== pkmPertama) {
-                    alert("GAGAL: Alat yang digabungkan dalam 1 BAST harus dari PKM / Faskes yang SAMA!");
+                    tampilkanAlertKeren("Data Tidak Valid!", "Alat yang digabungkan dalam 1 Nomor BAST harus berasal dari PKM / Faskes yang SAMA.");
                     return;
                 }
                 snList.push(selected[i].value);
             }
+            
+            // Logika Auto-Fill Alamat PKM
+            let alamatOtomatis = dataAlamatPKM[pkmPertama] || "Surabaya"; 
+            document.querySelector('input[name="alamat_penerima"]').value = alamatOtomatis;
             
             document.getElementById("editSnList").value = JSON.stringify(snList);
             document.getElementById("teksSN").innerText = snList.length + " Unit Alat (" + pkmPertama + ")";
