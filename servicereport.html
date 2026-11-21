@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Report - EBACON SYSTEM</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; background: #e0e0e0; font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: black; }
+        .a4-page { width: 210mm; min-height: 297mm; margin: 10mm auto; background: white; padding: 12mm; box-sizing: border-box; box-shadow: 0 0 10px rgba(0,0,0,0.2); position: relative; }
+        
+        @media print {
+            body { background: white; margin: 0; }
+            .a4-page { width: 100%; box-shadow: none; margin: 0; padding: 10mm; }
+            .no-print { display: none !important; }
+            @page { margin: 0; }
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        .sr-table { border: 1px solid black; margin-bottom: -1px; }
+        .sr-table td { border: 1px solid black; padding: 5px 8px; vertical-align: middle; }
+        
+        .bg-blue { background-color: #5b8cbe; color: white; font-weight: bold; font-size: 12px; }
+        .bg-light-blue { background-color: #d9e1f2; font-weight: bold; text-align: center; }
+
+        .header-logo { width: 100%; max-width: 140px; }
+        .header-title { margin: 0; font-size: 18px; font-weight: bold; color: black; }
+        .header-subtitle { margin: 2px 0 0 0; font-size: 11px; font-weight: bold; }
+        
+        .label-col { width: 18%; font-weight: bold; border-right: none !important; }
+        .val-col { width: 32%; border-left: none !important; }
+        
+        .box-check { display: inline-block; width: 10px; height: 10px; border: 1px solid black; text-align: center; line-height: 10px; font-size: 9px; font-weight: bold; margin-right: 3px; background: white; color: black;}
+
+        .btn-print { background: #0ea5e9; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; margin: 5px; transition: 0.3s; }
+        .btn-drive { background: #10b981; }
+        .btn-ttd-toggle { background: #6366f1; }
+        #loadingData { text-align: center; padding: 50px; font-size: 18px; }
+
+        .panel-ttd-langsung { max-width: 700px; margin: 12px auto 0; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; display: none; }
+        .ttd-grid-sr { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .canvas-sr { background: white; border: 1px solid #94a3b8; border-radius: 6px; width: 100%; height: 110px; cursor: crosshair; touch-action: none; }
+        .ttd-img-box { height: 55px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+        .ttd-img-box img { max-height: 55px; max-width: 180px; object-fit: contain; }
+    </style>
+</head>
+<body>
+
+    <div id="loadingData">⚙️ Menarik Data Laporan Teknis...</div>
+
+    <div class="no-print" style="text-align: center; padding: 15px; background: white; border-bottom: 2px solid #ccc; display:none;">
+        <button class="btn-print" onclick="window.print()">🖨️ Cetak Fisik</button>
+        <button id="btnSimpanDrive" class="btn-print btn-drive">☁️ Simpan PDF ke Folder Drive</button>
+        <button class="btn-print btn-ttd-toggle" onclick="togglePanelTTDSR()">✍️ Tanda Tangan Langsung</button>
+
+        <div id="panelTTDSR" class="panel-ttd-langsung">
+            <div class="ttd-grid-sr">
+                <div>
+                    <strong>TTD Teknisi</strong><br>
+                    <canvas id="srCanvasTek" class="canvas-sr" width="300" height="110"></canvas><br>
+                    <button type="button" onclick="clearSRCanvas('srCanvasTek', 'imgTTDTeknisi')" style="margin-top:4px; padding:4px 10px; cursor:pointer;">Hapus TTD Teknisi</button>
+                </div>
+                <div>
+                    <strong>TTD Pelanggan</strong><br>
+                    <canvas id="srCanvasPel" class="canvas-sr" width="300" height="110"></canvas><br>
+                    <button type="button" onclick="clearSRCanvas('srCanvasPel', 'imgTTDPelanggan')" style="margin-top:4px; padding:4px 10px; cursor:pointer;">Hapus TTD Pelanggan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="a4-page" id="lembarSR" style="display:none;">
+        
+        <!-- BAGIAN HEADER KOP SURAT -->
+        <table style="border: none; margin-bottom: 10px;">
+            <tr>
+                <td style="width: 25%; border: none; padding: 0;">
+                    <img src="https://i.ibb.co.com/wh3v3FG8/IMG-7461.jpg" crossorigin="anonymous" class="header-logo">
+                </td>
+                <td style="width: 45%; border: none; padding: 0 10px; vertical-align: top;">
+                    <h2 class="header-title">CV. EBACON SYSTEM</h2>
+                    <p class="header-subtitle">JL. Rungkut Menanggal Harapan<br>O-51, Surabaya<br>Telp 031-8707613, Whatsapp 0889 8948 8844</p>
+                </td>
+                <td style="width: 30%; border: none; padding: 0; vertical-align: top;">
+                    <table class="sr-table">
+                        <tr><td colspan="2" class="bg-blue" id="judulHeaderSR">LAPORAN TEKNIS</td></tr>
+                        <tr><td style="width: 40%; font-weight:bold;">No Laporan</td><td id="srNoLaporan"></td></tr>
+                        <tr><td style="font-weight:bold;">Tanggal</td><td id="srTglLaporan"></td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <!-- INFORMASI PELANGGAN & ALAT -->
+        <table class="sr-table">
+            <tr>
+                <td colspan="2" class="bg-blue" style="width: 50%;">INFORMASI PELANGGAN</td>
+                <td colspan="2" class="bg-blue" style="width: 50%;">INFORMASI ALAT</td>
+            </tr>
+            <tr>
+                <td class="label-col">Nama Instansi :</td><td class="val-col" id="srFaskes"></td>
+                <td class="label-col">Nama Alat :</td><td class="val-col" id="srAlat"></td>
+            </tr>
+            <tr>
+                <td class="label-col" rowspan="2">Alamat :</td><td class="val-col" rowspan="2" id="srAlamat"></td>
+                <td class="label-col">Model :</td><td class="val-col" id="srMerek"></td>
+            </tr>
+            <tr>
+                <td class="label-col">Nomor Seri :</td><td class="val-col" id="srSN"></td>
+            </tr>
+            <tr>
+                <td class="label-col">PIC :</td><td class="val-col" id="srPIC"></td>
+                <td class="label-col">Lokasi Ruangan :</td><td class="val-col" id="srLokasiRuangan">-</td>
+            </tr>
+            <tr>
+                <td class="label-col">No Telp :</td><td class="val-col" id="srTelp"></td>
+                <td class="label-col">Status Garansi :</td><td class="val-col" id="srStatusGaransi">-</td>
+            </tr>
+        </table>
+
+        <!-- INFORMASI TEKNIS -->
+        <table class="sr-table" style="border-top: none;">
+            <tr><td class="bg-blue">INFORMASI TEKNIS</td></tr>
+            <tr>
+                <td style="padding: 8px;">
+                    <span style="font-weight:bold; display:inline-block; width: 100px;">Tipe Teknis :</span>
+                    <span class="box-check" id="chkPM"></span> Pemeliharaan &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="box-check" id="chkINS"></span> Instalasi &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="box-check" id="chkCM"></span> Perbaikan &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="box-check" id="chkCHK"></span> Pengecekan
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">
+                    <span style="font-weight:bold; display:inline-block; width: 100px;">Tanggal Servis :</span> <span id="srTglServis"></span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- PEKERJAAN YANG DILAKUKAN -->
+        <table class="sr-table" style="border-top: none;">
+            <tr><td class="bg-blue">PEKERJAAN YANG DILAKUKAN</td></tr>
+            <tr>
+                <td style="height: 100px; vertical-align: top; padding: 8px; white-space: pre-line;" id="srTindakLanjut"></td>
+            </tr>
+        </table>
+
+        <!-- HASIL TEKNIS -->
+        <table class="sr-table" style="border-top: none;">
+            <tr><td class="bg-blue">HASIL TEKNIS</td></tr>
+            <tr>
+                <td style="padding: 8px;">
+                    <span class="box-check" id="chkSelesai"></span> Selesai &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="box-check" id="chkPart"></span> Perlu Pergantian Part &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="box-check" id="chkLanjutan"></span> Perlu Pengecekan Lanjutan
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">
+                    <span class="box-check" id="chkLainnya"></span> Lainnya : <span id="srLainnya"></span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- PART & CATATAN -->
+        <table class="sr-table" style="border-top: none;">
+            <tr>
+                <td class="bg-blue" style="width: 60%; border-right: 1px solid black;">PART YANG DIGUNAKAN</td>
+                <td class="bg-blue" style="width: 40%;">CATATAN</td>
+            </tr>
+            <tr>
+                <td style="padding: 0; vertical-align: top; border-right: 1px solid black;">
+                    <table style="width: 100%; border: none;">
+                        <tr>
+                            <td class="bg-light-blue" style="border-top: none; border-left: none; border-bottom: 1px solid black;">Part</td>
+                            <td class="bg-light-blue" style="border-top: none; border-bottom: 1px solid black; width: 15%; border-left: 1px solid black;">Qty</td>
+                            <td class="bg-light-blue" style="border-top: none; border-right: none; border-bottom: 1px solid black; width: 25%; border-left: 1px solid black;">Kondisi</td>
+                        </tr>
+                        <tbody id="tabelPartList"></tbody>
+                    </table>
+                </td>
+                <td style="vertical-align: top; padding: 8px; white-space: pre-line;" id="srCatatan"></td>
+            </tr>
+        </table>
+
+        <!-- KONFIRMASI PELANGGAN (DENGAN TTD) -->
+        <table class="sr-table" style="border-top: none;">
+            <tr><td colspan="2" class="bg-blue">KONFIRMASI PELANGGAN</td></tr>
+            <tr>
+                <td style="width: 50%; text-align: center; font-weight: bold; padding: 6px;">Teknisi</td>
+                <td style="width: 50%; text-align: center; font-weight: bold; padding: 6px;">Pelanggan</td>
+            </tr>
+            <tr>
+                <td style="height: 85px; vertical-align: bottom; text-align: center; padding: 6px;">
+                    <div class="ttd-img-box"><img id="imgTTDTeknisi" style="display:none;" alt=""></div>
+                    <div id="ttdTeknisi"></div>
+                </td>
+                <td style="height: 85px; vertical-align: bottom; text-align: center; padding: 6px;">
+                    <div class="ttd-img-box"><img id="imgTTDPelanggan" style="display:none;" alt=""></div>
+                    <div id="ttdPelanggan"></div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzP5btzre-P0GW-XTK90I-6-P6QOgWgnBzAzvspNvrYofFWSSoTHrxZnL8gncUxty2Q/exec'; 
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetSR = urlParams.get('no_laporan');
+        const jenisSR = (urlParams.get('jenis') || 'pengecekan').toLowerCase();
+
+        // Format semua tanggal ke DD-MM-YYYY (tanggal-bulan-tahun)
+        function formatDDMMYYYY(tglStr) {
+            if (!tglStr || tglStr === "-") return "-";
+            let clean = String(tglStr).replace(/^'/, "").trim();
+            if (/^\d{2}-\d{2}-\d{4}$/.test(clean)) return clean;
+            if (/^\d{4}-\d{2}-\d{2}$/.test(clean)) {
+                let p = clean.split("-");
+                return `${p[2]}-${p[1]}-${p[0]}`;
+            }
+            if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(clean)) {
+                let p = clean.split("/");
+                return `${p[0].padStart(2, "0")}-${p[1].padStart(2, "0")}-${p[2]}`;
+            }
+            return clean;
+        }
+
+        function togglePanelTTDSR() {
+            const panel = document.getElementById("panelTTDSR");
+            panel.style.display = panel.style.display === "block" ? "none" : "block";
+        }
+
+        function setTTDImage(imgId, dataUrl) {
+            const img = document.getElementById(imgId);
+            if (dataUrl && dataUrl.startsWith("data:image")) {
+                img.src = dataUrl;
+                img.style.display = "inline-block";
+            } else {
+                img.src = "";
+                img.style.display = "none";
+            }
+        }
+
+        function setupSRCanvas(canvasId, imgId, storagePrefix) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext("2d");
+            let drawing = false;
+            ctx.lineWidth = 2.2;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "#000000";
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: (clientX - rect.left) * (canvas.width / rect.width),
+                    y: (clientY - rect.top) * (canvas.height / rect.height)
+                };
+            }
+
+            function start(e) {
+                drawing = true;
+                const p = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                if (e.cancelable) e.preventDefault();
+            }
+
+            function move(e) {
+                if (!drawing) return;
+                const p = getPos(e);
+                ctx.lineTo(p.x, p.y);
+                ctx.stroke();
+                if (e.cancelable) e.preventDefault();
+            }
+
+            function end() {
+                if (!drawing) return;
+                drawing = false;
+                const url = canvas.toDataURL("image/png");
+                setTTDImage(imgId, url);
+                if (targetSR) localStorage.setItem(storagePrefix + targetSR, url);
+            }
+
+            canvas.addEventListener("mousedown", start);
+            canvas.addEventListener("mousemove", move);
+            window.addEventListener("mouseup", end);
+            canvas.addEventListener("touchstart", start, { passive: false });
+            canvas.addEventListener("touchmove", move, { passive: false });
+            canvas.addEventListener("touchend", end);
+        }
+
+        function clearSRCanvas(canvasId, imgId) {
+            const canvas = document.getElementById(canvasId);
+            canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+            setTTDImage(imgId, "");
+        }
+
+        window.onload = function() {
+            if(!targetSR) { alert("Nomor SR tidak ditemukan!"); return; }
+
+            setupSRCanvas("srCanvasTek", "imgTTDTeknisi", "ttd_tek_");
+            setupSRCanvas("srCanvasPel", "imgTTDPelanggan", "ttd_pel_");
+
+            // Judul tetap "LAPORAN TEKNIS" tanpa embel-embel pengecekan/perbaikan
+            document.getElementById("judulHeaderSR").innerText = "LAPORAN TEKNIS";
+            document.getElementById("btnSimpanDrive").innerText = "☁️ Simpan PDF SR " + (jenisSR === "perbaikan" ? "Perbaikan" : "Pengecekan") + " ke Folder Drive";
+
+            const localTek = localStorage.getItem("ttd_tek_" + targetSR);
+            const localPel = localStorage.getItem("ttd_pel_" + targetSR);
+            const localInfo = JSON.parse(localStorage.getItem("info_sr_" + targetSR) || "{}");
+            if (localTek) setTTDImage("imgTTDTeknisi", localTek);
+            if (localPel) setTTDImage("imgTTDPelanggan", localPel);
+            if (localInfo.lokasi_ruangan) document.getElementById("srLokasiRuangan").innerText = localInfo.lokasi_ruangan;
+            if (localInfo.status_garansi) document.getElementById("srStatusGaransi").innerText = localInfo.status_garansi;
+
+            // Ambil TTD & Info Alat / Pelanggan dari Drive
+            fetch(scriptURL + "?action=get_ttd&no_laporan=" + encodeURIComponent(targetSR))
+                .then(r => r.json())
+                .then(res => {
+                    if (!localTek && res.ttd_teknisi) setTTDImage("imgTTDTeknisi", res.ttd_teknisi);
+                    if (!localPel && res.ttd_pelanggan) setTTDImage("imgTTDPelanggan", res.ttd_pelanggan);
+                    if (!localInfo.lokasi_ruangan && res.lokasi_ruangan) document.getElementById("srLokasiRuangan").innerText = res.lokasi_ruangan;
+                    if (!localInfo.status_garansi && res.status_garansi) document.getElementById("srStatusGaransi").innerText = res.status_garansi;
+                    if (res.nama_pelanggan) {
+                        document.getElementById("srPIC").innerText = res.nama_pelanggan;
+                        document.getElementById("ttdPelanggan").innerText = res.nama_pelanggan;
+                    }
+                    if (res.telp_pelanggan) {
+                        document.getElementById("srTelp").innerText = res.telp_pelanggan;
+                    }
+                }).catch(() => {});
+
+            fetch(scriptURL + "?action=get_laporan")
+            .then(res => res.json())
+            .then(data => {
+                let item = data.find(d => d.no_laporan === targetSR);
+                if(!item) { alert("Data tidak ditemukan."); return; }
+
+                document.getElementById('srNoLaporan').innerText = item.no_laporan;
+                document.getElementById('srTglLaporan').innerText = formatDDMMYYYY(item.tgl_laporan);
+                document.getElementById('srFaskes').innerText = item.pkm;
+                document.getElementById('srAlamat').innerText = item.alamat;
+                document.getElementById('srAlat').innerText = item.alat;
+                document.getElementById('srMerek').innerText = item.merek;
+                document.getElementById('srSN').innerText = item.sn;
+
+                // Tanggal Servis berformat DD-MM-YYYY
+                if (jenisSR === "perbaikan") {
+                    document.getElementById('srTglServis').innerText = formatDDMMYYYY(item.tgl_perbaikan || item.tgl_cek);
+                } else {
+                    document.getElementById('srTglServis').innerText = formatDDMMYYYY(item.tgl_cek);
+                }
+
+                document.getElementById('srTindakLanjut').innerText = item.tindak_lanjut || item.kerusakan;
+                document.getElementById('srCatatan').innerText = item.catatan || '-';
+                document.getElementById('ttdTeknisi').innerText = item.teknisi || ".................................";
+                
+                // SPLIT PIC DAN NO TELP (Prioritaskan input manual nama_pelanggan)
+                let kontak = item.cp || "";
+                let pic = kontak;
+                let telp = "-";
+                
+                if(/[-/,]/.test(kontak)) {
+                    let splitData = kontak.split(/[-/,]/);
+                    pic = splitData[0].trim();
+                    telp = splitData.slice(1).join(" ").trim();
+                } else {
+                    let match = kontak.match(/([a-zA-Z\s.]+)([\d\s+]+)/);
+                    if(match) { pic = match[1].trim(); telp = match[2].trim(); }
+                }
+
+                const finalPic = localInfo.nama_pelanggan || pic;
+                const finalTelp = localInfo.telp_pelanggan || telp || "-";
+                
+                document.getElementById('srPIC').innerText = finalPic;
+                document.getElementById('srTelp').innerText = finalTelp;
+                document.getElementById('ttdPelanggan').innerText = finalPic || ".................................";
+
+                // SPLIT PART, QTY, KONDISI
+                let partRaw = item.part || "";
+                let tbodyPart = document.getElementById('tabelPartList');
+                tbodyPart.innerHTML = "";
+                let rowCount = 0;
+
+                if (partRaw && partRaw.trim() !== "" && partRaw.trim() !== "-") {
+                    let barisPart = partRaw.split(/\n|;/);
+                    barisPart.forEach(p => {
+                        if(p.trim()) {
+                            let col = p.split(',');
+                            let nama = col[0] ? col[0].trim() : "";
+                            let qty = col[1] ? col[1].trim() : "";
+                            let kondisi = col[2] ? col[2].trim() : "";
+                            
+                            tbodyPart.innerHTML += `<tr>
+                                <td style="border-left:none; border-bottom:1px solid black; padding:4px;">${nama}</td>
+                                <td style="text-align:center; border-left:1px solid black; border-bottom:1px solid black; padding:4px;">${qty}</td>
+                                <td style="text-align:center; border-left:1px solid black; border-right:none; border-bottom:1px solid black; padding:4px;">${kondisi}</td>
+                            </tr>`;
+                            rowCount++;
+                        }
+                    });
+                }
+                while(rowCount < 4) {
+                     tbodyPart.innerHTML += `<tr>
+                        <td style="border-left:none; border-bottom:1px solid black; padding:4px;">&nbsp;</td>
+                        <td style="border-left:1px solid black; border-bottom:1px solid black; padding:4px;">&nbsp;</td>
+                        <td style="border-left:1px solid black; border-right:none; border-bottom:1px solid black; padding:4px;">&nbsp;</td>
+                    </tr>`;
+                    rowCount++;
+                }
+                let lastRowTds = tbodyPart.querySelectorAll('tr:last-child td');
+                lastRowTds.forEach(td => td.style.borderBottom = 'none');
+
+                // CHECKBOX TIPE TEKNIS
+                const tipe = (item.tipe_laporan || "").toUpperCase();
+                if (tipe === 'PM') document.getElementById('chkPM').innerText = 'X';
+                else if (tipe === 'INS') document.getElementById('chkINS').innerText = 'X';
+                else if (tipe === 'CM') document.getElementById('chkCM').innerText = 'X';
+                else if (tipe === 'CHK') document.getElementById('chkCHK').innerText = 'X';
+                else if (jenisSR === 'perbaikan') document.getElementById('chkCM').innerText = 'X';
+                else document.getElementById('chkCHK').innerText = 'X';
+
+                // CHECKBOX HASIL TEKNIS
+                const hasil = (item.hasil_teknis || "").toLowerCase();
+                if (hasil.includes('selesai (normal)')) document.getElementById('chkSelesai').innerText = 'X';
+                else if (hasil.includes('menunggu part')) document.getElementById('chkPart').innerText = 'X';
+                else if (hasil.includes('rusak total') || hasil.includes('lanjutan')) document.getElementById('chkLanjutan').innerText = 'X';
+                else if (hasil !== "") {
+                    document.getElementById('chkLainnya').innerText = 'X';
+                    document.getElementById('srLainnya').innerText = item.hasil_teknis;
+                }
+
+                document.getElementById('loadingData').style.display = 'none';
+                document.getElementById('lembarSR').style.display = 'block';
+                document.querySelector('.no-print').style.display = 'block';
+            });
+        };
+
+        // SIMPAN PDF KE DALAM FOLDER DRIVE
+        document.getElementById('btnSimpanDrive').addEventListener('click', function() {
+            const btn = this;
+            const teksAsli = btn.innerText;
+            btn.innerText = "⏳ Memproses PDF...";
+            btn.disabled = true;
+            
+            var element = document.getElementById('lembarSR');
+            var prefixSR = jenisSR === "perbaikan" ? "SR Perbaikan - " : "SR Pengecekan - ";
+            var namaFilePDF = prefixSR + targetSR.replace(/\//g, "-") + '.pdf';
+
+            var opt = { 
+                margin: 0, 
+                filename: namaFilePDF, 
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true }, 
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+            };
+
+            html2pdf().set(opt).from(element).outputPdf('datauristring').then(function(pdfBase64) {
+                btn.innerText = "☁️ Mengirim ke Folder Drive...";
+                
+                const payload = {
+                    action: 'simpan_sr_pdf',
+                    no_laporan: targetSR,
+                    pdf_data: pdfBase64,
+                    file_name: namaFilePDF
+                };
+                
+                fetch(scriptURL, { 
+                    method: 'POST', 
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                })
+                .then(() => {
+                    alert('File "' + namaFilePDF + '" berhasil disimpan ke dalam folder Drive laporan ini!');
+                    btn.innerText = "✔️ Tersimpan di Folder Drive";
+                    btn.style.background = "#10b981";
+                    btn.disabled = false;
+                }).catch(err => {
+                    alert("Gagal koneksi saat upload.");
+                    btn.innerText = teksAsli;
+                    btn.disabled = false;
+                });
+            }).catch(function(err) {
+                alert("Gagal render PDF. Silakan coba lagi.");
+                btn.innerText = teksAsli;
+                btn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -37,14 +37,19 @@
         .btn-buka-form { background: #0ea5e9; color: white; border: none; padding: 15px 35px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3); }
         .btn-buka-form:hover { background: #0284c7; transform: translateY(-3px); }
         
-        .form-box, .panel { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; width: 100%; max-width: 1100px; backdrop-filter: blur(15px); transition: 0.3s; }
-        .form-box { display: none; position: relative; max-width: 900px; }
+        .form-box, .panel { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; width: 100%; max-width: 1300px; backdrop-filter: blur(15px); transition: 0.3s; }
+        .form-box { display: none; position: relative; max-width: 850px; } 
         
         .btn-tutup { position: absolute; top: 20px; right: 25px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; transition: 0.3s; }
         
-        .form-header { text-align: center; margin-bottom: 30px; }
+        .form-header { text-align: center; margin-bottom: 25px; }
         .form-header i { font-size: 50px; color: #0ea5e9; margin-bottom: 10px; }
-        .form-header h2 { font-size: 28px; font-weight: 600; color: #0ea5e9; }
+        .form-header h2 { font-size: 26px; font-weight: 600; color: #0ea5e9; }
+
+        .mode-switch { display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+        .btn-mode { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-mode.active-cek { background: #f59e0b; color: white; border-color: #f59e0b; }
+        .btn-mode.active-perbaikan { background: #8b5cf6; color: white; border-color: #8b5cf6; }
         
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full-width { grid-column: span 2; }
@@ -53,45 +58,73 @@
         .input-group input, .input-group textarea, .input-group select { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 15px; color: var(--text-main); outline: none; transition: 0.3s; font-size: 14px; }
         .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: #0ea5e9; background: rgba(14, 165, 233, 0.05); }
         .input-group select option { background: var(--panel-bg); color: var(--text-main); }
+
+        .part-wrapper { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; }
+        .part-header-row { display: grid; grid-template-columns: 3fr 1fr 2fr 38px; gap: 10px; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 0 4px; }
+        .part-row { display: grid; grid-template-columns: 3fr 1fr 2fr 38px; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .part-row input { width: 100%; padding: 10px 12px !important; font-size: 13px !important; border-radius: 8px !important; }
+        .btn-hapus-part { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); height: 38px; width: 38px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: 0.2s; }
+        .btn-hapus-part:hover { background: #ef4444; color: white; }
+        .btn-tambah-part { background: rgba(14, 165, 233, 0.15); color: #0ea5e9; border: 1px dashed #0ea5e9; padding: 9px 15px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; margin-top: 2px; }
+        .btn-tambah-part:hover { background: #0ea5e9; color: white; }
+
+        .foto-box { background: var(--input-bg); border: 1px dashed var(--border-color); border-radius: 12px; padding: 15px; }
+        .foto-input-label { display: inline-flex; align-items: center; gap: 8px; background: rgba(14, 165, 233, 0.15); color: #0ea5e9; border: 1px solid rgba(14, 165, 233, 0.4); padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .foto-input-label:hover { background: #0ea5e9; color: white; }
+        .preview-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .preview-item { position: relative; width: 85px; height: 85px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-del { position: absolute; top: 3px; right: 3px; background: rgba(239, 68, 68, 0.9); color: white; border: none; width: 20px; height: 20px; border-radius: 50%; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .ttd-box { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: center; }
+        .ttd-canvas { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; width: 100%; height: 140px; cursor: crosshair; touch-action: none; display: block; }
+        .btn-clear-ttd { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-top: 8px; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-clear-ttd:hover { background: #ef4444; color: white; }
         
         .radio-box-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .radio-box-group input[type="radio"] { display: none; }
         .radio-label { flex: 1; text-align: center; background: var(--input-bg); border: 2px solid var(--border-color); padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.3s; font-size: 14px; }
         .radio-box-group input[type="radio"]:checked + .radio-label { background: #0ea5e9; color: white; border-color: #0ea5e9; box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4); transform: translateY(-2px); }
         .radio-label:hover { border-color: #0ea5e9; color: #0ea5e9; }
-
-        /* KOTAK ALAT DINAMIS */
-        .alat-container { background: rgba(0,0,0,0.2); border: 1px dashed var(--border-color); padding: 20px; border-radius: 12px; margin-bottom: 15px; transition: 0.3s; }
-        body.light-mode .alat-container { background: rgba(0,0,0,0.03); }
-        .alat-header { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
-        .alat-header span { font-weight: 600; font-size: 14px; color: #0ea5e9; }
-        .btn-hapus-alat { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
-        .btn-tambah-alat { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; border: 1px dashed #0ea5e9; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; cursor: pointer; transition: 0.3s; }
         
         .btn-submit { background: #0ea5e9; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; display: block; }
+        .btn-tl-submit { background: #f59e0b; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; display: block; }
 
         .filter-bar { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; background: var(--input-bg); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
         .filter-item { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px; background: var(--panel-bg); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--border-color); }
         .filter-item i { color: #0ea5e9; font-size: 18px; }
         .filter-item input, .filter-item select { background: transparent; border: none; color: var(--text-main); width: 100%; outline: none; font-size: 13px; }
 
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .table-responsive { overflow-x: auto; max-height: 70vh; }
+        table { width: 100%; min-width: 2250px; border-collapse: collapse; font-size: 13px; }
+        thead { position: sticky; top: 0; background: var(--nav-bg); z-index: 10; backdrop-filter: blur(10px); }
         th, td { padding: 14px 15px; text-align: left; border-bottom: 1px solid var(--table-border); vertical-align: middle; }
         th { color: var(--text-muted); font-size: 11px; text-transform: uppercase; font-weight: 500; }
+        tr:hover { background: var(--table-hover); }
         
-        /* DROPDOWN STATUS EDITABLE */
-        .status-dropdown { appearance: none; -moz-appearance: none; -webkit-appearance: none; background-color: transparent; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; cursor: pointer; outline: none; text-align: center; border: 1px solid transparent; }
-        .status-dropdown option { background: var(--panel-bg); color: var(--text-main); font-weight: normal; }
-        .badge-merah { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.4); }
-        .badge-kuning { background: rgba(245, 158, 11, 0.15); color: #eab308; border-color: rgba(245, 158, 11, 0.4); }
-        .badge-hijau { background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.4); }
+        .btn-pdf { background: #10b981; color: white; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 4px; transition: 0.3s; }
+        .btn-pdf:hover { background: #059669; }
+        
+        .btn-tl { background: #f59e0b; color: white; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 4px; transition: 0.3s; cursor: pointer; border: none; }
+        .btn-tl:hover { background: #d97706; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 9999; opacity: 0; }
-        .modal-box { background: var(--panel-bg); border: 1px solid #10b981; border-radius: 20px; padding: 35px; width: 90%; max-width: 450px; text-align: center; color: var(--text-main); transform: scale(0.8); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.2); }
+        .btn-folder { background: rgba(14, 165, 233, 0.15); color: #0ea5e9; border: 1px solid rgba(14, 165, 233, 0.4); padding: 4px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 6px; }
+        .btn-folder:hover { background: #0ea5e9; color: white; }
+
+        .badge-status { padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge-merah { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .badge-hijau { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 9999; }
+        .modal-box { background: var(--panel-bg); border: 1px solid #10b981; border-radius: 20px; padding: 35px; width: 90%; max-width: 460px; text-align: center; color: var(--text-main); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.2); }
         .modal-box i { font-size: 65px; margin-bottom: 5px; color: #10b981; }
 
-        @media only screen and (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
+        @media only screen and (max-width: 768px) { 
+            .form-grid { grid-template-columns: 1fr; } 
+            .full-width { grid-column: span 1; }
+            .part-header-row { display: none; }
+            .part-row { grid-template-columns: 1fr 80px 1fr 38px; gap: 6px; }
+        }
     </style>
 </head>
 <body>
@@ -107,300 +140,1075 @@
     </nav>
 
     <div class="container">
-        <button id="btnBukaForm" class="btn-buka-form"><i class='bx bx-wrench'></i> Lapor Kerusakan Baru</button>
+        <button id="btnBukaForm" class="btn-buka-form"><i class='bx bx-plus-circle'></i> Lapor Kerusakan Baru</button>
 
-        <div class="form-box" id="wadahForm">
-            <button class="btn-tutup" id="btnTutupForm"><i class='bx bx-x'></i></button>
+        <!-- FORM 1: LAPORAN AWAL -->
+        <div class="form-box" id="wadahFormLaporanAwal">
+            <button class="btn-tutup" onclick="sembunyikanForm('LaporanAwal')"><i class='bx bx-x'></i></button>
             <div class="form-header">
                 <i class='bx bx-clipboard'></i>
-                <h2>Laporan Kerusakan</h2>
-                <p>No Laporan: SR / [KATEGORI] / [BULAN] / [TAHUN] / [URUT] digenerate otomatis.</p>
+                <h2>Laporan Awal Kerusakan</h2>
+                <p>Isi data awal. SR akan dibuat otomatis.</p>
             </div>
 
-            <form id="formLaporan" class="form-grid">
+            <form id="formLaporanAwal" class="form-grid">
                 <input type="hidden" name="action" value="simpan_laporan">
+                <input type="hidden" name="kolom_s" value="Menunggu TL">
 
                 <div class="input-group full-width">
-                    <label>Pilih Kategori Pekerjaan</label>
+                    <label>Pilih Tipe Laporan (Kode SR)</label>
                     <div class="radio-box-group">
-                        <input type="radio" id="katCM" name="kategori" value="CM" required>
-                        <label for="katCM" class="radio-label">CM</label>
-                        <input type="radio" id="katPM" name="kategori" value="PM">
-                        <label for="katPM" class="radio-label">PM</label>
-                        <input type="radio" id="katCHK" name="kategori" value="CHK">
-                        <label for="katCHK" class="radio-label">CHK</label>
-                        <input type="radio" id="katINS" name="kategori" value="INS">
-                        <label for="katINS" class="radio-label">INS</label>
+                        <input type="radio" id="katCM" name="tipe_laporan" value="CM" required>
+                        <label for="katCM" class="radio-label">CM (Perbaikan)</label>
+                        <input type="radio" id="katPM" name="tipe_laporan" value="PM">
+                        <label for="katPM" class="radio-label">PM (Pemeliharaan)</label>
+                        <input type="radio" id="katCHK" name="tipe_laporan" value="CHK">
+                        <label for="katCHK" class="radio-label">CHK (Pengecekan)</label>
+                        <input type="radio" id="katINS" name="tipe_laporan" value="INS">
+                        <label for="katINS" class="radio-label">INS (Instalasi)</label>
                     </div>
                 </div>
 
+                <div class="input-group full-width">
+                    <label>Tanggal Masuk Laporan</label>
+                    <input type="date" name="tgl_laporan" required>
+                </div>
+
                 <div class="input-group">
-                    <label>Tanggal / Bulan / Tahun</label>
-                    <input type="date" name="tanggal" required>
+                    <label>Faskes / PKM</label>
+                    <input list="listFaskes" name="pkm" placeholder="Contoh: Puskesmas Asemrowo" required autocomplete="off">
+                    <datalist id="listFaskes"></datalist>
                 </div>
                 <div class="input-group">
-                    <label>Nama Faskes (Ketik untuk mencari / list)</label>
-                    <input list="listFaskes" name="nama_faskes" placeholder="Contoh: Puskesmas Asemrowo" required autocomplete="off">
-                    <datalist id="listFaskes">
-                        <option value="Puskesmas Asemrowo"></option>
-                        <option value="Puskesmas Balas Klumprik"></option>
-                        <option value="Puskesmas Balongsari"></option>
-                    </datalist>
+                    <label>Contact Person (CP / Pelanggan)</label>
+                    <input type="text" name="cp" placeholder="Nama dan No. HP">
                 </div>
 
                 <div class="input-group full-width">
-                    <label>Contact Person (Nama PJ & No HP)</label>
-                    <input type="text" name="cp" placeholder="Contoh: dr. Budi - 081234567xxx" required>
+                    <label>Alamat Lengkap</label>
+                    <textarea name="alamat" rows="2" placeholder="Alamat otomatis terisi saat PKM dipilih..."></textarea>
                 </div>
 
-                <div class="full-width" style="margin-top: 10px;">
-                    <label style="font-size: 13px; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 10px;">Rincian Alat (Bisa >1 alat dalam 1 PKM)</label>
-                    
-                    <div id="wadahListAlat">
-                        <div class="alat-container item-alat">
-                            <div class="alat-header">
-                                <span class="nomer-urut">Alat #1</span>
-                            </div>
-                            <div class="input-group" style="margin-bottom: 10px;">
-                                <label style="font-size:11px; margin-bottom:5px;">Nama Alkes (Merk, Type, S/N)</label>
-                                <input type="text" class="input-nama-alat" placeholder="Merk, Type, SN..." required>
-                            </div>
-                            <div class="input-group">
-                                <label style="font-size:11px; margin-bottom:5px;">Kerusakan</label>
-                                <input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-tambah-alat" onclick="tambahFormAlat()">
-                        <i class='bx bx-plus'></i> Tambah Baris Alat Lainnya
-                    </button>
+                <div class="input-group">
+                    <label>Nama Alat Kesehatan</label>
+                    <input type="text" name="alat" placeholder="Contoh: Patient Monitor" required>
+                </div>
+                <div class="input-group">
+                    <label>Merek / Type</label>
+                    <input type="text" name="merek" placeholder="Merek dan Tipe Alat">
+                </div>
+                
+                <div class="input-group">
+                    <label>Serial Number (SN)</label>
+                    <input type="text" name="sn" placeholder="Nomor Seri Mesin">
+                </div>
+                <div class="input-group">
+                    <label>Lokasi Ruangan</label>
+                    <input type="text" id="awalLokasiRuangan" placeholder="Contoh: Poli Umum / IGD / Lab">
+                </div>
+
+                <div class="input-group">
+                    <label>Status Garansi</label>
+                    <input type="text" id="awalStatusGaransi" list="listGaransi" placeholder="Contoh: Garansi / Non Garansi">
+                </div>
+                <div class="input-group">
+                    <label>Nama Teknisi Lapor</label>
+                    <input type="text" name="teknisi" placeholder="Nama pelapor (opsional)">
                 </div>
 
                 <div class="input-group full-width">
-                    <label>Status</label>
-                    <select name="status" required>
-                        <option value="" disabled selected>-- Pilih Status --</option>
-                        <option value="Belum diTL">Belum diTL</option>
-                        <option value="Penjadwalan Teknisi">Penjadwalan Teknisi</option>
-                        <option value="Selesai">Selesai</option>
-                    </select>
+                    <label>Kerusakan / Keluhan Awal</label>
+                    <textarea name="kerusakan" rows="2" placeholder="Deskripsi kerusakan..." required></textarea>
                 </div>
                 
                 <div class="input-group full-width">
-                    <button type="submit" class="btn-submit" id="btnKirim">Simpan & Generate Laporan</button>
+                    <button type="submit" class="btn-submit" id="btnKirimAwal"><i class='bx bx-save'></i> Simpan Laporan Awal</button>
                 </div>
             </form>
         </div>
 
+        <!-- FORM 2: TINDAK LANJUT PENGECEKAN & PERBAIKAN -->
+        <div class="form-box" id="wadahFormTL">
+            <button class="btn-tutup" onclick="sembunyikanForm('TL')"><i class='bx bx-x'></i></button>
+            <div class="form-header">
+                <i class='bx bx-wrench' style="color: #f59e0b;" id="iconFormTL"></i>
+                <h2 style="color: #f59e0b;" id="judulFormTL">Form Tindak Lanjut (Pengecekan)</h2>
+                <p>No SR: <span id="labelNoSRTL" style="font-weight:bold;"></span> | <span id="labelPKMTL" style="color:#0ea5e9; font-weight:600;"></span></p>
+                
+                <div class="mode-switch">
+                    <button type="button" class="btn-mode active-cek" id="tabModeCek" onclick="setModeFormTL('pengecekan')">
+                        <i class='bx bx-search-alt'></i> Mode Pengecekan (Kolom E)
+                    </button>
+                    <button type="button" class="btn-mode" id="tabModePerbaikan" onclick="setModeFormTL('perbaikan')">
+                        <i class='bx bx-cog'></i> Mode Perbaikan (Kolom F)
+                    </button>
+                </div>
+            </div>
+
+            <form id="formTL" class="form-grid">
+                <input type="hidden" name="action" id="hiddenActionTL" value="simpan_pengecekan">
+                <input type="hidden" name="no_laporan" id="hiddenNoSRTL">
+                <input type="hidden" name="part" id="hiddenPartTL">
+
+                <!-- EDIT TIPE LAPORAN & TANGGAL LAPORAN -->
+                <div class="input-group">
+                    <label>Tipe Laporan / Tipe Teknis (Bisa Diedit)</label>
+                    <select name="tipe_laporan" id="tlTipeLaporan" required>
+                        <option value="CHK">CHK - Pengecekan</option>
+                        <option value="CM">CM - Perbaikan</option>
+                        <option value="PM">PM - Pemeliharaan</option>
+                        <option value="INS">INS - Instalasi</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Tanggal Laporan (Bisa Diedit)</label>
+                    <input type="date" name="tgl_laporan" id="tlTglLaporan" required>
+                </div>
+
+                <!-- TANGGAL PENGECEKAN (KOLOM E) vs TANGGAL PERBAIKAN (KOLOM F) -->
+                <div class="input-group" id="grupTglCek">
+                    <label>Tanggal Pengecekan (Kolom E)</label>
+                    <input type="date" name="tgl_cek" id="tlTglCek">
+                </div>
+                <div class="input-group" id="grupTglPerbaikan" style="display:none;">
+                    <label>Tanggal Perbaikan (Kolom F)</label>
+                    <input type="date" name="tgl_perbaikan" id="tlTglPerbaikan">
+                </div>
+                <div class="input-group">
+                    <label>Teknisi Yang Mengerjakan</label>
+                    <input type="text" name="teknisi" required>
+                </div>
+
+                <!-- NAMA PELANGGAN / USER & NO TELP (BISA DIISI MANUAL) -->
+                <div class="input-group">
+                    <label>Nama Pelanggan / User (PIC)</label>
+                    <input type="text" name="nama_pelanggan" id="tlNamaPelanggan" placeholder="Isi manual nama user / pelanggan" required>
+                </div>
+                <div class="input-group">
+                    <label>No. Telp Pelanggan / User</label>
+                    <input type="text" name="telp_pelanggan" id="tlTelpPelanggan" placeholder="Contoh: 08123456789">
+                </div>
+
+                <!-- LOKASI RUANGAN & STATUS GARANSI -->
+                <div class="input-group">
+                    <label>Lokasi Ruangan</label>
+                    <input type="text" name="lokasi_ruangan" id="tlLokasiRuangan" placeholder="Contoh: Poli Umum / IGD / Lab">
+                </div>
+                <div class="input-group">
+                    <label>Status Garansi</label>
+                    <input type="text" name="status_garansi" id="tlStatusGaransi" list="listGaransi" placeholder="Contoh: Garansi / Non Garansi">
+                </div>
+
+                <div class="input-group full-width">
+                    <label>Hasil Teknis</label>
+                    <select name="hasil_teknis" required>
+                        <option value="Selesai (Normal)">Selesai (Normal)</option>
+                        <option value="Belum Selesai (Menunggu Part)">Belum Selesai (Menunggu Part)</option>
+                        <option value="Perlu Pengecekan Lanjutan">Perlu Pengecekan Lanjutan</option>
+                        <option value="Rusak Total">Rusak Total</option>
+                    </select>
+                </div>
+
+                <div class="input-group full-width">
+                    <label id="labelPekerjaanTL">Tindak Lanjut / Hasil Pengecekan</label>
+                    <textarea name="tindak_lanjut" rows="2" required></textarea>
+                </div>
+                
+                <!-- INPUT PART TERPISAH (PART | QTY | KONDISI) -->
+                <div class="input-group full-width">
+                    <label>Part / Sparepart Digunakan (Sesuai Tabel Service Report)</label>
+                    <div class="part-wrapper">
+                        <div class="part-header-row">
+                            <span>Nama Part</span>
+                            <span>Qty</span>
+                            <span>Kondisi</span>
+                            <span></span>
+                        </div>
+                        <div id="containerPartTL"></div>
+                        <button type="button" class="btn-tambah-part" onclick="tambahBarisPart()">
+                            <i class='bx bx-plus'></i> Tambah Part
+                        </button>
+                    </div>
+                    <datalist id="listKondisiPart">
+                        <option value="Baru">
+                        <option value="Bekas Bagus">
+                        <option value="Refurbished">
+                        <option value="Perbaikan">
+                    </datalist>
+                    <datalist id="listGaransi">
+                        <option value="Garansi">
+                        <option value="Non Garansi">
+                        <option value="Kontrak Servis (KSO)">
+                    </datalist>
+                </div>
+
+                <!-- UPLOAD FOTO PENGECEKAN -->
+                <div class="input-group full-width" id="grupFotoPengecekan">
+                    <label>Foto Pengecekan (Bisa pilih lebih dari 1 foto)</label>
+                    <div class="foto-box">
+                        <label class="foto-input-label">
+                            <i class='bx bx-camera'></i> Pilih / Tambah Foto Pengecekan
+                            <input type="file" id="inputFotoPengecekan" accept="image/*" multiple style="display:none;" onchange="handlePilihFoto(this, 'pengecekan')">
+                        </label>
+                        <div class="preview-grid" id="previewFotoPengecekan"></div>
+                    </div>
+                </div>
+
+                <!-- UPLOAD FOTO PART -->
+                <div class="input-group full-width" id="grupFotoPart">
+                    <label>Foto Part / Sparepart (Bisa pilih lebih dari 1 foto ketika ada penggantian)</label>
+                    <div class="foto-box">
+                        <label class="foto-input-label">
+                            <i class='bx bx-chip'></i> Pilih / Tambah Foto Part
+                            <input type="file" id="inputFotoPart" accept="image/*" multiple style="display:none;" onchange="handlePilihFoto(this, 'part')">
+                        </label>
+                        <div class="preview-grid" id="previewFotoPart"></div>
+                    </div>
+                </div>
+
+                <!-- UPLOAD FOTO PERBAIKAN -->
+                <div class="input-group full-width" id="grupFotoPerbaikan" style="display:none;">
+                    <label>Foto Perbaikan (Bisa pilih lebih dari 1 foto)</label>
+                    <div class="foto-box">
+                        <label class="foto-input-label" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa; border-color: rgba(139, 92, 246, 0.4);">
+                            <i class='bx bx-wrench'></i> Pilih / Tambah Foto Perbaikan
+                            <input type="file" id="inputFotoPerbaikan" accept="image/*" multiple style="display:none;" onchange="handlePilihFoto(this, 'perbaikan')">
+                        </label>
+                        <div class="preview-grid" id="previewFotoPerbaikan"></div>
+                    </div>
+                </div>
+
+                <div class="input-group full-width">
+                    <label>Catatan Tambahan</label>
+                    <textarea name="catatan" rows="2"></textarea>
+                </div>
+
+                <!-- TANDA TANGAN DIGITAL -->
+                <div class="input-group">
+                    <label>Tanda Tangan Teknisi (TTD)</label>
+                    <div class="ttd-box">
+                        <canvas id="canvasTTDTeknisi" class="ttd-canvas" width="360" height="140"></canvas>
+                        <button type="button" class="btn-clear-ttd" onclick="hapusCanvasTTD('canvasTTDTeknisi')">
+                            <i class='bx bx-eraser'></i> Ulangi TTD Teknisi
+                        </button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Tanda Tangan Pelanggan (TTD)</label>
+                    <div class="ttd-box">
+                        <canvas id="canvasTTDPelanggan" class="ttd-canvas" width="360" height="140"></canvas>
+                        <button type="button" class="btn-clear-ttd" onclick="hapusCanvasTTD('canvasTTDPelanggan')">
+                            <i class='bx bx-eraser'></i> Ulangi TTD Pelanggan
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="input-group full-width">
+                    <button type="submit" class="btn-tl-submit" id="btnKirimTL"><i class='bx bx-check-circle'></i> Simpan Pengecekan & Buka SR Pengecekan</button>
+                </div>
+            </form>
+        </div>
+
+
         <div class="panel">
-            <h3 style="color: #0ea5e9; margin-bottom: 20px; margin-top: 0;"><i class='bx bx-table'></i> Detail Laporan Kerusakan</h3>
+            <h3 style="color: #0ea5e9; margin-bottom: 20px; margin-top: 0;"><i class='bx bx-table'></i> Database Laporan (A-S)</h3>
             
             <div class="filter-bar">
                 <div class="filter-item">
                     <i class='bx bx-building-house'></i>
-                    <input type="text" id="filterFaskes" placeholder="Filter Faskes..." onkeyup="saringTabel()">
+                    <input type="text" id="filterFaskes" placeholder="Cari Faskes / Alat..." onkeyup="saringTabel()">
                 </div>
                 <div class="filter-item">
                     <i class='bx bx-category'></i>
                     <select id="filterKategori" onchange="saringTabel()">
-                        <option value="">Semua Kategori (CM/PM/CHK/INS)</option>
+                        <option value="">Semua Tipe</option>
                         <option value="CM">CM</option>
                         <option value="PM">PM</option>
                         <option value="CHK">CHK</option>
                         <option value="INS">INS</option>
                     </select>
                 </div>
-                <div class="filter-item">
-                    <i class='bx bx-calendar'></i>
-                    <input type="date" id="filterTanggal" onchange="saringTabel()">
-                </div>
-                <button onclick="document.getElementById('filterTanggal').value=''; saringTabel();" style="background:transparent; border:1px solid #ef4444; color:#ef4444; border-radius:10px; padding:0 15px; cursor:pointer;" title="Reset Filter Tanggal"><i class='bx bx-reset'></i></button>
             </div>
 
             <div class="table-responsive">
                 <table id="tabelData">
                     <thead>
                         <tr>
-                            <th>No Laporan</th>
-                            <th>Tanggal</th>
-                            <th>Faskes & CP</th>
-                            <th>Alkes & Kerusakan</th>
-                            <th>Status TL (Bisa Diedit)</th>
+                            <th>No</th>
+                            <th>Tipe Laporan</th>
+                            <th>No Laporan (SR)</th>
+                            <th>Tgl Laporan</th>
+                            <th>Tgl Pengecekan</th>
+                            <th>Tgl Perbaikan</th>
+                            <th>PKM / Faskes</th>
+                            <th>Alamat</th>
+                            <th>CP / Pelanggan</th>
+                            <th>Teknisi</th>
+                            <th>Nama Alat</th>
+                            <th>Merek / Type</th>
+                            <th>Serial Number</th>
+                            <th>Kerusakan</th>
+                            <th>Tindak Lanjut</th>
+                            <th>Hasil Teknis</th>
+                            <th>Part (Part, Qty, Kondisi)</th>
+                            <th>Catatan</th>
+                            <th style="min-width: 260px; text-align: center;">Folder Drive & Aksi (Kolom S)</th>
                         </tr>
                     </thead>
                     <tbody id="bodyTabelLaporan">
-                        <tr><td colspan="5" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data...</td></tr>
+                        <tr><td colspan="19" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- MODAL SUCCESS -->
+    <!-- MODAL SUCCESS DENGAN TOMBOL BUKA SERVICE REPORT -->
     <div id="modalSuccess" class="modal-overlay">
         <div class="modal-box" id="modalSuccessBox">
             <i class='bx bx-check-circle'></i>
-            <h2>Laporan Tersimpan!</h2>
-            <p id="teksSukses" style="margin-bottom: 25px; color: var(--text-muted);">Data berhasil dipecah dan masuk ke Database.</p>
-            <button class="btn-submit" style="background: #10b981;" onclick="document.getElementById('modalSuccess').style.display='none'">Tutup</button>
+            <h2>Tersimpan!</h2>
+            <p id="teksSukses" style="margin-bottom: 20px; color: var(--text-muted);">Laporan sukses diproses.</p>
+            <a id="btnBukaSRModal" href="#" target="_blank" class="btn-submit" style="background: #0ea5e9; text-decoration: none; margin-bottom: 10px; display: none;">
+                <i class='bx bx-printer'></i> Buka Service Report (New Tab)
+            </a>
+            <button class="btn-submit" style="background: #10b981;" onclick="tutupModalSukses()">Tutup</button>
         </div>
     </div>
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbzP5btzre-P0GW-XTK90I-6-P6QOgWgnBzAzvspNvrYofFWSSoTHrxZnL8gncUxty2Q/exec'; 
 
+        // THEME TOGGLE
         const btnTheme = document.getElementById('btnTheme');
         if(localStorage.getItem('temaArtomoro') === 'light') { document.body.classList.add('light-mode'); btnTheme.querySelector('i').className = 'bx bx-moon'; }
         btnTheme.addEventListener('click', () => { document.body.classList.toggle('light-mode'); localStorage.setItem('temaArtomoro', document.body.classList.contains('light-mode') ? 'light' : 'dark'); btnTheme.querySelector('i').className = document.body.classList.contains('light-mode') ? 'bx bx-moon' : 'bx bx-sun'; });
 
-        const wadahForm = document.getElementById("wadahForm");
+        window.dataLaporanGlobal = [];
+        window.modeFormAktif = "pengecekan";
+        window.fotoStore = { pengecekan: [], part: [], perbaikan: [] };
+        window.ttdStatus = { canvasTTDTeknisi: false, canvasTTDPelanggan: false };
+
+        // Konversi DD-MM-YYYY / YYYY-MM-DD ke YYYY-MM-DD untuk <input type="date">
+        function keFormatInputDate(tglStr) {
+            if (!tglStr) return "";
+            let clean = String(tglStr).replace(/^'/, "").trim();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(clean)) return clean;
+            if (/^\d{2}-\d{2}-\d{4}$/.test(clean)) {
+                let p = clean.split("-");
+                return `${p[2]}-${p[1]}-${p[0]}`;
+            }
+            if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(clean)) {
+                let p = clean.split("/");
+                return `${p[2]}-${p[1].padStart(2, "0")}-${p[0].padStart(2, "0")}`;
+            }
+            let d = new Date(clean);
+            if (!isNaN(d.getTime())) {
+                return d.toISOString().split("T")[0];
+            }
+            return "";
+        }
+
+        // Konversi ke format tampilan DD-MM-YYYY (tanggal-bulan-tahun)
+        function formatDDMMYYYY(tglStr) {
+            if (!tglStr || tglStr === "-") return "-";
+            let clean = String(tglStr).replace(/^'/, "").trim();
+            if (/^\d{2}-\d{2}-\d{4}$/.test(clean)) return clean;
+            if (/^\d{4}-\d{2}-\d{2}$/.test(clean)) {
+                let p = clean.split("-");
+                return `${p[2]}-${p[1]}-${p[0]}`;
+            }
+            if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(clean)) {
+                let p = clean.split("/");
+                return `${p[0].padStart(2, "0")}-${p[1].padStart(2, "0")}-${p[2]}`;
+            }
+            return clean;
+        }
+
+        function parseKontakCP(cpStr) {
+            let kontak = String(cpStr || "").trim();
+            let pic = kontak;
+            let telp = "";
+            if (/[-/,]/.test(kontak)) {
+                let splitData = kontak.split(/[-/,]/);
+                pic = splitData[0].trim();
+                telp = splitData.slice(1).join(" ").trim();
+            } else {
+                let match = kontak.match(/([a-zA-Z\s.]+)([\d\s+]+)/);
+                if (match) {
+                    pic = match[1].trim();
+                    telp = match[2].trim();
+                }
+            }
+            return { pic, telp };
+        }
+
+        // ==========================================
+        // KANVAS TTD DIGITAL
+        // ==========================================
+        function setupCanvasTTD(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext("2d");
+            let drawing = false;
+
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.strokeStyle = "#0f172a";
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: (clientX - rect.left) * scaleX,
+                    y: (clientY - rect.top) * scaleY
+                };
+            }
+
+            function startDraw(e) {
+                drawing = true;
+                window.ttdStatus[canvasId] = true;
+                const pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+                if (e.cancelable) e.preventDefault();
+            }
+
+            function moveDraw(e) {
+                if (!drawing) return;
+                const pos = getPos(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                if (e.cancelable) e.preventDefault();
+            }
+
+            function endDraw() {
+                drawing = false;
+            }
+
+            canvas.addEventListener("mousedown", startDraw);
+            canvas.addEventListener("mousemove", moveDraw);
+            window.addEventListener("mouseup", endDraw);
+            canvas.addEventListener("touchstart", startDraw, { passive: false });
+            canvas.addEventListener("touchmove", moveDraw, { passive: false });
+            canvas.addEventListener("touchend", endDraw);
+        }
+
+        function hapusCanvasTTD(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            window.ttdStatus[canvasId] = false;
+        }
+
+        function muatTTDKeCanvas(canvasId, dataUrl) {
+            hapusCanvasTTD(canvasId);
+            if (!dataUrl || !dataUrl.startsWith("data:image")) return;
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext("2d");
+            const img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                window.ttdStatus[canvasId] = true;
+            };
+            img.src = dataUrl;
+        }
+
+        // ==========================================
+        // KOMPRES & PREVIEW MULTI-FOTO
+        // ==========================================
+        function kompresGambar(file, maxWidth = 1280, quality = 0.8) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > maxWidth) {
+                            h = Math.round((h * maxWidth) / w);
+                            w = maxWidth;
+                        }
+                        const canvas = document.createElement("canvas");
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL("image/jpeg", quality));
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function handlePilihFoto(inputEl, kategori) {
+            const files = Array.from(inputEl.files);
+            for (const file of files) {
+                const compressedDataUrl = await kompresGambar(file);
+                window.fotoStore[kategori].push({
+                    name: file.name,
+                    dataUrl: compressedDataUrl
+                });
+            }
+            inputEl.value = "";
+            renderPreviewFoto(kategori);
+        }
+
+        function renderPreviewFoto(kategori) {
+            const mapId = {
+                pengecekan: "previewFotoPengecekan",
+                part: "previewFotoPart",
+                perbaikan: "previewFotoPerbaikan"
+            };
+            const container = document.getElementById(mapId[kategori]);
+            container.innerHTML = "";
+
+            window.fotoStore[kategori].forEach((item, idx) => {
+                const div = document.createElement("div");
+                div.className = "preview-item";
+                div.innerHTML = `
+                    <img src="${item.dataUrl}" alt="Foto">
+                    <button type="button" class="preview-del" onclick="hapusFotoItem('${kategori}', ${idx})" title="Hapus foto">&times;</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function hapusFotoItem(kategori, idx) {
+            window.fotoStore[kategori].splice(idx, 1);
+            renderPreviewFoto(kategori);
+        }
+
+        function resetSemuaFoto() {
+            window.fotoStore = { pengecekan: [], part: [], perbaikan: [] };
+            renderPreviewFoto("pengecekan");
+            renderPreviewFoto("part");
+            renderPreviewFoto("perbaikan");
+        }
+
+        // ==========================================
+        // SWITCH MODE PENGECEKAN (KOLOM E) vs PERBAIKAN (KOLOM F)
+        // ==========================================
+        function setModeFormTL(mode) {
+            window.modeFormAktif = mode;
+            const tabCek = document.getElementById("tabModeCek");
+            const tabPerbaikan = document.getElementById("tabModePerbaikan");
+            const btnSubmit = document.getElementById("btnKirimTL");
+            const selectTipe = document.getElementById("tlTipeLaporan");
+
+            if (mode === "pengecekan") {
+                tabCek.className = "btn-mode active-cek";
+                tabPerbaikan.className = "btn-mode";
+                document.getElementById("hiddenActionTL").value = "simpan_pengecekan";
+                document.getElementById("judulFormTL").innerText = "Form Tindak Lanjut (Pengecekan)";
+                document.getElementById("judulFormTL").style.color = "#f59e0b";
+                document.getElementById("iconFormTL").style.color = "#f59e0b";
+                document.getElementById("labelPekerjaanTL").innerText = "Tindak Lanjut / Hasil Pengecekan";
+
+                document.getElementById("grupTglCek").style.display = "flex";
+                document.getElementById("grupTglPerbaikan").style.display = "none";
+
+                document.getElementById("grupFotoPengecekan").style.display = "flex";
+                document.getElementById("grupFotoPart").style.display = "flex";
+                document.getElementById("grupFotoPerbaikan").style.display = "none";
+
+                btnSubmit.style.background = "#f59e0b";
+                btnSubmit.innerHTML = "<i class='bx bx-check-circle'></i> Simpan Pengecekan & Buka SR Pengecekan";
+            } else {
+                tabCek.className = "btn-mode";
+                tabPerbaikan.className = "btn-mode active-perbaikan";
+                document.getElementById("hiddenActionTL").value = "simpan_perbaikan";
+                document.getElementById("judulFormTL").innerText = "Form Input / Edit Perbaikan";
+                document.getElementById("judulFormTL").style.color = "#a78bfa";
+                document.getElementById("iconFormTL").style.color = "#a78bfa";
+                document.getElementById("labelPekerjaanTL").innerText = "Tindakan Perbaikan Yang Dilakukan";
+
+                if (selectTipe.value === "CHK") {
+                    selectTipe.value = "CM";
+                }
+
+                document.getElementById("grupTglCek").style.display = "none";
+                document.getElementById("grupTglPerbaikan").style.display = "flex";
+
+                document.getElementById("grupFotoPengecekan").style.display = "none";
+                document.getElementById("grupFotoPart").style.display = "flex";
+                document.getElementById("grupFotoPerbaikan").style.display = "flex";
+
+                btnSubmit.style.background = "#8b5cf6";
+                btnSubmit.innerHTML = "<i class='bx bx-check-circle'></i> Simpan Perbaikan & Buka SR Perbaikan";
+            }
+        }
+
+        // FUNGSI MODAL SUKSES + LINK NEW TAB SERVICE REPORT
+        function tampilkanModalSukses(pesan, srUrl = "") {
+            document.getElementById("teksSukses").innerText = pesan;
+            const btnSR = document.getElementById("btnBukaSRModal");
+            if (srUrl) {
+                btnSR.href = srUrl;
+                btnSR.style.display = "block";
+            } else {
+                btnSR.style.display = "none";
+            }
+            const modal = document.getElementById("modalSuccess");
+            modal.style.display = "flex";
+            gsap.fromTo(modal, {opacity: 0, scale: 0.8}, {opacity: 1, scale: 1, duration: 0.3});
+        }
+
+        function tutupModalSukses() {
+            const modal = document.getElementById("modalSuccess");
+            gsap.to(modal, {opacity: 0, duration: 0.3, onComplete: () => {
+                modal.style.display = "none";
+            }});
+        }
+
+        // FUNGSI BARIS PART (PART | QTY | KONDISI)
+        function tambahBarisPart(nama = "", qty = "", kondisi = "") {
+            const container = document.getElementById("containerPartTL");
+            const row = document.createElement("div");
+            row.className = "part-row";
+
+            const inputNama = document.createElement("input");
+            inputNama.type = "text";
+            inputNama.className = "in-part-nama";
+            inputNama.placeholder = "Nama Part (mis. Manset)";
+            inputNama.value = nama;
+
+            const inputQty = document.createElement("input");
+            inputQty.type = "text";
+            inputQty.className = "in-part-qty";
+            inputQty.placeholder = "Qty";
+            inputQty.value = qty;
+
+            const inputKondisi = document.createElement("input");
+            inputKondisi.type = "text";
+            inputKondisi.className = "in-part-kondisi";
+            inputKondisi.setAttribute("list", "listKondisiPart");
+            inputKondisi.placeholder = "Kondisi (Baru/Bekas)";
+            inputKondisi.value = kondisi;
+
+            const btnHapus = document.createElement("button");
+            btnHapus.type = "button";
+            btnHapus.className = "btn-hapus-part";
+            btnHapus.title = "Hapus baris ini";
+            btnHapus.innerHTML = "<i class='bx bx-trash'></i>";
+            btnHapus.onclick = function() {
+                row.remove();
+                if (container.children.length === 0) {
+                    tambahBarisPart();
+                }
+            };
+
+            row.appendChild(inputNama);
+            row.appendChild(inputQty);
+            row.appendChild(inputKondisi);
+            row.appendChild(btnHapus);
+            container.appendChild(row);
+        }
+
+        function gabungkanDataPart() {
+            const rows = document.querySelectorAll("#containerPartTL .part-row");
+            let hasilList = [];
+
+            rows.forEach(r => {
+                let nama = r.querySelector(".in-part-nama").value.replace(/,/g, " ").trim();
+                let qty = r.querySelector(".in-part-qty").value.replace(/,/g, " ").trim();
+                let kondisi = r.querySelector(".in-part-kondisi").value.replace(/,/g, " ").trim();
+
+                if (nama !== "" || qty !== "" || kondisi !== "") {
+                    hasilList.push(`${nama}, ${qty}, ${kondisi}`);
+                }
+            });
+
+            const hasilStr = hasilList.join("\n");
+            document.getElementById("hiddenPartTL").value = hasilStr;
+            return hasilStr;
+        }
+
+        // FORM ANIMATION
+        const wadahFormAwal = document.getElementById("wadahFormLaporanAwal");
+        const wadahFormTL = document.getElementById("wadahFormTL");
         const btnBuka = document.getElementById("btnBukaForm");
         
         btnBuka.addEventListener("click", () => {
-            wadahForm.style.display = "block";
-            gsap.fromTo(wadahForm, { y:-30, opacity:0 }, { y:0, opacity:1, duration:0.5 });
-            btnBuka.style.display = "none";
+            bukaForm('LaporanAwal');
         });
-        function sembunyikanForm() {
-            gsap.to(wadahForm, { y:-30, opacity:0, duration:0.3, onComplete: () => { 
-                wadahForm.style.display = "none"; 
+
+        function bukaForm(tipe) {
+            btnBuka.style.display = "none";
+            if (tipe === 'LaporanAwal') {
+                wadahFormTL.style.display = "none";
+                wadahFormAwal.style.display = "block";
+                gsap.fromTo(wadahFormAwal, { y:-30, opacity:0 }, { y:0, opacity:1, duration:0.5 });
+            } else if (tipe === 'TL') {
+                wadahFormAwal.style.display = "none";
+                wadahFormTL.style.display = "block";
+                gsap.fromTo(wadahFormTL, { y:-30, opacity:0 }, { y:0, opacity:1, duration:0.5 });
+            }
+        }
+
+        function sembunyikanForm(tipe) {
+            let formAktif = tipe === 'LaporanAwal' ? wadahFormAwal : wadahFormTL;
+            gsap.to(formAktif, { y:-30, opacity:0, duration:0.3, onComplete: () => { 
+                formAktif.style.display = "none"; 
                 btnBuka.style.display = "inline-flex"; 
                 gsap.fromTo(btnBuka, { scale:0.5, opacity:0 }, { scale:1, opacity:1, duration:0.5 }); 
             }});
         }
-        document.getElementById("btnTutupForm").addEventListener("click", sembunyikanForm);
 
+        // WEBGL BACKGROUND
         const bgContainer = document.getElementById('webgl-background'); const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); camera.position.z = 10; const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight); bgContainer.appendChild(renderer.domElement);
         const particlesGeo = new THREE.BufferGeometry(); const posArray = new Float32Array(250 * 3); for(let i=0; i<750; i++) posArray[i] = (Math.random()-0.5)*25; particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3)); const particleMesh = new THREE.Points(particlesGeo, new THREE.PointsMaterial({ size: 0.05, color: 0x0ea5e9, transparent: true, opacity: 0.6 })); scene.add(particleMesh); function animateBg() { requestAnimationFrame(animateBg); particleMesh.rotation.y += 0.0015; renderer.render(scene, camera); } animateBg();
 
-        let hitungAlat = 1;
-        function tambahFormAlat() {
-            hitungAlat++;
-            const wadah = document.getElementById("wadahListAlat");
-            const divBaru = document.createElement("div"); divBaru.className = "alat-container item-alat";
-            divBaru.innerHTML = `<div class="alat-header"><span class="nomer-urut">Alat #${hitungAlat}</span><button type="button" class="btn-hapus-alat" onclick="hapusFormAlat(this)"><i class='bx bx-trash'></i> Hapus</button></div><div class="input-group" style="margin-bottom: 10px;"><label style="font-size:11px; margin-bottom:5px;">Nama Alkes (Merk, Type, S/N)</label><input type="text" class="input-nama-alat" placeholder="Merk, Type, SN..." required></div><div class="input-group"><label style="font-size:11px; margin-bottom:5px;">Kerusakan</label><input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required></div>`;
-            wadah.appendChild(divBaru); updateNomerUrut();
+        // AUTO-FILL ALAMAT PKM
+        const dataFaskes = {
+            "Puskesmas Asemrowo": "Jl. Asemrowo No. 1, Surabaya",
+            "Puskesmas Balas Klumprik": "Jl. Balas Klumprik No. 2, Surabaya",
+            "Puskesmas Balongsari": "Jl. Balongsari No. 3, Surabaya",
+            "Puskesmas Bulak Banteng": "Jl. Bulak Banteng Wetan No. 14, Kenjeran, Surabaya"
+        };
+        const dataList = document.getElementById("listFaskes");
+        for (const [namaPkm, alamat] of Object.entries(dataFaskes)) {
+            let option = document.createElement("option"); option.value = namaPkm; dataList.appendChild(option);
         }
-        function hapusFormAlat(btn) { btn.closest(".item-alat").remove(); updateNomerUrut(); }
-        function updateNomerUrut() { document.querySelectorAll(".item-alat").forEach((el, index) => { el.querySelector(".nomer-urut").innerText = `Alat #${index + 1}`; }); }
+        document.querySelector('input[name="pkm"]').addEventListener('input', function() {
+            document.querySelector('textarea[name="alamat"]').value = dataFaskes[this.value] || ""; 
+        });
 
-        document.getElementById('formLaporan').addEventListener('submit', e => {
+        // SUBMIT LAPORAN AWAL
+        document.getElementById('formLaporanAwal').addEventListener('submit', e => {
             e.preventDefault();
-            const btnKirim = document.getElementById('btnKirim');
-            btnKirim.innerText = "Menyimpan..."; btnKirim.style.background = "#fbbf24";
+            const btnKirim = document.getElementById('btnKirimAwal');
+            btnKirim.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Menyimpan..."; 
+            btnKirim.style.background = "#fbbf24";
             
-            let arrayAlat = [];
-            document.querySelectorAll(".item-alat").forEach(item => { arrayAlat.push({ nama: item.querySelector(".input-nama-alat").value, rusak: item.querySelector(".input-rusak-alat").value }); });
-            let formData = new FormData(document.getElementById('formLaporan'));
-            formData.append("data_alat_json", JSON.stringify(arrayAlat));
+            const pkmVal = document.querySelector('#formLaporanAwal input[name="pkm"]').value.trim();
+            const alatVal = document.querySelector('#formLaporanAwal input[name="alat"]').value.trim();
+            const lokVal = document.getElementById("awalLokasiRuangan").value.trim();
+            const garVal = document.getElementById("awalStatusGaransi").value.trim();
+            if (lokVal || garVal) {
+                localStorage.setItem(`info_awal_${pkmVal}_${alatVal}`, JSON.stringify({ lokasi_ruangan: lokVal, status_garansi: garVal }));
+            }
+
+            let formData = new FormData(document.getElementById('formLaporanAwal'));
 
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: formData })
                 .then(() => {
                     gsap.killTweensOf(btnKirim);
-                    btnKirim.style.background = "#0ea5e9"; btnKirim.innerText = "Simpan & Generate Laporan";
-                    document.getElementById('teksSukses').innerText = `Sistem berhasil memecah data menjadi ${arrayAlat.length} Laporan!`;
-                    document.getElementById("modalSuccess").style.display = "flex";
-                    document.getElementById('formLaporan').reset();
-                    document.getElementById("wadahListAlat").innerHTML = `<div class="alat-container item-alat"><div class="alat-header"><span class="nomer-urut">Alat #1</span></div><div class="input-group" style="margin-bottom: 10px;"><label style="font-size:11px; margin-bottom:5px;">Nama Alkes (Merk, Type, S/N)</label><input type="text" class="input-nama-alat" placeholder="Merk, Type, SN..." required></div><div class="input-group"><label style="font-size:11px; margin-bottom:5px;">Kerusakan</label><input type="text" class="input-rusak-alat" placeholder="Deskripsi kerusakan..." required></div></div>`;
-                    hitungAlat = 1; sembunyikanForm();
+                    btnKirim.style.background = "#0ea5e9"; btnKirim.innerHTML = "<i class='bx bx-save'></i> Simpan Laporan Awal";
+                    
+                    tampilkanModalSukses("Laporan awal berhasil disimpan!");
+                    document.getElementById('formLaporanAwal').reset();
+                    document.querySelector('input[name="tgl_laporan"]').valueAsDate = new Date();
+                    
+                    sembunyikanForm('LaporanAwal');
                     setTimeout(muatDataLaporan, 1500); 
                 }).catch(err => {
-                    btnKirim.style.background = "#ef4444"; btnKirim.innerText = "Gagal Simpan!"; alert("Cek Koneksi Internet Anda!");
+                    btnKirim.style.background = "#ef4444"; btnKirim.innerText = "Gagal Simpan!"; alert("Gagal. Cek Koneksi Internet!");
                 });
         });
 
-        // ================= FITUR EDIT STATUS LANGSUNG DARI TABEL =================
-        window.ubahStatusLaporan = function(idLaporan, elemenSelect) {
-            const statusBaru = elemenSelect.value;
-            const classLama = elemenSelect.className;
+        // SUBMIT PENGECEKAN / PERBAIKAN + AUTO OPEN NEW TAB SERVICE REPORT
+        document.getElementById('formTL').addEventListener('submit', e => {
+            e.preventDefault();
             
-            elemenSelect.className = "status-dropdown";
-            if(statusBaru === "Belum diTL") elemenSelect.classList.add("badge-merah");
-            else if(statusBaru === "Penjadwalan Teknisi") elemenSelect.classList.add("badge-kuning");
-            else if(statusBaru === "Selesai") elemenSelect.classList.add("badge-hijau");
-            elemenSelect.style.opacity = "0.5";
+            const partGabungan = gabungkanDataPart();
+            const noSR = document.getElementById('hiddenNoSRTL').value;
+            const mode = window.modeFormAktif;
+            const tipeLaporanBaru = document.getElementById("tlTipeLaporan").value;
+            const namaPelanggan = document.getElementById("tlNamaPelanggan").value.trim();
+            const telpPelanggan = document.getElementById("tlTelpPelanggan").value.trim();
+            const lokasiRuangan = document.getElementById("tlLokasiRuangan").value.trim();
+            const statusGaransi = document.getElementById("tlStatusGaransi").value.trim();
+            const cpGabungan = telpPelanggan ? `${namaPelanggan} - ${telpPelanggan}` : namaPelanggan;
 
-            let fd = new FormData();
-            fd.append("action", "update_status_laporan");
-            fd.append("no_laporan", idLaporan);
-            fd.append("status_baru", statusBaru);
+            const srUrl = new URL(`servicereport.html?no_laporan=${encodeURIComponent(noSR)}&jenis=${mode}`, window.location.href).href;
 
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: fd })
-                .then(() => { 
-                    elemenSelect.style.opacity = "1"; 
-                    // Jika diubah ke penjadwalan teknisi, beritahu user
-                    if(statusBaru === "Penjadwalan Teknisi") {
-                        alert(`Laporan ${idLaporan} otomatis disalin ke menu Jadwal Teknisi!`);
+            const tabSR = window.open("about:blank", "_blank");
+            if (tabSR) {
+                tabSR.document.write("<p style='font-family:sans-serif; padding:30px; text-align:center;'>⏳ Menyimpan data & menyiapkan Service Report...</p>");
+            }
+
+            const ttdTekData = window.ttdStatus.canvasTTDTeknisi ? document.getElementById("canvasTTDTeknisi").toDataURL("image/png") : "";
+            const ttdPelData = window.ttdStatus.canvasTTDPelanggan ? document.getElementById("canvasTTDPelanggan").toDataURL("image/png") : "";
+            if (ttdTekData) localStorage.setItem("ttd_tek_" + noSR, ttdTekData);
+            if (ttdPelData) localStorage.setItem("ttd_pel_" + noSR, ttdPelData);
+            localStorage.setItem("info_sr_" + noSR, JSON.stringify({
+                lokasi_ruangan: lokasiRuangan,
+                status_garansi: statusGaransi,
+                nama_pelanggan: namaPelanggan,
+                telp_pelanggan: telpPelanggan
+            }));
+
+            const payload = {
+                action: mode === "perbaikan" ? "simpan_perbaikan" : "simpan_pengecekan",
+                no_laporan: noSR,
+                tipe_laporan: tipeLaporanBaru,
+                tgl_laporan: document.getElementById("tlTglLaporan").value,
+                tgl_cek: document.getElementById("tlTglCek").value,
+                tgl_perbaikan: document.getElementById("tlTglPerbaikan").value,
+                cp: cpGabungan,
+                nama_pelanggan: namaPelanggan,
+                telp_pelanggan: telpPelanggan,
+                teknisi: document.querySelector('#formTL input[name="teknisi"]').value,
+                lokasi_ruangan: lokasiRuangan,
+                status_garansi: statusGaransi,
+                tindak_lanjut: document.querySelector('#formTL textarea[name="tindak_lanjut"]').value,
+                hasil_teknis: document.querySelector('#formTL select[name="hasil_teknis"]').value,
+                part: partGabungan,
+                catatan: document.querySelector('#formTL textarea[name="catatan"]').value,
+                foto_pengecekan: mode === "pengecekan" ? window.fotoStore.pengecekan : [],
+                foto_part: window.fotoStore.part,
+                foto_perbaikan: mode === "perbaikan" ? window.fotoStore.perbaikan : [],
+                ttd_teknisi: ttdTekData,
+                ttd_pelanggan: ttdPelData
+            };
+
+            const btnKirim = document.getElementById('btnKirimTL');
+            btnKirim.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Menyimpan Data, Foto & Membuka SR..."; 
+            btnKirim.disabled = true;
+
+            fetch(scriptURL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload) 
+            })
+            .then(() => {
+                btnKirim.disabled = false;
+                setModeFormTL(mode);
+
+                if (tabSR && !tabSR.closed) {
+                    tabSR.location.href = srUrl;
+                }
+
+                const labelNotif = mode === "perbaikan" 
+                    ? "Data perbaikan berhasil disimpan! Service Report Perbaikan telah dibuka di tab baru." 
+                    : "Data pengecekan berhasil disimpan! Service Report Pengecekan telah dibuka di tab baru.";
+                
+                tampilkanModalSukses(labelNotif, srUrl);
+
+                document.getElementById('formTL').reset();
+                document.getElementById('containerPartTL').innerHTML = "";
+                tambahBarisPart();
+                resetSemuaFoto();
+                hapusCanvasTTD("canvasTTDTeknisi");
+                hapusCanvasTTD("canvasTTDPelanggan");
+                
+                sembunyikanForm('TL');
+                setTimeout(muatDataLaporan, 2000); 
+            }).catch(err => {
+                if (tabSR && !tabSR.closed) tabSR.close();
+                btnKirim.disabled = false;
+                btnKirim.style.background = "#ef4444"; 
+                btnKirim.innerText = "Gagal Simpan!"; 
+                alert("Gagal koneksi saat menyimpan. Silakan coba lagi.");
+            });
+        });
+
+        // BUKA FORM TL (MODE PENGECEKAN ATAU MODE PERBAIKAN)
+        window.bukaFormTLDariTabel = function(index, mode = "pengecekan") {
+            let row = window.dataLaporanGlobal[index];
+
+            document.getElementById("tlTipeLaporan").value = row.tipe_laporan || "CHK";
+            setModeFormTL(mode);
+            resetSemuaFoto();
+
+            document.getElementById('labelNoSRTL').innerText = row.no_laporan;
+            document.getElementById('labelPKMTL').innerText = row.pkm || "";
+            document.getElementById('hiddenNoSRTL').value = row.no_laporan;
+
+            // Pre-fill Tanggal Laporan, Tanggal Pengecekan (Kolom E) & Tanggal Perbaikan (Kolom F)
+            document.getElementById('tlTglLaporan').value = keFormatInputDate(row.tgl_laporan) || new Date().toISOString().split('T')[0];
+            document.getElementById('tlTglCek').value = keFormatInputDate(row.tgl_cek) || new Date().toISOString().split('T')[0];
+            document.getElementById('tlTglPerbaikan').value = keFormatInputDate(row.tgl_perbaikan) || new Date().toISOString().split('T')[0];
+
+            // Pre-fill Nama Pelanggan / User & No Telp (bisa diedit manual)
+            const savedInfo = JSON.parse(localStorage.getItem("info_sr_" + row.no_laporan) || localStorage.getItem(`info_awal_${row.pkm}_${row.alat}`) || "{}");
+            const parsedCP = parseKontakCP(row.cp);
+            document.getElementById("tlNamaPelanggan").value = savedInfo.nama_pelanggan || parsedCP.pic || "";
+            document.getElementById("tlTelpPelanggan").value = savedInfo.telp_pelanggan || parsedCP.telp || "";
+
+            document.querySelector('#formTL input[name="teknisi"]').value = row.teknisi || '';
+            document.querySelector('#formTL textarea[name="tindak_lanjut"]').value = row.tindak_lanjut || '';
+            
+            let hasil = row.hasil_teknis;
+            if(!hasil) hasil = 'Selesai (Normal)';
+            document.querySelector('#formTL select[name="hasil_teknis"]').value = hasil;
+
+            document.getElementById("tlLokasiRuangan").value = savedInfo.lokasi_ruangan || "";
+            document.getElementById("tlStatusGaransi").value = savedInfo.status_garansi || "";
+            
+            // Isi baris Part (Part, Qty, Kondisi)
+            const containerPart = document.getElementById("containerPartTL");
+            containerPart.innerHTML = "";
+            let partRaw = row.part || "";
+            if (partRaw.trim() !== "" && partRaw.trim() !== "-") {
+                let barisPart = partRaw.split(/\n|;/);
+                barisPart.forEach(p => {
+                    if (p.trim() !== "") {
+                        let col = p.split(",");
+                        let nama = col[0] ? col[0].trim() : "";
+                        let qty = col[1] ? col[1].trim() : "";
+                        let kondisi = col[2] ? col[2].trim() : "";
+                        tambahBarisPart(nama, qty, kondisi);
                     }
-                })
-                .catch(err => {
-                    elemenSelect.style.opacity = "1";
-                    elemenSelect.className = classLama; 
-                    alert("Gagal update status. Cek koneksi internet.");
                 });
-        };
+            }
+            if (containerPart.children.length === 0) {
+                tambahBarisPart();
+            }
 
+            document.querySelector('#formTL textarea[name="catatan"]').value = row.catatan || '';
+
+            // Muat TTD & Info Alat / Pelanggan dari localStorage atau Drive
+            const savedTek = localStorage.getItem("ttd_tek_" + row.no_laporan);
+            const savedPel = localStorage.getItem("ttd_pel_" + row.no_laporan);
+            muatTTDKeCanvas("canvasTTDTeknisi", savedTek);
+            muatTTDKeCanvas("canvasTTDPelanggan", savedPel);
+
+            if (!savedTek || !savedPel || !savedInfo.lokasi_ruangan || !savedInfo.nama_pelanggan) {
+                fetch(scriptURL + "?action=get_ttd&no_laporan=" + encodeURIComponent(row.no_laporan))
+                    .then(r => r.json())
+                    .then(res => {
+                        if (!savedTek && res.ttd_teknisi) muatTTDKeCanvas("canvasTTDTeknisi", res.ttd_teknisi);
+                        if (!savedPel && res.ttd_pelanggan) muatTTDKeCanvas("canvasTTDPelanggan", res.ttd_pelanggan);
+                        if (!savedInfo.lokasi_ruangan && res.lokasi_ruangan) document.getElementById("tlLokasiRuangan").value = res.lokasi_ruangan;
+                        if (!savedInfo.status_garansi && res.status_garansi) document.getElementById("tlStatusGaransi").value = res.status_garansi;
+                        if (!savedInfo.nama_pelanggan && res.nama_pelanggan) document.getElementById("tlNamaPelanggan").value = res.nama_pelanggan;
+                        if (!savedInfo.telp_pelanggan && res.telp_pelanggan) document.getElementById("tlTelpPelanggan").value = res.telp_pelanggan;
+                    }).catch(() => {});
+            }
+
+            bukaForm('TL');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
+        // LOAD DATA KE TABEL (KOLOM A - S)
         function muatDataLaporan() {
             const tbody = document.getElementById("bodyTabelLaporan");
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="19" style="text-align: center; padding: 30px;"><i class='bx bx-loader-alt bx-spin' style="font-size: 24px; color:#0ea5e9;"></i><br>Menarik Data Laporan...</td></tr>`;
             
+            document.querySelector('input[name="tgl_laporan"]').valueAsDate = new Date();
+
             fetch(scriptURL + "?action=get_laporan")
             .then(res => res.json())
             .then(data => {
                 tbody.innerHTML = "";
-                if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada laporan kerusakan masuk.</td></tr>'; return; }
+                if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="19" style="text-align: center;">Belum ada laporan masuk.</td></tr>'; return; }
                 
-                data.reverse().forEach(item => {
-                    let st = item.status || "";
-                    let b = "badge-merah"; 
-                    if(st === "Penjadwalan Teknisi") b = "badge-kuning"; 
-                    else if(st === "Selesai") b = "badge-hijau";
+                window.dataLaporanGlobal = data.reverse();
+                
+                window.dataLaporanGlobal.forEach((row, index) => {
+                    let st = String(row.kolom_s || "").trim();
+                    let tglCek = formatDDMMYYYY(row.tgl_cek);
+                    let tglPerbaikan = formatDDMMYYYY(row.tgl_perbaikan);
+                    let hasTL = Boolean(row.tindak_lanjut && row.tindak_lanjut.trim() !== "" && row.tindak_lanjut.trim() !== "-");
 
-                    // Select Status Editable
-                    let selectHtml = `
-                    <select class="status-dropdown ${b}" onchange="ubahStatusLaporan('${item.no_laporan}', this)">
-                        <option value="Belum diTL" ${st === 'Belum diTL' ? 'selected' : ''}>Belum diTL</option>
-                        <option value="Penjadwalan Teknisi" ${st === 'Penjadwalan Teknisi' ? 'selected' : ''}>Penjadwalan Teknisi</option>
-                        <option value="Selesai" ${st === 'Selesai' ? 'selected' : ''}>Selesai</option>
-                    </select>`;
-                    
-                    let formatAlkes = (item.alkes || "").toString().replace(/\n/g, "<br>");
-                    let formatRusak = (item.kerusakan || "").toString().replace(/\n/g, "<br>");
+                    let sudahCek = Boolean((tglCek !== "-" && tglCek !== "") || (hasTL && (tglPerbaikan === "-" || tglPerbaikan === "")));
+                    let sudahPerbaikan = Boolean(tglPerbaikan !== "-" && tglPerbaikan !== "");
+                    let belumTL = !sudahCek && !sudahPerbaikan;
+
+                    let aksiHtml = "";
+
+                    if (belumTL) {
+                        // Belum dicek & belum diperbaiki: TIDAK muncul file SR
+                        aksiHtml = `<div style="text-align:center;">
+                                        <span class="badge-status badge-merah" style="margin-bottom:8px;">Belum di-TL</span><br>
+                                        <div style="display:flex; gap:4px; justify-content:center; flex-wrap:wrap;">
+                                            <button onclick="bukaFormTLDariTabel(${index}, 'pengecekan')" class="btn-tl"><i class='bx bx-search-alt'></i> Isi Pengecekan</button>
+                                            <button onclick="bukaFormTLDariTabel(${index}, 'perbaikan')" class="btn-tl" style="background:#8b5cf6;"><i class='bx bx-cog'></i> Perbaikan</button>
+                                        </div>
+                                    </div>`;
+                    } else {
+                        let folderBtn = st.includes("http") 
+                            ? `<a href="${st}" target="_blank" class="btn-folder" title="Buka Folder PKM - Tanggal"><i class='bx bxs-folder-open'></i> Buka Folder Drive</a><br>` 
+                            : `<span class="badge-status badge-hijau" style="margin-bottom:6px;">Sudah di-TL</span><br>`;
+
+                        let srCekUrl = `servicereport.html?no_laporan=${encodeURIComponent(row.no_laporan)}&jenis=pengecekan`;
+                        let srPerbaikanUrl = `servicereport.html?no_laporan=${encodeURIComponent(row.no_laporan)}&jenis=perbaikan`;
+
+                        let labelBtnCek = sudahCek ? "Edit Pengecekan" : "Isi Pengecekan";
+                        let labelBtnPerbaikan = sudahPerbaikan ? "Edit Perbaikan" : "Input Perbaikan";
+
+                        let tombolSRHtml = "";
+                        if (sudahCek) {
+                            tombolSRHtml += `<a href="${srCekUrl}" target="_blank" class="btn-pdf" title="Cetak/Simpan SR Pengecekan"><i class='bx bx-printer'></i> SR Cek</a>`;
+                        }
+                        if (sudahPerbaikan) {
+                            tombolSRHtml += `<a href="${srPerbaikanUrl}" target="_blank" class="btn-pdf" style="background:#0d9488;" title="Cetak/Simpan SR Perbaikan"><i class='bx bx-printer'></i> SR Perbaikan</a>`;
+                        }
+                        
+                        aksiHtml = `<div style="text-align:center;">
+                                        ${folderBtn}
+                                        <div style="display:flex; gap:4px; justify-content:center; margin-bottom:4px; flex-wrap:wrap;">
+                                            <button onclick="bukaFormTLDariTabel(${index}, 'pengecekan')" class="btn-tl" style="background:#3b82f6;" title="${labelBtnCek}"><i class='bx bx-edit'></i> ${labelBtnCek}</button>
+                                            <button onclick="bukaFormTLDariTabel(${index}, 'perbaikan')" class="btn-tl" style="background:#8b5cf6;" title="${labelBtnPerbaikan}"><i class='bx bx-cog'></i> ${labelBtnPerbaikan}</button>
+                                        </div>
+                                        <div style="display:flex; gap:4px; justify-content:center; flex-wrap:wrap;">
+                                            ${tombolSRHtml}
+                                        </div>
+                                    </div>`;
+                    }
+
+                    let tampilanPart = row.part ? row.part.replace(/\n/g, "<br>") : "-";
 
                     tbody.innerHTML += `
-                    <tr>
-                        <td><b>${item.no_laporan}</b><br><span style="color:#0ea5e9; font-size:11px; font-weight:600;">${item.kategori}</span></td>
-                        <td class="kol-tanggal">${item.tanggal}</td>
-                        <td class="kol-faskes"><b>${item.faskes}</b><br><span style="font-size:11px; opacity:0.7;"><i class='bx bx-user'></i> ${item.cp}</span></td>
-                        <td><b>${formatAlkes}</b><br><span style="opacity:0.8;">${formatRusak}</span></td>
-                        <td>${selectHtml}</td>
+                    <tr class="data-row">
+                        <td style="font-weight:bold;">${row.no || '-'}</td>
+                        <td class="kol-kategori">${row.tipe_laporan || '-'}</td>
+                        <td style="color:#0ea5e9; font-weight:bold; white-space:nowrap;">${row.no_laporan || '-'}</td>
+                        <td class="kol-tanggal" style="white-space:nowrap;">${formatDDMMYYYY(row.tgl_laporan)}</td>
+                        <td style="white-space:nowrap;">${tglCek}</td>
+                        <td style="white-space:nowrap; color:#a78bfa; font-weight:600;">${tglPerbaikan}</td>
+                        <td class="kol-faskes" style="font-weight:bold; white-space:nowrap;">${row.pkm || '-'}</td>
+                        <td style="min-width: 150px; font-size: 11px;">${row.alamat || '-'}</td>
+                        <td>${row.cp || '-'}</td>
+                        <td>${row.teknisi || '-'}</td>
+                        <td style="color:#0ea5e9; font-weight:bold;">${row.alat || '-'}</td>
+                        <td>${row.merek || '-'}</td>
+                        <td style="font-family:monospace;">${row.sn || '-'}</td>
+                        <td style="color:#ef4444; min-width: 150px;">${row.kerusakan || '-'}</td>
+                        <td style="min-width: 150px;">${row.tindak_lanjut || '-'}</td>
+                        <td style="font-weight:bold;">${row.hasil_teknis || '-'}</td>
+                        <td style="min-width: 160px;">${tampilanPart}</td>
+                        <td>${row.catatan || '-'}</td>
+                        <td style="vertical-align: middle;">${aksiHtml}</td>
                     </tr>`;
                 });
                 saringTabel(); 
             }).catch(err => {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Gagal mengambil data.</td></tr>`;
+                console.log(err);
+                tbody.innerHTML = `<tr><td colspan="19" style="text-align: center; color: #ef4444;">Gagal menarik data. Cek koneksi Anda.</td></tr>`;
             });
         }
 
         function saringTabel() {
-            let fFaskes = document.getElementById("filterFaskes").value.toLowerCase();
+            let fPencarian = document.getElementById("filterFaskes").value.toLowerCase();
             let fKat = document.getElementById("filterKategori").value.toLowerCase();
-            let fTgl = document.getElementById("filterTanggal").value; 
 
-            let baris = document.querySelectorAll("#bodyTabelLaporan tr");
+            let baris = document.querySelectorAll("#bodyTabelLaporan .data-row");
             baris.forEach(tr => {
-                if(tr.getElementsByTagName("td").length > 1) {
-                    let tdFaskes = tr.querySelector(".kol-faskes").textContent.toLowerCase();
-                    let tdKategori = tr.getElementsByTagName("td")[0].textContent.toLowerCase();
-                    let tdTanggal = tr.querySelector(".kol-tanggal").textContent; 
-                    let cocokFaskes = tdFaskes.indexOf(fFaskes) > -1;
-                    let cocokKat = fKat === "" || tdKategori.indexOf(fKat) > -1;
-                    let cocokTgl = fTgl === "" || tdTanggal.includes(fTgl);
-                    tr.style.display = (cocokFaskes && cocokKat && cocokTgl) ? "" : "none";
-                }
+                let textBaris = tr.innerText.toLowerCase();
+                let tdKategori = tr.querySelector(".kol-kategori").textContent.toLowerCase();
+                
+                let cocokCari = textBaris.indexOf(fPencarian) > -1;
+                let cocokKat = fKat === "" || tdKategori.indexOf(fKat) > -1;
+                
+                tr.style.display = (cocokCari && cocokKat) ? "" : "none";
             });
         }
-        window.onload = muatDataLaporan;
+        
+        window.onload = function() {
+            setupCanvasTTD("canvasTTDTeknisi");
+            setupCanvasTTD("canvasTTDPelanggan");
+            tambahBarisPart();
+            muatDataLaporan();
+        };
     </script>
 </body>
 </html>
